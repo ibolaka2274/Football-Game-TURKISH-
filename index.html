@@ -183,9 +183,9 @@
         const mahalleler = ["Yıldızlar Mah.", "Güneş Sokak", "Fırtına Gençlik", "Şimşek Spor"];
         const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz"];
 
-        function save() { localStorage.setItem('ayazKariyer_v3', JSON.stringify(p)); }
+        function save() { localStorage.setItem('ayazKariyer_v5', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v3');
+            let s = localStorage.getItem('ayazKariyer_v5');
             if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
         }
         window.onload = load;
@@ -254,6 +254,9 @@
             let kadro = [`GK: ${isimler[0]}`, `DEF: ${isimler[1]}`, `MID: ${p.name} (SEN)`, `MID: ${isimler[3]}`, `FOR: ${isimler[4]}`];
             document.getElementById('squad-content').innerHTML = kadro.map(k => `<div class="player-line">${k}</div>`).join('');
 
+            // Süper Hız Ayarı: Mahallede 1000ms, profesyonel maçlarda 300ms (Baya hızlı!)
+            const speed = type === 'mahalle' ? 1000 : 300;
+
             const loop = setInterval(() => {
                 clock++;
                 
@@ -268,7 +271,7 @@
                 if(Math.random() > 0.7) {
                     if(Math.random() > 0.5) { s1++; document.getElementById('s-1').innerText = s1; document.getElementById('goal-info').innerText = "GOL: " + (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]); }
                     else { s2++; document.getElementById('s-2').innerText = s2; document.getElementById('goal-info').innerText = "GOL: Rakip"; }
-                    setTimeout(() => document.getElementById('goal-info').innerText = "", 1000);
+                    setTimeout(() => document.getElementById('goal-info').innerText = "", 500);
                 }
 
                 let isOver = false;
@@ -289,7 +292,7 @@
                     addComment(result);
                     save(); updateUI();
                 }
-            }, type === 'mahalle' ? 1000 : 800);
+            }, speed);
         }
 
         function addComment(res) {
