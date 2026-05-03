@@ -48,27 +48,32 @@
         #start-screen.active, #role-screen.active, #match-screen.active { justify-content: center; align-items: center; }
 
         input { padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: white; border-radius: 8px; font-size: 18px; margin-bottom: 10px; width: 250px; text-align: center;}
-        button { padding: 10px 15px; margin: 5px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #333; color: white; transition: 0.3s; text-transform: uppercase; font-size: 12px; }
+        button { padding: 10px 15px; margin: 5px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #333; color: white; transition: 0.3s; text-transform: uppercase; font-size: 11px; }
         button:disabled { opacity: 0.5; cursor: not-allowed; background: #222 !important; }
         button:hover:not(:disabled) { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); transform: translateY(-2px); }
 
-        .sidebar { width: 200px; display: flex; flex-direction: column; gap: 10px; border-left: 4px solid var(--accent-red); padding-left: 20px; }
-        .sidebar-item { background: rgba(17, 17, 17, 0.6); padding: 12px; font-size: 14px; cursor: pointer; text-align: center; border: 1px solid #333; border-radius: 4px; transition: 0.2s; }
+        .sidebar { width: 180px; display: flex; flex-direction: column; gap: 8px; border-left: 4px solid var(--accent-red); padding-left: 15px; }
+        .sidebar-item { background: rgba(17, 17, 17, 0.6); padding: 10px; font-size: 12px; cursor: pointer; text-align: center; border: 1px solid #333; border-radius: 4px; transition: 0.2s; }
         .sidebar-item:hover { background: var(--sidebar-hover); border-color: var(--accent-red); color: var(--accent-red); }
 
-        .header-ui { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 12px; border-bottom: 2px solid var(--accent-red); }
-        .level-container { background: #222; width: 300px; height: 30px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #444; }
+        .header-ui { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 15px; background: rgba(0,0,0,0.8); padding: 12px; border-radius: 12px; border-bottom: 2px solid var(--accent-red); }
+        .level-container { background: #222; width: 300px; height: 25px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #444; }
         .level-bar { background: linear-gradient(90deg, #ff3e3e, #ff8e53); height: 100%; width: 0%; transition: width 0.5s; }
-        .level-text { position: absolute; width: 100%; text-align: center; line-height: 30px; font-weight: bold; font-size: 12px; text-shadow: 1px 1px 2px black; }
+        .level-text { position: absolute; width: 100%; text-align: center; line-height: 25px; font-weight: bold; font-size: 11px; text-shadow: 1px 1px 2px black; }
 
         #main-layout { display: flex; height: 85%; }
         #content-area { flex: 1; padding: 20px; overflow-y: auto; text-align: center; }
 
-        .training-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px; border: 1px solid #444; display: inline-block; width: 180px; }
-        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .scoreboard { font-size: 4rem; font-family: monospace; color: var(--accent-red); margin: 10px; }
         
-        .scoreboard { font-size: 5rem; font-family: monospace; background: rgba(0,0,0,0.9); padding: 20px 40px; border-radius: 15px; border: 4px solid var(--accent-red); color: var(--accent-red); margin: 20px; }
-        #goal-announcement { color: var(--accent-gold); font-size: 1.5rem; font-weight: bold; height: 40px; margin-top: 10px; }
+        #squad-list { width: 220px; background: rgba(0,0,0,0.7); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 15px; text-align: left; font-size: 13px; }
+        .squad-title { color: var(--accent-gold); font-weight: bold; border-bottom: 1px solid #444; margin-bottom: 10px; text-align: center; }
+        .player-line { margin: 5px 0; color: #ccc; }
+
+        .comment-box { background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 15px; height: 350px; overflow-y: auto; border: 1px solid #333; text-align: left; }
+        .comment { padding: 8px; border-bottom: 1px solid #222; color: #ddd; font-size: 0.9rem; }
+        .training-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px; border: 1px solid #444; display: inline-block; width: 160px; }
     </style>
 </head>
 <body>
@@ -76,12 +81,12 @@
     <div id="start-screen" class="screen active">
         <h1 style="color: var(--accent-red); letter-spacing: 5px;">AYAZ ENTERTAINMENT</h1>
         <input type="text" id="player-name-input" placeholder="Futbolcu İsmi...">
-        <button onclick="startGame()">SÖZLEŞME İMZALA</button>
+        <button onclick="startGame()">SÖZLEŞMEYİ İMZALA</button>
     </div>
 
     <div id="role-screen" class="screen">
-        <h2 style="color: var(--accent-gold);">MEVKİNİ BELİRLE</h2>
-        <div style="display: flex; gap: 15px; justify-content: center;">
+        <h2 style="color: var(--accent-gold);">MEVKİ SEÇİMİ</h2>
+        <div style="display: flex; gap: 10px;">
             <button onclick="setRole('Forvet')">FORVET</button>
             <button onclick="setRole('Orta Saha')">ORTA SAHA</button>
             <button onclick="setRole('Defans')">DEFANS</button>
@@ -91,12 +96,12 @@
 
     <div id="main-screen" class="screen">
         <div class="header-ui">
-            <div id="ui-name-label" style="font-size: 18px; font-weight: bold; color: var(--accent-gold);"></div>
+            <div id="ui-name-label" style="font-weight: bold; color: var(--accent-gold);"></div>
             <div class="level-container">
                 <div id="level-bar" class="level-bar"></div>
-                <div class="level-text" id="ui-level-val">0 / 10000 XP</div>
+                <div class="level-text" id="ui-level-val">0 / 100000 XP</div>
             </div>
-            <button onclick="resetGame()" style="background: #600; font-size: 10px; padding: 5px 10px;">Sıfırla</button>
+            <button onclick="resetGame()" style="background: #600; font-size: 9px;">SIFIRLA</button>
         </div>
 
         <div id="main-layout">
@@ -104,204 +109,196 @@
                 <div class="sidebar-item" onclick="showSection('home')">ANA SAYFA</div>
                 <div class="sidebar-item" onclick="showSection('player')">PROFİL</div>
                 <div class="sidebar-item" onclick="showSection('training')">ANTRENMAN</div>
-                <div id="team-btn" class="sidebar-item" onclick="showSection('teams')">TAKIMLAR (Lv 30)</div>
-                <div id="milli-btn" class="sidebar-item" onclick="showSection('milli')" style="color: #ff3e3e; border: 1px solid #ff3e3e;">MİLLİ TAKIM (Lv 1000)</div>
-                <div class="sidebar-item" onclick="showSection('comments')" style="margin-top: 20px; border: 1px solid var(--accent-gold); color: var(--accent-gold);">YORUMLAR</div>
+                <div id="mh-btn" class="sidebar-item" onclick="showSection('mahalle')" style="color:#00ff00;">MAHALLE (100 XP)</div>
+                <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">TAKIMLAR (30 XP)</div>
+                <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">MİLLİ (1000 XP)</div>
+                <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">YORUMLAR</div>
             </div>
 
             <div id="content-area">
-                <div id="view-home">
-                    <h2 style="color: var(--accent-red);">KARİYER MERKEZİ</h2>
-                    <p>Antrenman yap ve efsane ol! Seviye 1000'de Milli Takım seni bekliyor.</p>
-                </div>
-
+                <div id="view-home"><h2>KARİYER MERKEZİ</h2><p>Antrenman yaparak seviye atla ve büyük takımlara transfer ol!</p></div>
+                
                 <div id="view-player" style="display:none;">
-                    <h2 style="color: var(--accent-gold);">OYUNCU KARTI</h2>
-                    <div style="background: rgba(20,20,20,0.9); padding: 30px; border-radius: 15px; border: 2px solid var(--accent-gold); display: inline-block; text-align: left; min-width: 300px;">
-                        <p>👤 <strong>İsim:</strong> <span id="p-info-name"></span></p>
-                        <p>⚽ <strong>Mevki:</strong> <span id="p-info-role"></span></p>
-                        <p>⭐ <strong>XP:</strong> <span id="p-info-lv"></span></p>
-                        <p>🏆 <strong>Kulüp:</strong> <span id="p-info-team">Boşta</span></p>
+                    <h2>OYUNCU KARTI</h2>
+                    <div style="border: 1px solid var(--accent-gold); padding: 20px; display: inline-block; text-align: left;">
+                        <p>👤 İsim: <span id="p-name"></span></p>
+                        <p>⚽ Mevki: <span id="p-role"></span></p>
+                        <p>⭐ Level: <span id="p-lv"></span></p>
+                        <p>🏠 Takım: <span id="p-tm"></span></p>
                     </div>
                 </div>
 
                 <div id="view-training" style="display:none;">
-                    <h2>ANTRENMAN TESİSLERİ</h2>
+                    <h2>TESİSLER</h2>
                     <div class="training-card"><h3>Şut</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Şut çalıştın!')">ÇALIŞ</button></div>
                     <div class="training-card"><h3>Kondisyon</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Koşu yaptın!')">ÇALIŞ</button></div>
                     <div class="training-card"><h3>Teknik</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Teknik çalıştın!')">ÇALIŞ</button></div>
-                    <p id="train-log" style="margin-top: 20px; font-weight: bold; color: var(--accent-gold);"></p>
+                    <p id="t-log" style="margin-top: 10px; font-weight: bold; color: var(--accent-gold);"></p>
+                </div>
+
+                <div id="view-mahalle" style="display:none;">
+                    <h2>MAHALLE MAÇLARI (10'DA BİTER)</h2>
+                    <div id="mh-list" class="team-grid"></div>
+                    <button id="mh-match-btn" style="display:none; margin-top:20px; background:#00ff00; color:black;" onclick="startMatch('mahalle')">MAHALLE MAÇI YAP</button>
                 </div>
 
                 <div id="view-teams" style="display:none;">
-                    <h2 style="color: var(--accent-gold);">TRANSFER PAZARI</h2>
-                    <div id="team-list" class="team-grid"></div>
-                    <div id="match-area" style="display:none; margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
-                        <button onclick="startMatch('kulup')" style="background: var(--accent-red); padding: 15px 40px; font-size: 18px;">MAÇA ÇIK</button>
-                    </div>
+                    <h2>KULÜPLER</h2>
+                    <div id="tm-list" class="team-grid"></div>
+                    <button id="tm-match-btn" style="display:none; margin-top:20px; background:red;" onclick="startMatch('kulup')">KULÜP MAÇI YAP</button>
                 </div>
 
                 <div id="view-milli" style="display:none;">
-                    <h2 style="color: var(--accent-red);">MİLLİ TAKIM SEÇMELERİ</h2>
-                    <div id="milli-list" class="team-grid"></div>
-                    <div id="milli-match-area" style="display:none; margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
-                        <button onclick="startMatch('milli')" style="background: white; color: black; padding: 15px 40px; font-size: 18px;">MİLLİ MAÇA ÇIK</button>
-                    </div>
+                    <h2>MİLLİ TAKIMLAR</h2>
+                    <div id="ml-list" class="team-grid"></div>
+                    <button id="ml-match-btn" style="display:none; margin-top:20px; background:white; color:black;" onclick="startMatch('milli')">MİLLİ MAÇ YAP</button>
                 </div>
 
                 <div id="view-comments" style="display:none;">
-                    <h2 style="color: var(--accent-gold);">TARAFTAR YORUMLARI</h2>
-                    <div id="comment-list" style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; min-height: 200px;"></div>
+                    <h2>TARAFTAR YORUMLARI</h2>
+                    <div id="comment-list" class="comment-box"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="match-screen" class="screen">
-        <h2 id="match-status">MAÇ BAŞLIYOR...</h2>
-        <div class="scoreboard"><span id="s-my">0</span> - <span id="s-opp">0</span></div>
-        <div id="goal-announcement"></div>
-        <div style="font-size: 20px;">DAKİKA: <span id="m-time">0</span>'</div>
-        <button id="btn-finish" style="display:none; margin-top:20px;" onclick="showSection('home'); showScreen('main-screen');">DEVAM ET</button>
+    <div id="match-screen" class="screen" style="flex-direction: row; justify-content: space-around;">
+        <div style="flex: 1; text-align: center;">
+            <h2 id="m-status">MAÇ BAŞLIYOR</h2>
+            <div class="scoreboard"><span id="s-1">0</span> - <span id="s-2">0</span></div>
+            <div id="goal-info" style="color:var(--accent-gold); font-weight:bold; height:30px;"></div>
+            <p id="time-display">Dakika: 0'</p>
+            <button id="m-finish" style="display:none;" onclick="showScreen('main-screen')">DEVAM ET</button>
+        </div>
+        <div id="squad-list">
+            <div class="squad-title">TAKIM KADROSU</div>
+            <div id="squad-content"></div>
+        </div>
     </div>
 
     <script>
-        let playerData = { name: "", role: "", level: 0, team: "", milliTeam: "", fanComments: [] };
-        const kulupTeams = ["Pendik Anadolu", "Ayaz City", "Blender Utd", "Unity FC", "Roblox Stars", "JS Gücü", "HTML Warriors", "CSS United", "Python Gençlik", "C# Belediye", "React Spor", "Node.js İdman", "SQL Kartalları", "Java City", "Swift Gücü", "Go Futbol"];
-        const milliTeams = ["Türkiye", "Brezilya", "Arjantin", "Fransa", "Almanya", "İngiltere", "Portekiz", "İspanya", "İtalya", "Hollanda", "Belçika", "Hırvatistan", "Uruguay", "Fas", "Japonya", "Güney Kore", "Senegal", "ABD", "İsviçre", "Danimarka"];
-        const scorers = ["Kerem", "Barış Alper", "Arda Güler", "Hakan Çalhanoğlu", "Kenan Yıldız", "Ferdi", "Mauro", "Edin", "Michy", "Semih", "Cenk", "İrfan Can", "Vinicius", "Mbappe", "Messi", "Ronaldo", "Neymar", "Salah", "Haaland", "Lewandowski"];
+        let p = { name: "", role: "", lv: 0, tm: "", mh: "", ml: "", comments: [] };
+        const kulupler = ["Pendik Anadolu", "Ayaz City", "Blender Utd", "Unity FC", "Roblox Stars", "JS Gücü", "HTML Warriors", "CSS United", "Python Gençlik", "C# Belediye", "React Spor", "Node.js İdman", "SQL Kartalları", "Java City", "Swift Gücü", "Go Futbol"];
+        const milliler = ["Türkiye", "Brezilya", "Arjantin", "Fransa", "Almanya", "İngiltere", "Portekiz", "İspanya", "İtalya", "Hollanda", "Belçika", "Hırvatistan", "Uruguay", "Fas", "Japonya", "Güney Kore", "Senegal", "ABD", "İsviçre", "Danimarka"];
+        const mahalleler = ["Yıldızlar Mah.", "Güneş Sokak", "Fırtına Gençlik", "Şimşek Spor"];
+        const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz"];
 
-        function save() { localStorage.setItem('ayazKariyer_v8', JSON.stringify(playerData)); }
+        function save() { localStorage.setItem('ayazKariyer_v3', JSON.stringify(p)); }
         function load() {
-            const saved = localStorage.getItem('ayazKariyer_v8');
-            if(saved) {
-                playerData = JSON.parse(saved);
-                if(playerData.name) { updateUI(); showScreen('main-screen'); }
-            }
+            let s = localStorage.getItem('ayazKariyer_v3');
+            if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
         }
         window.onload = load;
 
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+        function showScreen(id) { document.querySelectorAll('.screen').forEach(x => x.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
         function startGame() {
-            const val = document.getElementById('player-name-input').value;
-            if(!val) return;
-            playerData.name = val;
-            showScreen('role-screen');
+            let n = document.getElementById('player-name-input').value;
+            if(!n) return; p.name = n; showScreen('role-screen');
         }
 
-        function setRole(r) {
-            playerData.role = r;
-            save();
-            updateUI();
-            showScreen('main-screen');
-        }
+        function setRole(r) { p.role = r; save(); updateUI(); showScreen('main-screen'); }
 
-        function doTrain(xp, msg) {
-            const btns = document.querySelectorAll('.t-btn');
-            btns.forEach(b => b.disabled = true);
-            let timeLeft = 5;
-            document.getElementById('train-log').innerText = `Antrenman yapılıyor... ${timeLeft}s`;
-            const timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('train-log').innerText = `Antrenman yapılıyor... ${timeLeft}s`;
-                if(timeLeft <= 0) {
-                    clearInterval(timer);
-                    playerData.level = Math.min(10000, playerData.level + xp);
-                    updateUI();
-                    save();
-                    document.getElementById('train-log').innerText = msg + " (+10 XP)";
-                    btns.forEach(b => b.disabled = false);
-                }
+        function doTrain(x, msg) {
+            document.querySelectorAll('.t-btn').forEach(b => b.disabled = true);
+            let t = 5; document.getElementById('t-log').innerText = `Çalışıyor... ${t}s`;
+            let i = setInterval(() => {
+                t--; document.getElementById('t-log').innerText = `Çalışıyor... ${t}s`;
+                if(t <= 0) { clearInterval(i); p.lv = Math.min(100000, p.lv + x); updateUI(); save(); document.getElementById('t-log').innerText = msg + " (+10 XP)"; document.querySelectorAll('.t-btn').forEach(b => b.disabled = false); }
             }, 1000);
         }
 
         function updateUI() {
-            document.getElementById('ui-name-label').innerText = `${playerData.name} | ${playerData.role}`;
-            document.getElementById('ui-level-val').innerText = `${playerData.level} / 10000 XP`;
-            document.getElementById('level-bar').style.width = (playerData.level / 100) + "%";
-            document.getElementById('team-btn').style.opacity = playerData.level >= 30 ? "1" : "0.5";
-            document.getElementById('milli-btn').style.opacity = playerData.level >= 1000 ? "1" : "0.5";
+            document.getElementById('ui-name-label').innerText = `${p.name} (${p.role})`;
+            document.getElementById('ui-level-val').innerText = `${p.lv} / 100000 XP`;
+            document.getElementById('level-bar').style.width = (p.lv / 1000) + "%";
+            document.getElementById('mh-btn').style.opacity = p.lv >= 100 ? "1" : "0.4";
+            document.getElementById('tm-btn').style.opacity = p.lv >= 30 ? "1" : "0.4";
+            document.getElementById('ml-btn').style.opacity = p.lv >= 1000 ? "1" : "0.4";
         }
 
-        function showSection(sect) {
-            if(sect === 'teams' && playerData.level < 30) return alert("30 XP lazım!");
-            if(sect === 'milli' && playerData.level < 1000) return alert("Milli Takım için 1000 XP lazım!");
+        function showSection(s) {
+            if(s === 'mahalle' && p.lv < 100) return alert("100 XP lazım!");
+            if(s === 'teams' && p.lv < 30) return alert("30 XP lazım!");
+            if(s === 'milli' && p.lv < 1000) return alert("1000 XP lazım!");
             
             document.querySelectorAll('#content-area > div').forEach(v => v.style.display = 'none');
-            document.getElementById('view-' + sect).style.display = 'block';
-            
-            if(sect === 'player') {
-                document.getElementById('p-info-name').innerText = playerData.name;
-                document.getElementById('p-info-role').innerText = playerData.role;
-                document.getElementById('p-info-lv').innerText = playerData.level;
-                document.getElementById('p-info-team').innerText = (playerData.milliTeam ? playerData.milliTeam + " (Milli) / " : "") + (playerData.team || "Boşta");
+            document.getElementById('view-' + s).style.display = 'block';
+
+            if(s === 'player') {
+                document.getElementById('p-name').innerText = p.name;
+                document.getElementById('p-role').innerText = p.role;
+                document.getElementById('p-lv').innerText = p.lv;
+                document.getElementById('p-tm').innerText = p.ml || p.tm || p.mh || "Boşta";
             }
-            if(sect === 'teams') renderTeams('kulup');
-            if(sect === 'milli') renderTeams('milli');
+            if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh');
+            if(s === 'teams') renderList('tm-list', kulupler, 'tm');
+            if(s === 'milli') renderList('ml-list', milliler, 'ml');
+            if(s === 'comments') renderComments();
         }
 
-        function renderTeams(type) {
-            if(type === 'kulup') {
-                const list = document.getElementById('team-list');
-                list.innerHTML = kulupTeams.map(t => `<button onclick="joinTeam('${t}', 'kulup')" style="${playerData.team === t ? 'background:green;' : ''}">${t}</button>`).join('');
-                document.getElementById('match-area').style.display = playerData.team ? 'block' : 'none';
-            } else {
-                const list = document.getElementById('milli-list');
-                list.innerHTML = milliTeams.map(t => `<button onclick="joinTeam('${t}', 'milli')" style="${playerData.milliTeam === t ? 'background:red; color:white;' : ''}">${t}</button>`).join('');
-                document.getElementById('milli-match-area').style.display = playerData.milliTeam ? 'block' : 'none';
-            }
+        function renderList(id, arr, key) {
+            document.getElementById(id).innerHTML = arr.map(t => `<button onclick="join('${t}','${key}')" style="${p[key]===t?'background:gold;color:black;':''}">${t}</button>`).join('');
+            document.getElementById(key+'-match-btn').style.display = p[key] ? 'inline-block' : 'none';
         }
 
-        function joinTeam(t, type) {
-            if(type === 'kulup') {
-                if(playerData.team && playerData.team !== t) playerData.level = Math.max(0, playerData.level - 10);
-                playerData.team = t;
-            } else {
-                playerData.milliTeam = t;
-            }
-            updateUI();
-            save();
-            renderTeams(type);
-        }
+        function join(t, k) { p[k] = t; save(); showSection(p.lv >= 1000 ? 'milli' : (p.lv >= 100 ? 'mahalle' : 'teams')); }
 
-        function startMatch(matchType) {
+        function startMatch(type) {
             showScreen('match-screen');
-            document.getElementById('s-my').innerText = "0";
-            document.getElementById('s-opp').innerText = "0";
-            document.getElementById('goal-announcement').innerText = "";
-            document.getElementById('btn-finish').style.display = 'none';
-            document.getElementById('match-status').innerText = matchType === 'milli' ? "MİLLİ MAÇ OYNANIYOR..." : "MAÇ OYNANIYOR...";
+            let s1 = 0, s2 = 0, clock = 0;
+            document.getElementById('s-1').innerText = 0;
+            document.getElementById('s-2').innerText = 0;
+            document.getElementById('m-finish').style.display = 'none';
             
-            let minute = 0;
-            const matchInterval = setInterval(() => {
-                minute += 15;
-                document.getElementById('m-time').innerText = minute;
+            let kadro = [`GK: ${isimler[0]}`, `DEF: ${isimler[1]}`, `MID: ${p.name} (SEN)`, `MID: ${isimler[3]}`, `FOR: ${isimler[4]}`];
+            document.getElementById('squad-content').innerHTML = kadro.map(k => `<div class="player-line">${k}</div>`).join('');
+
+            const loop = setInterval(() => {
+                clock++;
                 
-                if(Math.random() > 0.6) {
-                    const side = Math.random() > 0.5 ? 's-my' : 's-opp';
-                    document.getElementById(side).innerText = parseInt(document.getElementById(side).innerText) + 1;
-                    
-                    const randomScorer = scorers[Math.floor(Math.random() * scorers.length)];
-                    const scorerFinal = Math.random() > 0.3 ? randomScorer : playerData.name;
-                    document.getElementById('goal-announcement').innerText = `GOL! Atan: ${scorerFinal}`;
-                    setTimeout(() => { document.getElementById('goal-announcement').innerText = ""; }, 2000);
+                if(type === 'mahalle') {
+                    let mins = Math.floor(clock / 60);
+                    let secs = clock % 60;
+                    document.getElementById('time-display').innerText = `Kronometre: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    document.getElementById('time-display').innerText = `Dakika: ${clock}'`;
+                }
+                
+                if(Math.random() > 0.7) {
+                    if(Math.random() > 0.5) { s1++; document.getElementById('s-1').innerText = s1; document.getElementById('goal-info').innerText = "GOL: " + (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]); }
+                    else { s2++; document.getElementById('s-2').innerText = s2; document.getElementById('goal-info').innerText = "GOL: Rakip"; }
+                    setTimeout(() => document.getElementById('goal-info').innerText = "", 1000);
                 }
 
-                if(minute >= 90) {
-                    clearInterval(matchInterval);
-                    document.getElementById('match-status').innerText = "MAÇ BİTTİ!";
-                    document.getElementById('btn-finish').style.display = 'inline-block';
-                    playerData.level = Math.min(10000, playerData.level + 50);
-                    updateUI();
-                    save();
+                let isOver = false;
+                if(type === 'mahalle' && (s1 >= 10 || s2 >= 10)) isOver = true;
+                if(type !== 'mahalle' && clock >= 90) isOver = true;
+
+                if(isOver) {
+                    clearInterval(loop);
+                    document.getElementById('m-status').innerText = "MAÇ BİTTİ!";
+                    document.getElementById('m-finish').style.display = 'block';
+                    
+                    let xp = 0;
+                    let result = (s1 > s2) ? "win" : (s1 === s2 ? "draw" : "lose");
+                    if(result === "win") xp = (type==='mahalle'?5:50);
+                    else if(result === "draw") xp = (type==='mahalle'?2:20);
+                    
+                    p.lv = Math.min(100000, p.lv + xp);
+                    addComment(result);
+                    save(); updateUI();
                 }
-            }, 800);
+            }, type === 'mahalle' ? 1000 : 800);
         }
 
+        function addComment(res) {
+            let m = res === "win" ? "Harika bir maç çıkardın!" : (res === "draw" ? "Daha iyisi olabilirdi." : "Çok kötü bir oyun...");
+            p.comments.unshift(`${isimler[Math.floor(Math.random()*isimler.length)]}: ${m}`);
+            if(p.comments.length > 10) p.comments.pop();
+        }
+
+        function renderComments() { document.getElementById('comment-list').innerHTML = p.comments.map(c => `<div class="comment">${c}</div>`).join(''); }
         function resetGame() { if(confirm("Sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
