@@ -28,6 +28,7 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
         .screen {
@@ -42,6 +43,7 @@
             position: relative;
             padding: 30px;
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            z-index: 2;
         }
 
         .active { display: flex; flex-direction: column; }
@@ -193,9 +195,7 @@
 
                 <div id="view-training" style="display:none;">
                     <h2>TESİSLER</h2>
-                    <div class="training-card"><h3>🎯 Şut</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Şut çalıştın!')">ÇALIŞ</button></div>
-                    <div class="training-card"><h3>🏃 Kondisyon</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Koşu yaptın!')">ÇALIŞ</button></div>
-                    <div class="training-card"><h3>🧠 Teknik</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Teknik çalıştın!')">ÇALIŞ</button></div>
+                    <div id="training-cards-container"></div>
                     <p id="t-log" style="margin-top: 10px; font-weight: bold; color: var(--accent-gold);"></p>
                 </div>
 
@@ -318,9 +318,9 @@
         const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz", "Volkan", "Serkan", "Hüseyin", "Gökhan", "Kaan", "Tolga"];
         const soyisimler = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir", "Arslan", "Doğan", "Kılıç"];
 
-        function save() { localStorage.setItem('ayazKariyer_v11', JSON.stringify(p)); }
+        function save() { localStorage.setItem('ayazKariyer_v13', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v11');
+            let s = localStorage.getItem('ayazKariyer_v13');
             if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
         }
         window.onload = load;
@@ -349,13 +349,13 @@
             document.getElementById('ui-name-label').innerHTML = currentTeamDisplay;
             
             document.getElementById('ui-level-val').innerText = `${p.lv} / 100000 XP`;
-            document.getElementById('level-bar').style.width = (p.lv / 1000) + "%";
+            document.getElementById('level-bar').style.width = (p.lv / 100) + "%";
             
             if(p.hasTeam) {
                 document.getElementById('ui-team-bar-container').style.display = 'flex';
                 document.getElementById('ui-team-bar-title').innerText = `${p.teamName}:`;
                 document.getElementById('ui-team-level-val').innerText = `${p.teamLv} / 100000 XP`;
-                document.getElementById('team-level-bar').style.width = (p.teamLv / 1000) + "%";
+                document.getElementById('team-level-bar').style.width = (p.teamLv / 100) + "%";
                 document.getElementById('mkt-btn').style.display = 'block';
                 document.getElementById('sqd-btn').style.display = 'block';
             } else {
@@ -368,6 +368,23 @@
             document.getElementById('tm-btn').style.opacity = p.lv >= 30 ? "1" : "0.4";
             document.getElementById('custom-team-btn').style.opacity = p.lv >= 50 ? "1" : "0.4";
             document.getElementById('ml-btn').style.opacity = p.lv >= 1000 ? "1" : "0.4";
+        }
+
+        function generateTrainingCards() {
+            let container = document.getElementById('training-cards-container');
+            if (p.role === 'Kaleci') {
+                container.innerHTML = `
+                    <div class="training-card"><h3>🎯 Atlama</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Atlama çalıştın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🏃 Pozisyon Alma</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Pozisyon alma çalıştın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🧠 Pas</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Pas çalıştın!')">ÇALIŞ</button></div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="training-card"><h3>🎯 Şut</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Şut çalıştın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🏃 Kondisyon</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Koşu yaptın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🧠 Teknik</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Teknik çalıştın!')">ÇALIŞ</button></div>
+                `;
+            }
         }
 
         function previewLogo(input) {
@@ -453,7 +470,6 @@
                 document.getElementById('p-role').innerText = p.role;
                 document.getElementById('p-lv').innerText = p.lv;
                 
-                // PROFIL KISMINA TAKIM SEVIYESINI YAZDIRMA ALANI
                 let teamLvDisplay = document.getElementById('p-team-lv-display');
                 if(p.hasTeam) {
                     teamLvDisplay.innerText = `${p.teamName} (${p.teamLv} / 100000 XP)`;
@@ -466,6 +482,12 @@
                 else if(p.mh) { document.getElementById('p-tm').innerHTML = p.mh; } 
                 else { document.getElementById('p-tm').innerHTML = "Boşta 🗓️"; }
             }
+            
+            if(s === 'training') {
+                generateTrainingCards();
+                document.getElementById('t-log').innerText = "";
+            }
+            
             if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh', false);
             if(s === 'teams') renderList('tm-list', kulupler, 'tm', true); 
             
