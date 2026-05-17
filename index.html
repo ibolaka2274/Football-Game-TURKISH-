@@ -54,7 +54,7 @@
         button:disabled { opacity: 0.5; cursor: not-allowed; background: #222 !important; }
         button:hover:not(:disabled) { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); transform: translateY(-2px); }
 
-        .sidebar { width: 180px; display: flex; flex-direction: column; gap: 8px; border-left: 4px solid var(--accent-red); padding-left: 15px; }
+        .sidebar { width: 180px; display: flex; flex-direction: column; gap: 8px; border-left: 4px solid var(--accent-red); padding-left: 15px; overflow-y: auto; height: 100%; }
         .sidebar-item { background: rgba(17, 17, 17, 0.6); padding: 10px; font-size: 12px; cursor: pointer; text-align: center; border: 1px solid #333; border-radius: 4px; transition: 0.2s; }
         .sidebar-item:hover { background: var(--sidebar-hover); border-color: var(--accent-red); color: var(--accent-red); }
 
@@ -69,7 +69,7 @@
         .team-level-bar { background: linear-gradient(90deg, #00ff00, #00aa00); height: 100%; width: 0%; transition: width 0.5s; }
         .level-text { position: absolute; width: 100%; text-align: center; line-height: 22px; font-weight: bold; font-size: 10px; text-shadow: 1px 1px 2px black; }
 
-        #main-layout { display: flex; height: 85%; }
+        #main-layout { display: flex; height: 85%; overflow: hidden; }
         #content-area { flex: 1; padding: 20px; overflow-y: auto; text-align: center; }
 
         .team-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 10px; justify-items: center; }
@@ -102,6 +102,15 @@
 
         .custom-file-upload { border: 1px solid #555; display: inline-block; padding: 12px 20px; cursor: pointer; background: #222; border-radius: 8px; font-weight: bold; margin-bottom: 15px; transition: 0.3s; }
         .custom-file-upload:hover { background: #333; border-color: var(--accent-gold); }
+
+        /* Yeni Eklenen Stiller */
+        .forfeit-btn { position: absolute; bottom: 25px; right: 25px; background: #500; border: 2px solid #f33; padding: 12px 25px; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 12px; z-index: 15; }
+        .forfeit-btn:hover { background: #900; box-shadow: 0 0 15px #f33; }
+        
+        .history-card { background: rgba(255,255,255,0.05); border: 1px solid #333; padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+        .history-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        
+        .mission-card { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-gold); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
 
         .game-logo {
             font-size: 50px;
@@ -163,11 +172,13 @@
                 <div class="sidebar-item" onclick="showSection('home')">🏠 ANA SAYFA</div>
                 <div class="sidebar-item" onclick="showSection('player')">👤 PROFİL</div>
                 <div class="sidebar-item" onclick="showSection('training')">🏋️ ANTRENMAN</div>
+                <div class="sidebar-item" onclick="showSection('missions')">📜 GÖREVLER</div>
                 <div id="mh-btn" class="sidebar-item" onclick="showSection('mahalle')" style="color:#00ff00;">MAHALLE (100 XP)</div>
                 <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">🏆 TAKIMLAR (30 XP)</div>
                 <div id="custom-team-btn" class="sidebar-item" onclick="showSection('customteam')" style="color: cyan;">🛡️ TAKIM OLUŞTUR (50 SV)</div>
                 <div id="mkt-btn" class="sidebar-item" onclick="showSection('market')" style="color: #ffcc00; display: none;">🛒 OYUNCU MARKETİ</div>
                 <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc; display: none;">🏃 ALINAN OYUNCULAR</div>
+                <div id="history-btn" class="sidebar-item" onclick="showSection('history')" style="color: #e0aaff; display: none;">📊 MAÇ GEÇMİŞİ</div>
                 <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">🌍 MİLLİ (1000 XP)</div>
                 <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">💬 YORUMLAR</div>
             </div>
@@ -197,6 +208,21 @@
                     <h2>TESİSLER</h2>
                     <div id="training-cards-container"></div>
                     <p id="t-log" style="margin-top: 10px; font-weight: bold; color: var(--accent-gold);"></p>
+                </div>
+
+                <div id="view-missions" style="display:none;">
+                    <h2>📜 SÜRELİ AKTİF GÖREVLER</h2>
+                    <p style="color: #aaa; font-size: 13px; margin-bottom: 20px;">Görevler 12 saatte bir yenilenir. Tamamlanan her görev <b>+100 Takım XP</b> kazandırır!</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: inline-block; margin-bottom: 20px; border: 1px solid #444;">
+                        ⏳ Yeni Görevlere Kalan Süre: <span id="mission-timer" style="color: var(--accent-gold); font-weight: bold;">12:00:00</span>
+                    </div>
+                    <div id="missions-container"></div>
+                </div>
+
+                <div id="view-history" style="display:none;">
+                    <h2>📊 KULÜP MAÇ GEÇMİŞİ</h2>
+                    <p style="color: #aaa; margin-bottom: 20px;">Takımınızın yaptığı tüm resmi karşılaşmaların dökümü.</p>
+                    <div id="history-container" style="max-width: 600px; margin: 0 auto; max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
                 </div>
 
                 <div id="view-mahalle" style="display:none;">
@@ -273,7 +299,7 @@
     </div>
 
     <div id="match-screen" class="screen" style="flex-direction: row; justify-content: space-around;">
-        <div style="flex: 1; text-align: center;">
+        <div style="flex: 1; text-align: center; position: relative; height: 100%;">
             <div style="font-size: 40px; margin-bottom: 5px;">⚔️</div>
             <h2 id="m-status">MAÇ BAŞLIYOR</h2>
             
@@ -289,7 +315,9 @@
 
             <div id="goal-info" style="color:var(--accent-gold); font-weight:bold; height:30px;"></div>
             <p id="time-display">Dakika: 0'</p>
-            <button id="m-finish" style="display:none;" onclick="showScreen('main-screen')">DEVAM ET</button>
+            <button id="m-finish" style="display:none; margin: 20px auto;" onclick="showScreen('main-screen')">DEVAM ET</button>
+            
+            <button id="m-forfeit" class="forfeit-btn" onclick="forfeitMatch()">MAÇTAN ÇEKİL 🏳️</button>
         </div>
         <div id="squad-list">
             <div class="squad-title">🛡️ TAKIM KADROSU</div>
@@ -301,9 +329,17 @@
         let p = { 
             name: "", role: "", lv: 0, tm: "", mh: "", ml: "", comments: [], 
             hasTeam: false, teamName: "", teamLogo: "", teamLv: 0,
-            marketGenerated: false, marketPool: [], boughtPool: [], squadIds: [] 
+            marketGenerated: false, marketPool: [], boughtPool: [], squadIds: [],
+            matchHistory: [], 
+            missions: [], missionTimestamp: 0, 
+            stats: { matchesPlayed: 0, wins: 0, trainingsDone: 0 } 
         };
         
+        let matchLoopInterval = null; 
+        let currentOpponentName = ""; 
+        let currentOpponentLogo = ""; 
+        let currentMatchType = ""; 
+
         const kulupler = [
             "AKINCILAR SPOR.jpeg", "ALEV ATLAR.jpeg", "ANADOLU BİZONLARI.jpeg", "BABALAR FUTBOL.jpeg",
             "BUZ ASLANLARI FUTBOL KULÜBÜ.jpeg", "CELIK BIRLIK FUTBOL KULUBU.jpeg", "EFSANE SPOR KULÜBÜ.jpeg",
@@ -318,10 +354,27 @@
         const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz", "Volkan", "Serkan", "Hüseyin", "Gökhan", "Kaan", "Tolga"];
         const soyisimler = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir", "Arslan", "Doğan", "Kılıç"];
 
-        function save() { localStorage.setItem('ayazKariyer_v13', JSON.stringify(p)); }
+        const tumGorevler = [
+            { id: "train_3", desc: "Tesislerde 3 kez Antrenman yap", targetType: "trainsDone", targetVal: 3 },
+            { id: "match_1", desc: "Herhangi bir kulüple 1 Maç tamamla", targetType: "matchesPlayed", targetVal: 1 },
+            { id: "win_1", desc: "Zorlu mücadelelerden 1 Galibiyet al", targetType: "wins", targetVal: 1 },
+            { id: "train_5", desc: "Sınırları zorla: 5 kez Antrenman yap", targetType: "trainsDone", targetVal: 5 },
+            { id: "match_2", desc: "Sahaya hükmet: Toplam 2 Maç yap", targetType: "matchesPlayed", targetVal: 2 }
+        ];
+
+        function save() { localStorage.setItem('ayazKariyer_v14', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v13');
-            if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
+            let s = localStorage.getItem('ayazKariyer_v14');
+            if(s) { 
+                p = JSON.parse(s); 
+                if(!p.matchHistory) p.matchHistory = [];
+                if(!p.missions) p.missions = [];
+                if(!p.stats) p.stats = { matchesPlayed: 0, wins: 0, trainingsDone: 0 };
+                updateUI(); 
+                if(p.name) showScreen('main-screen'); 
+            }
+            setupMissions();
+            setInterval(updateMissionTimer, 1000);
         }
         window.onload = load;
 
@@ -339,7 +392,16 @@
             let t = 5; document.getElementById('t-log').innerText = `⏳ Çalışıyor... ${t}s`;
             let i = setInterval(() => {
                 t--; document.getElementById('t-log').innerText = `⏳ Çalışıyor... ${t}s`;
-                if(t <= 0) { clearInterval(i); p.lv = Math.min(100000, p.lv + x); updateUI(); save(); document.getElementById('t-log').innerText = "✅ " + msg + " (+10 XP)"; document.querySelectorAll('.t-btn').forEach(b => b.disabled = false); }
+                if(t <= 0) { 
+                    clearInterval(i); 
+                    p.lv = Math.min(100000, p.lv + x); 
+                    p.stats.trainingsDone++; 
+                    checkMissionProgress();
+                    updateUI(); 
+                    save(); 
+                    document.getElementById('t-log').innerText = "✅ " + msg + " (+10 XP)"; 
+                    document.querySelectorAll('.t-btn').forEach(b => b.disabled = false); 
+                }
             }, 1000);
         }
 
@@ -358,16 +420,131 @@
                 document.getElementById('team-level-bar').style.width = (p.teamLv / 100) + "%";
                 document.getElementById('mkt-btn').style.display = 'block';
                 document.getElementById('sqd-btn').style.display = 'block';
+                document.getElementById('history-btn').style.display = 'block';
             } else {
                 document.getElementById('ui-team-bar-container').style.display = 'none';
                 document.getElementById('mkt-btn').style.display = 'none';
                 document.getElementById('sqd-btn').style.display = 'none';
+                document.getElementById('history-btn').style.display = 'none';
             }
 
             document.getElementById('mh-btn').style.opacity = p.lv >= 100 ? "1" : "0.4";
             document.getElementById('tm-btn').style.opacity = p.lv >= 30 ? "1" : "0.4";
             document.getElementById('custom-team-btn').style.opacity = p.lv >= 50 ? "1" : "0.4";
             document.getElementById('ml-btn').style.opacity = p.lv >= 1000 ? "1" : "0.4";
+        }
+
+        /* GÖREVLER SİSTEMİ (12 Saatte Bir Güncellenir) */
+        function setupMissions() {
+            let simdi = Date.now();
+            let onikiSaat = 12 * 60 * 60 * 1000;
+            
+            if(!p.missionTimestamp || (simdi - p.missionTimestamp >= onikiSaat) || p.missions.length === 0) {
+                p.missionTimestamp = simdi;
+                let karisik = [...tumGorevler].sort(() => 0.5 - Math.random());
+                p.missions = karisik.slice(0, 3).map(m => ({
+                    ...m,
+                    startVal: p.stats[m.targetType] || 0,
+                    isCompleted: false,
+                    isClaimed: false
+                }));
+                save();
+            }
+        }
+
+        function updateMissionTimer() {
+            let simdi = Date.now();
+            let onikiSaat = 12 * 60 * 60 * 1000;
+            let kalanMili = onikiSaat - (simdi - p.missionTimestamp);
+            
+            if(kalanMili <= 0) {
+                setupMissions();
+                if(document.getElementById('view-missions').style.display === 'block') {
+                    renderMissions();
+                }
+                kalanMili = onikiSaat;
+            }
+            
+            let saniye = Math.floor((kalanMili / 1000) % 60);
+            let dakika = Math.floor((kalanMili / (1000 * 60)) % 60);
+            let saat = Math.floor((kalanMili / (1000 * 60 * 60)) % 24);
+            
+            let timerSpan = document.getElementById('mission-timer');
+            if(timerSpan) {
+                timerSpan.innerText = `${saat.toString().padStart(2,'0')}:${dakika.toString().padStart(2,'0')}:${saniye.toString().padStart(2,'0')}`;
+            }
+        }
+
+        function checkMissionProgress() {
+            p.missions.forEach(m => {
+                if(!m.isCompleted) {
+                    let guncelIlerleme = (p.stats[m.targetType] || 0) - m.startVal;
+                    if(guncelIlerleme >= m.targetVal) {
+                        m.isCompleted = true;
+                    }
+                }
+            });
+            save();
+        }
+
+        function renderMissions() {
+            let container = document.getElementById('missions-container');
+            container.innerHTML = p.missions.map((m, idx) => {
+                let guncelIlerleme = Math.min(m.targetVal, (p.stats[m.targetType] || 0) - m.startVal);
+                if(guncelIlerleme < 0) guncelIlerleme = 0; 
+                
+                let btnHtml = "";
+                if(m.isClaimed) {
+                    btnHtml = `<button disabled style="background:#222; color:#555;">ALINDI ✅</button>`;
+                } else if(m.isCompleted) {
+                    btnHtml = `<button onclick="claimMission(${idx})" style="background:var(--accent-gold); color:black;">ÖDÜLÜ AL (+100 XP)</button>`;
+                } else {
+                    btnHtml = `<button disabled style="background:#444;">DEVAM EDİYOR</button>`;
+                }
+
+                return `
+                    <div class="mission-card">
+                        <div>
+                            <h4 style="margin:0 0 5px 0; color:#fff;">${m.desc}</h4>
+                            <p style="margin:0; font-size:12px; color:#aaa;">İlerleme: <span style="color:cyan;">${guncelIlerleme} / ${m.targetVal}</span></p>
+                        </div>
+                        <div>${btnHtml}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function claimMission(idx) {
+            if(!p.hasTeam) return alert("Görev ödülünü alabilmek için önce kendi takımını kurmuş olmalısın!");
+            if(p.missions[idx].isCompleted && !p.missions[idx].isClaimed) {
+                p.missions[idx].isClaimed = true;
+                p.teamLv = Math.min(100000, p.teamLv + 100); 
+                save(); updateUI(); renderMissions();
+                alert("Harika! Görev ödülü olan 100 Takım Seviyesi (XP) başarıyla hesabına eklendi.");
+            }
+        }
+
+        /* MAÇ GEÇMİŞİ RENDER */
+        function renderHistory() {
+            let container = document.getElementById('history-container');
+            if(p.matchHistory.length === 0) {
+                container.innerHTML = `<p style="color:#aaa; margin-top:30px;">Henüz yapılmış bir resmi kulüp maçı bulunmuyor.</p>`;
+                return;
+            }
+            container.innerHTML = p.matchHistory.map(m => {
+                let bColor = m.res === 'GALİBİYET' ? '#00aa00' : (m.res === 'BERABERLİK' ? '#888' : '#cc0000');
+                let rakipGosterim = m.oppLogo.includes('.jpeg') ? `<img src="${m.oppLogo}" class="ui-team-logo" style="width:24px; height:24px;"> ${m.oppName}` : `${m.oppName}`;
+                return `
+                    <div class="history-card">
+                        <div>
+                            <span class="history-badge" style="background:${bColor};">${m.res}</span>
+                            <span style="font-size:11px; color:#666; margin-left:10px;">${m.type.toUpperCase()}</span>
+                            <div style="margin-top:6px; font-weight:bold; font-size:14px;">${p.teamName || 'Takımınız'} vs ${rakipGosterim}</div>
+                        </div>
+                        <div style="font-size:22px; font-family:monospace; font-weight:bold; color:var(--accent-gold);">${m.skor}</div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function generateTrainingCards() {
@@ -460,6 +637,7 @@
             if(s === 'customteam' && p.lv < 50) return alert("En az 50 Seviye (XP) olmalısın!");
             if(s === 'market' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
             if(s === 'myplayers' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
+            if(s === 'history' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
             if(s === 'milli' && p.lv < 1000) return alert("1000 XP lazım!");
             
             document.querySelectorAll('#content-area > div').forEach(v => v.style.display = 'none');
@@ -488,6 +666,8 @@
                 document.getElementById('t-log').innerText = "";
             }
             
+            if(s === 'missions') renderMissions();
+            if(s === 'history') renderHistory();
             if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh', false);
             if(s === 'teams') renderList('tm-list', kulupler, 'tm', true); 
             
@@ -612,12 +792,49 @@
 
         function join(t, k) { p[k] = t; save(); showSection(p.lv >= 1000 ? 'milli' : (p.lv >= 100 ? 'mahalle' : 'teams')); }
 
+        /* YENİ: Maçtan Çekil Fonksiyonu */
+        function forfeitMatch() {
+            if(!matchLoopInterval) return;
+            if(confirm("Maçtan çekilmek istediğine emin misin? Hükmen 3-0 mağlubiyet sayılacaktır!")) {
+                clearInterval(matchLoopInterval);
+                matchLoopInterval = null;
+                
+                document.getElementById('s-1').innerText = 0;
+                document.getElementById('s-2').innerText = 3;
+                document.getElementById('m-status').innerText = "🏳️ HÜKMEN MAĞLUBİYET (ÇEKİLDİN)";
+                document.getElementById('m-forfeit').style.display = 'none';
+                document.getElementById('m-finish').style.display = 'block';
+                
+                p.stats.matchesPlayed++;
+                
+                if(p.hasTeam) {
+                    p.matchHistory.unshift({
+                        type: currentMatchType,
+                        oppName: currentOpponentName,
+                        oppLogo: currentOpponentLogo,
+                        skor: "0 - 3",
+                        res: "MAĞLUBİYET"
+                    });
+                }
+                
+                p.comments.unshift(`💬 [TARAFTAR]: Takımı sahadan çekmek mi? Ruhunuz nerede sizin?! 🤬`);
+                if(p.comments.length > 10) p.comments.pop();
+                
+                checkMissionProgress();
+                save(); updateUI();
+            }
+        }
+
+        /* YENİDEN YAPILANDIRILAN GERÇEKÇİ MAÇ MOTORU */
         function startMatch(type) {
+            currentMatchType = type;
             showScreen('match-screen');
             let s1 = 0, s2 = 0, clock = 0;
             document.getElementById('s-1').innerText = 0;
             document.getElementById('s-2').innerText = 0;
             document.getElementById('m-finish').style.display = 'none';
+            document.getElementById('m-forfeit').style.display = 'block';
+            document.getElementById('m-status').innerText = "MAÇ DEVAM EDİYOR";
             
             let homeLogoContainer = document.getElementById('m-logo-home-container');
             let awayLogoContainer = document.getElementById('m-logo-away-container');
@@ -625,52 +842,60 @@
             let kadro = [];
             
             if(type === 'custom') {
+                currentOpponentName = kulupler[Math.floor(Math.random() * kulupler.length)].replace('.jpeg', '');
+                currentOpponentLogo = kulupler[Math.floor(Math.random() * kulupler.length)];
+                
                 homeLogoContainer.style.display = 'flex';
                 awayLogoContainer.style.display = 'flex';
                 document.getElementById('m-logo-home').src = p.teamLogo;
+                document.getElementById('m-logo-away').src = currentOpponentLogo;
                 
-                let randomOpponentLogo = kulupler[Math.floor(Math.random() * kulupler.length)];
-                document.getElementById('m-logo-away').src = randomOpponentLogo;
-                
-                kadro = p.squadIds.map((id, index) => {
+                kadro = p.squadIds.map((id) => {
                     let pl = p.boughtPool.find(x => x.id === id);
                     return `🏃 [${pl.gen} GEN] ${pl.name}`;
                 });
             } else {
                 homeLogoContainer.style.display = 'none';
                 awayLogoContainer.style.display = 'none';
+                
+                if(type === 'mahalle') { currentOpponentName = p.mh || "Mahalle Rakibi"; currentOpponentLogo = "🏡"; }
+                else if(type === 'kulup') { currentOpponentName = (p.tm || "Rakip Kulüp").replace('.jpeg',''); currentOpponentLogo = p.tm || "🏆"; }
+                else { currentOpponentName = p.ml || "Milli Rakip"; currentOpponentLogo = "🌍"; }
+                
                 kadro = [`🧤 GK: ${isimler[0]}`, `🛡️ DEF: ${isimler[1]}`, `🏃 MID: ${p.name} (SEN)`, `👟 MID: ${isimler[3]}`, `🔥 FOR: ${isimler[4]}`];
             }
             
             document.getElementById('squad-content').innerHTML = kadro.map(k => `<div class="player-line">${k}</div>`).join('');
 
-            const speed = type === 'mahalle' ? 1000 : 300;
+            const speed = type === 'mahalle' ? 80 : 40; 
 
-            const loop = setInterval(() => {
+            matchLoopInterval = setInterval(() => {
                 clock++;
                 
                 if(type === 'mahalle') {
-                    let mins = Math.floor(clock / 60);
-                    let secs = clock % 60;
+                    let mins = Math.floor(clock / 6);
+                    let secs = (clock % 6) * 10;
                     document.getElementById('time-display').innerText = `⏱️ Kronometre: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 } else {
                     document.getElementById('time-display').innerText = `🕒 Dakika: ${clock}'`;
                 }
                 
-                if(Math.random() > 0.88) { 
-                    if(Math.random() > 0.5) { 
-                        if(s1 < 4) { 
-                            s1++; document.getElementById('s-1').innerText = s1; 
-                            let scorer = type === 'custom' ? p.boughtPool.find(x=>x.id===p.squadIds[Math.floor(Math.random()*5)]).name : (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]);
-                            document.getElementById('goal-info').innerText = "⚽ GOL: " + scorer;
-                        }
+                // Sabit kilitlenmeyi aşan gerçekçi rastgele şans algoritması
+                if(Math.random() > 0.94) { 
+                    if(Math.random() > 0.52) { 
+                        s1++; 
+                        document.getElementById('s-1').innerText = s1; 
+                        let scorer = type === 'custom' ? p.boughtPool.find(x=>x.id===p.squadIds[Math.floor(Math.random()*5)]).name : (Math.random()>0.4?p.name:isimler[Math.floor(Math.random()*5)]);
+                        document.getElementById('goal-info').innerText = "⚽ GOL: " + scorer;
                     } else { 
-                        if(s2 < 4) {
-                            s2++; document.getElementById('s-2').innerText = s2; 
-                            document.getElementById('goal-info').innerText = "❌ GOL: Rakip"; 
-                        }
+                        s2++; 
+                        document.getElementById('s-2').innerText = s2; 
+                        document.getElementById('goal-info').innerText = "❌ GOL: " + currentOpponentName; 
                     }
-                    setTimeout(() => document.getElementById('goal-info').innerText = "", 600);
+                    setTimeout(() => {
+                        let infoDiv = document.getElementById('goal-info');
+                        if(infoDiv) infoDiv.innerText = "";
+                    }, 800);
                 }
 
                 let isOver = false;
@@ -678,35 +903,61 @@
                 if(type !== 'mahalle' && clock >= 90) isOver = true;
 
                 if(isOver) {
-                    clearInterval(loop);
+                    clearInterval(matchLoopInterval);
+                    matchLoopInterval = null;
+                    
                     document.getElementById('m-status').innerText = "🏁 MAÇ BİTTİ!";
+                    document.getElementById('m-forfeit').style.display = 'none';
                     document.getElementById('m-finish').style.display = 'block';
                     
+                    p.stats.matchesPlayed++;
                     let xp = 0;
-                    let result = (s1 > s2) ? "win" : (s1 === s2 ? "draw" : "lose");
-                    if(result === "win") xp = (type==='mahalle'?5:50);
-                    else if(result === "draw") xp = (type==='mahalle'?2:20);
+                    let resultStr = "BERABERLİK";
                     
+                    if(s1 > s2) {
+                        xp = (type==='mahalle'?5:50);
+                        p.stats.wins++;
+                        resultStr = "GALİBİYET";
+                    } else if(s1 === s2) {
+                        xp = (type==='mahalle'?2:20);
+                        resultStr = "BERABERLİK";
+                    } else {
+                        resultStr = "MAĞLUBİYET";
+                    }
+                    
+                    p.navigator
                     p.lv = Math.min(100000, p.lv + xp);
                     
-                    if(type === 'custom' && (result === "win" || result === "draw")) {
+                    if(type === 'custom' && (s1 >= s2)) {
                         p.teamLv = Math.min(100000, p.teamLv + 5);
                     }
                     
-                    addComment(result);
+                    // Geçmişe Kaydetme
+                    if(p.hasTeam) {
+                        p.matchHistory.unshift({
+                            type: type,
+                            oppName: currentOpponentName,
+                            oppLogo: currentOpponentLogo,
+                            skor: `${s1} - ${s2}`,
+                            res: resultStr
+                        });
+                    }
+                    
+                    addComment(s1 > s2 ? "win" : (s1 === s2 ? "draw" : "lose"));
+                    checkMissionProgress();
                     save(); updateUI();
                 }
             }, speed);
         }
 
         function addComment(res) {
-            let m = res === "win" ? "Harika bir maç çıkardın! 🔥" : (res === "draw" ? "Daha iyisi olabilirdi. 🤝" : "Çok kötü bir oyun... 🙁");
+            let m = res === "win" ? "Harika bir galibiyet, takım devleşti! 🔥" : (res === "draw" ? "Çok zorlu bir taktik savaşıydı, berabere bitti. 🤝" : "Defanstaki büyük hatalar yenilgiyi getirdi... 🙁");
             p.comments.unshift(`💬 ${isimler[Math.floor(Math.random()*isimler.length)]}: ${m}`);
             if(p.comments.length > 10) p.comments.pop();
         }
 
         function renderComments() { document.getElementById('comment-list').innerHTML = p.comments.map(c => `<div class="comment">${c}</div>`).join(''); }
-        function resetGame() { if(confirm("Tüm kariyeriniz sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
+        function resetGame() { if(confirm("Tüm kariyeriniz ve kurduğunuz takım sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
