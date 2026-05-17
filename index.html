@@ -64,7 +64,15 @@
         #main-layout { display: flex; height: 85%; }
         #content-area { flex: 1; padding: 20px; overflow-y: auto; text-align: center; }
 
-        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .team-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 10px; justify-items: center; }
+        .logo-btn { background: rgba(255,255,255,0.05); border: 2px solid #333; border-radius: 15px; padding: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; width: 100px; height: 100px; }
+        .logo-btn img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; }
+        .logo-btn:hover { border-color: var(--accent-red); transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 62, 62, 0.4); }
+        .logo-btn.selected { border-color: var(--accent-gold); background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        
+        .ui-team-logo { width: 30px; height: 30px; object-fit: contain; vertical-align: middle; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
+        .profile-team-logo { width: 60px; height: 60px; object-fit: contain; display: block; margin-top: 5px; border-radius: 8px; border: 1px solid #444; }
+
         .scoreboard { font-size: 4rem; font-family: monospace; color: var(--accent-red); margin: 10px; }
         
         #squad-list { width: 220px; background: rgba(0,0,0,0.7); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 15px; text-align: left; font-size: 13px; }
@@ -74,12 +82,24 @@
         .comment-box { background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 15px; height: 350px; overflow-y: auto; border: 1px solid #333; text-align: left; }
         .comment { padding: 8px; border-bottom: 1px solid #222; color: #ddd; font-size: 0.9rem; }
         .training-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px; border: 1px solid #444; display: inline-block; width: 160px; }
+
+        .game-logo {
+            font-size: 50px;
+            margin: 0;
+            text-shadow: 0 0 20px var(--accent-red);
+            animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse {
+            from { transform: scale(1); text-shadow: 0 0 10px var(--accent-red); }
+            to { transform: scale(1.05); text-shadow: 0 0 25px var(--accent-red), 0 0 10px var(--accent-gold); }
+        }
     </style>
 </head>
 <body>
 
     <div id="start-screen" class="screen active">
-        <h1 style="color: var(--accent-red); letter-spacing: 5px;">AYAZ ENTERTAINMENT</h1>
+        <div class="game-logo">⚽</div>
+        <h1 style="color: var(--accent-red); letter-spacing: 5px; margin-top: 5px;">AYAZ ENTERTAINMENT</h1>
         <input type="text" id="player-name-input" placeholder="Futbolcu İsmi...">
         <button onclick="startGame()">SÖZLEŞMEYİ İMZALA</button>
     </div>
@@ -96,7 +116,7 @@
 
     <div id="main-screen" class="screen">
         <div class="header-ui">
-            <div id="ui-name-label" style="font-weight: bold; color: var(--accent-gold);"></div>
+            <div id="ui-name-label" style="font-weight: bold; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;"></div>
             <div class="level-container">
                 <div id="level-bar" class="level-bar"></div>
                 <div class="level-text" id="ui-level-val">0 / 100000 XP</div>
@@ -106,39 +126,46 @@
 
         <div id="main-layout">
             <div class="sidebar">
-                <div class="sidebar-item" onclick="showSection('home')">ANA SAYFA</div>
-                <div class="sidebar-item" onclick="showSection('player')">PROFİL</div>
-                <div class="sidebar-item" onclick="showSection('training')">ANTRENMAN</div>
+                <div class="sidebar-item" onclick="showSection('home')">🏠 ANA SAYFA</div>
+                <div class="sidebar-item" onclick="showSection('player')">👤 PROFİL</div>
+                <div class="sidebar-item" onclick="showSection('training')">🏋️ ANTRENMAN</div>
                 <div id="mh-btn" class="sidebar-item" onclick="showSection('mahalle')" style="color:#00ff00;">MAHALLE (100 XP)</div>
-                <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">TAKIMLAR (30 XP)</div>
-                <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">MİLLİ (1000 XP)</div>
-                <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">YORUMLAR</div>
+                <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">🏆 TAKIMLAR (30 XP)</div>
+                <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">🌍 MİLLİ (1000 XP)</div>
+                <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">💬 YORUMLAR</div>
             </div>
 
             <div id="content-area">
-                <div id="view-home"><h2>KARİYER MERKEZİ</h2><p>Antrenman yaparak seviye atla ve büyük takımlara transfer ol!</p></div>
+                <div id="view-home">
+                    <div style="font-size: 80px; margin-bottom: 10px;">🏆</div>
+                    <h2>KARİYER MERKEZİ</h2>
+                    <p>Antrenman yaparak seviye atla ve büyük takımlara transfer ol!</p>
+                </div>
                 
                 <div id="view-player" style="display:none;">
                     <h2>OYUNCU KARTI</h2>
-                    <div style="border: 1px solid var(--accent-gold); padding: 20px; display: inline-block; text-align: left;">
+                    <div style="border: 1px solid var(--accent-gold); padding: 20px; display: inline-block; text-align: left; background: rgba(0,0,0,0.5); border-radius: 12px;">
                         <p>👤 İsim: <span id="p-name"></span></p>
                         <p>⚽ Mevki: <span id="p-role"></span></p>
                         <p>⭐ Level: <span id="p-lv"></span></p>
-                        <p>🏠 Takım: <span id="p-tm"></span></p>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 14px 0;">
+                            <span>🏠 Takım:</span>
+                            <span id="p-tm"></span>
+                        </div>
                     </div>
                 </div>
 
                 <div id="view-training" style="display:none;">
                     <h2>TESİSLER</h2>
-                    <div class="training-card"><h3>Şut</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Şut çalıştın!')">ÇALIŞ</button></div>
-                    <div class="training-card"><h3>Kondisyon</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Koşu yaptın!')">ÇALIŞ</button></div>
-                    <div class="training-card"><h3>Teknik</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Teknik çalıştın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🎯 Şut</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Şut çalıştın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🏃 Kondisyon</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Koşu yaptın!')">ÇALIŞ</button></div>
+                    <div class="training-card"><h3>🧠 Teknik</h3><p>+10 XP</p><button class="t-btn" onclick="doTrain(10, 'Teknik çalıştın!')">ÇALIŞ</button></div>
                     <p id="t-log" style="margin-top: 10px; font-weight: bold; color: var(--accent-gold);"></p>
                 </div>
 
                 <div id="view-mahalle" style="display:none;">
                     <h2>MAHALLE MAÇLARI (10'DA BİTER)</h2>
-                    <div id="mh-list" class="team-grid"></div>
+                    <div id="mh-list" class="team-grid" style="grid-template-columns: repeat(4, 1fr);"></div>
                     <button id="mh-match-btn" style="display:none; margin-top:20px; background:#00ff00; color:black;" onclick="startMatch('mahalle')">MAHALLE MAÇI YAP</button>
                 </div>
 
@@ -150,7 +177,7 @@
 
                 <div id="view-milli" style="display:none;">
                     <h2>MİLLİ TAKIMLAR</h2>
-                    <div id="ml-list" class="team-grid"></div>
+                    <div id="ml-list" class="team-grid" style="grid-template-columns: repeat(4, 1fr);"></div>
                     <button id="ml-match-btn" style="display:none; margin-top:20px; background:white; color:black;" onclick="startMatch('milli')">MİLLİ MAÇ YAP</button>
                 </div>
 
@@ -164,6 +191,7 @@
 
     <div id="match-screen" class="screen" style="flex-direction: row; justify-content: space-around;">
         <div style="flex: 1; text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 5px;">⚔️</div>
             <h2 id="m-status">MAÇ BAŞLIYOR</h2>
             <div class="scoreboard"><span id="s-1">0</span> - <span id="s-2">0</span></div>
             <div id="goal-info" style="color:var(--accent-gold); font-weight:bold; height:30px;"></div>
@@ -171,21 +199,46 @@
             <button id="m-finish" style="display:none;" onclick="showScreen('main-screen')">DEVAM ET</button>
         </div>
         <div id="squad-list">
-            <div class="squad-title">TAKIM KADROSU</div>
+            <div class="squad-title">🛡️ TAKIM KADROSU</div>
             <div id="squad-content"></div>
         </div>
     </div>
 
     <script>
         let p = { name: "", role: "", lv: 0, tm: "", mh: "", ml: "", comments: [] };
-        const kulupler = ["Pendik Anadolu", "Ayaz City", "Blender Utd", "Unity FC", "Roblox Stars", "JS Gücü", "HTML Warriors", "CSS United", "Python Gençlik", "C# Belediye", "React Spor", "Node.js İdman", "SQL Kartalları", "Java City", "Swift Gücü", "Go Futbol"];
-        const milliler = ["Türkiye", "Brezilya", "Arjantin", "Fransa", "Almanya", "İngiltere", "Portekiz", "İspanya", "İtalya", "Hollanda", "Belçika", "Hırvatistan", "Uruguay", "Fas", "Japonya", "Güney Kore", "Senegal", "ABD", "İsviçre", "Danimarka"];
-        const mahalleler = ["Yıldızlar Mah.", "Güneş Sokak", "Fırtına Gençlik", "Şimşek Spor"];
+        
+        // Gönderdiğin tüm 20 logonun tam listesi
+        const kulupler = [
+            "AKINCILAR SPOR.jpeg",
+            "ALEV ATLAR.jpeg",
+            "ANADOLU BİZONLARI.jpeg",
+            "BABALAR FUTBOL.jpeg",
+            "BUZ ASLANLARI FUTBOL KULÜBÜ.jpeg",
+            "CELIK BIRLIK FUTBOL KULUBU.jpeg",
+            "EFSANE SPOR KULÜBÜ.jpeg",
+            "FIRTINA KIRAN SPOR KULÜBÜ.jpeg",
+            "GECE MUHAFIZLARI SPOR.jpeg",
+            "GÜMÜŞ TİLKİ SPOR.jpeg",
+            "HÜKÜM DAĞI.jpeg",
+            "KADIKÖY BOĞA SPOR.jpeg",
+            "KAHRAMANLAR YURDU.jpeg",
+            "KARDEŞ KURTLAR SPOR KULÜBÜ.jpeg",
+            "KARTAL KANAT SPOR KULUBU.jpeg",
+            "KORSANLAR.jpeg",
+            "KRALLAR.jpeg",
+            "KYS.jpeg",
+            "PARSLAR.jpeg",
+            "ZFK.jpeg"
+        ];
+        
+        const milliler = ["🇹🇷 Türkiye", "🇧🇷 Brezilya", "🇦🇷 Arjantin", "🇫🇷 Fransa", "🇩🇪 Almanya", "🏴󠁧󠁢󠁥󠁮󠁧󠁿 İngiltere", "🇵🇹 Portekiz", "🇪🇸 İspanya"];
+        const mahalleler = ["🧱 Çıkmaz Sokak FC", "🏡 Yıkık Duvar Gençlik", "🪵 Hurdalık Spor", "⚡ Beton Saha Gücü"];
+        
         const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz"];
 
-        function save() { localStorage.setItem('ayazKariyer_v5', JSON.stringify(p)); }
+        function save() { localStorage.setItem('ayazKariyer_v8', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v5');
+            let s = localStorage.getItem('ayazKariyer_v8');
             if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
         }
         window.onload = load;
@@ -201,15 +254,19 @@
 
         function doTrain(x, msg) {
             document.querySelectorAll('.t-btn').forEach(b => b.disabled = true);
-            let t = 5; document.getElementById('t-log').innerText = `Çalışıyor... ${t}s`;
+            let t = 5; document.getElementById('t-log').innerText = `⏳ Çalışıyor... ${t}s`;
             let i = setInterval(() => {
-                t--; document.getElementById('t-log').innerText = `Çalışıyor... ${t}s`;
-                if(t <= 0) { clearInterval(i); p.lv = Math.min(100000, p.lv + x); updateUI(); save(); document.getElementById('t-log').innerText = msg + " (+10 XP)"; document.querySelectorAll('.t-btn').forEach(b => b.disabled = false); }
+                t--; document.getElementById('t-log').innerText = `⏳ Çalışıyor... ${t}s`;
+                if(t <= 0) { clearInterval(i); p.lv = Math.min(100000, p.lv + x); updateUI(); save(); document.getElementById('t-log').innerText = "✅ " + msg + " (+10 XP)"; document.querySelectorAll('.t-btn').forEach(b => b.disabled = false); }
             }, 1000);
         }
 
         function updateUI() {
-            document.getElementById('ui-name-label').innerText = `${p.name} (${p.role})`;
+            let currentTeamDisplay = `🏃 ${p.name} (${p.role})`;
+            if(p.tm) {
+                currentTeamDisplay += ` <img src="${p.tm}" class="ui-team-logo">`;
+            }
+            document.getElementById('ui-name-label').innerHTML = currentTeamDisplay;
             document.getElementById('ui-level-val').innerText = `${p.lv} / 100000 XP`;
             document.getElementById('level-bar').style.width = (p.lv / 1000) + "%";
             document.getElementById('mh-btn').style.opacity = p.lv >= 100 ? "1" : "0.4";
@@ -229,16 +286,35 @@
                 document.getElementById('p-name').innerText = p.name;
                 document.getElementById('p-role').innerText = p.role;
                 document.getElementById('p-lv').innerText = p.lv;
-                document.getElementById('p-tm').innerText = p.ml || p.tm || p.mh || "Boşta";
+                
+                if(p.ml) {
+                    document.getElementById('p-tm').innerHTML = p.ml;
+                } else if(p.tm) {
+                    document.getElementById('p-tm').innerHTML = `<img src="${p.tm}" class="profile-team-logo">`;
+                } else if(p.mh) {
+                    document.getElementById('p-tm').innerHTML = p.mh;
+                } else {
+                    document.getElementById('p-tm').innerHTML = "Boşta 🗓️";
+                }
             }
-            if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh');
-            if(s === 'teams') renderList('tm-list', kulupler, 'tm');
-            if(s === 'milli') renderList('ml-list', milliler, 'ml');
+            if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh', false);
+            if(s === 'teams') renderList('tm-list', kulupler, 'tm', true); 
+            if(s === 'milli') renderList('ml-list', milliles, 'ml', false);
             if(s === 'comments') renderComments();
         }
 
-        function renderList(id, arr, key) {
-            document.getElementById(id).innerHTML = arr.map(t => `<button onclick="join('${t}','${key}')" style="${p[key]===t?'background:gold;color:black;':''}">${t}</button>`).join('');
+        function renderList(id, arr, key, isImage) {
+            if(isImage) {
+                document.getElementById(id).innerHTML = arr.map(t => `
+                    <div onclick="join('${t}','${key}')" class="logo-btn ${p[key]===t?'selected':''}">
+                        <img src="${t}" alt="Team Logo">
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById(id).innerHTML = arr.map(t => `
+                    <button onclick="join('${t}','${key}')" style="${p[key]===t?'background:gold;color:black;':''}">${t}</button>
+                `).join('');
+            }
             document.getElementById(key+'-match-btn').style.display = p[key] ? 'inline-block' : 'none';
         }
 
@@ -251,10 +327,9 @@
             document.getElementById('s-2').innerText = 0;
             document.getElementById('m-finish').style.display = 'none';
             
-            let kadro = [`GK: ${isimler[0]}`, `DEF: ${isimler[1]}`, `MID: ${p.name} (SEN)`, `MID: ${isimler[3]}`, `FOR: ${isimler[4]}`];
+            let kadro = [`🧤 GK: ${isimler[0]}`, `🛡️ DEF: ${isimler[1]}`, `🏃 MID: ${p.name} (SEN)`, `👟 MID: ${isimler[3]}`, `🔥 FOR: ${isimler[4]}`];
             document.getElementById('squad-content').innerHTML = kadro.map(k => `<div class="player-line">${k}</div>`).join('');
 
-            // Süper Hız Ayarı: Mahallede 1000ms, profesyonel maçlarda 300ms (Baya hızlı!)
             const speed = type === 'mahalle' ? 1000 : 300;
 
             const loop = setInterval(() => {
@@ -263,14 +338,14 @@
                 if(type === 'mahalle') {
                     let mins = Math.floor(clock / 60);
                     let secs = clock % 60;
-                    document.getElementById('time-display').innerText = `Kronometre: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    document.getElementById('time-display').innerText = `⏱️ Kronometre: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 } else {
-                    document.getElementById('time-display').innerText = `Dakika: ${clock}'`;
+                    document.getElementById('time-display').innerText = `🕒 Dakika: ${clock}'`;
                 }
                 
                 if(Math.random() > 0.7) {
-                    if(Math.random() > 0.5) { s1++; document.getElementById('s-1').innerText = s1; document.getElementById('goal-info').innerText = "GOL: " + (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]); }
-                    else { s2++; document.getElementById('s-2').innerText = s2; document.getElementById('goal-info').innerText = "GOL: Rakip"; }
+                    if(Math.random() > 0.5) { s1++; document.getElementById('s-1').innerText = s1; document.getElementById('goal-info').innerText = "⚽ GOL: " + (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]); }
+                    else { s2++; document.getElementById('s-2').innerText = s2; document.getElementById('goal-info').innerText = "❌ GOL: Rakip"; }
                     setTimeout(() => document.getElementById('goal-info').innerText = "", 500);
                 }
 
@@ -280,7 +355,7 @@
 
                 if(isOver) {
                     clearInterval(loop);
-                    document.getElementById('m-status').innerText = "MAÇ BİTTİ!";
+                    document.getElementById('m-status').innerText = "🏁 MAÇ BİTTİ!";
                     document.getElementById('m-finish').style.display = 'block';
                     
                     let xp = 0;
@@ -296,8 +371,8 @@
         }
 
         function addComment(res) {
-            let m = res === "win" ? "Harika bir maç çıkardın!" : (res === "draw" ? "Daha iyisi olabilirdi." : "Çok kötü bir oyun...");
-            p.comments.unshift(`${isimler[Math.floor(Math.random()*isimler.length)]}: ${m}`);
+            let m = res === "win" ? "Harika bir maç çıkardın! 🔥" : (res === "draw" ? "Daha iyisi olabilirdi. 🤝" : "Çok kötü bir oyun... 🙁");
+            p.comments.unshift(`💬 ${isimler[Math.floor(Math.random()*isimler.length)]}: ${m}`);
             if(p.comments.length > 10) p.comments.pop();
         }
 
