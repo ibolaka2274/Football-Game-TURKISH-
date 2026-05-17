@@ -56,10 +56,16 @@
         .sidebar-item { background: rgba(17, 17, 17, 0.6); padding: 10px; font-size: 12px; cursor: pointer; text-align: center; border: 1px solid #333; border-radius: 4px; transition: 0.2s; }
         .sidebar-item:hover { background: var(--sidebar-hover); border-color: var(--accent-red); color: var(--accent-red); }
 
-        .header-ui { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 15px; background: rgba(0,0,0,0.8); padding: 12px; border-radius: 12px; border-bottom: 2px solid var(--accent-red); }
-        .level-container { background: #222; width: 300px; height: 25px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #444; }
+        .header-ui { display: flex; flex-direction: column; width: 100%; margin-bottom: 15px; background: rgba(0,0,0,0.8); padding: 12px; border-radius: 12px; border-bottom: 2px solid var(--accent-red); gap: 10px; }
+        .ui-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        
+        .bars-stack { display: flex; flex-direction: column; gap: 5px; }
+        .bar-wrapper { display: flex; align-items: center; gap: 10px; }
+        .bar-label { font-size: 10px; font-weight: bold; color: var(--accent-gold); width: 80px; text-align: right; text-transform: uppercase; }
+        .level-container { background: #222; width: 300px; height: 22px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #444; }
         .level-bar { background: linear-gradient(90deg, #ff3e3e, #ff8e53); height: 100%; width: 0%; transition: width 0.5s; }
-        .level-text { position: absolute; width: 100%; text-align: center; line-height: 25px; font-weight: bold; font-size: 11px; text-shadow: 1px 1px 2px black; }
+        .team-level-bar { background: linear-gradient(90deg, #00ff00, #00aa00); height: 100%; width: 0%; transition: width 0.5s; }
+        .level-text { position: absolute; width: 100%; text-align: center; line-height: 22px; font-weight: bold; font-size: 10px; text-shadow: 1px 1px 2px black; }
 
         #main-layout { display: flex; height: 85%; }
         #content-area { flex: 1; padding: 20px; overflow-y: auto; text-align: center; }
@@ -73,7 +79,10 @@
         .ui-team-logo { width: 30px; height: 30px; object-fit: contain; vertical-align: middle; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
         .profile-team-logo { width: 60px; height: 60px; object-fit: contain; display: block; margin-top: 5px; border-radius: 8px; border: 1px solid #444; }
 
-        .scoreboard { font-size: 4rem; font-family: monospace; color: var(--accent-red); margin: 10px; }
+        .match-display-container { display: flex; align-items: center; justify-content: center; gap: 30px; margin: 15px 0; }
+        .match-logo-frame { width: 90px; height: 90px; background: rgba(255,255,255,0.05); border: 2px solid #444; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 5px; }
+        .match-logo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+        .scoreboard { font-size: 4rem; font-family: monospace; color: var(--accent-red); line-height: 1; }
         
         #squad-list { width: 220px; background: rgba(0,0,0,0.7); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 15px; text-align: left; font-size: 13px; }
         .squad-title { color: var(--accent-gold); font-weight: bold; border-bottom: 1px solid #444; margin-bottom: 10px; text-align: center; }
@@ -82,6 +91,15 @@
         .comment-box { background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 15px; height: 350px; overflow-y: auto; border: 1px solid #333; text-align: left; }
         .comment { padding: 8px; border-bottom: 1px solid #222; color: #ddd; font-size: 0.9rem; }
         .training-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px; border: 1px solid #444; display: inline-block; width: 160px; }
+
+        .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .market-card { background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+        .market-info h4 { margin: 0 0 5px 0; color: #fff; }
+        .market-info p { margin: 0; font-size: 12px; color: #aaa; }
+        .gen-badge { background: var(--accent-gold); color: black; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 14px; }
+
+        .custom-file-upload { border: 1px solid #555; display: inline-block; padding: 12px 20px; cursor: pointer; background: #222; border-radius: 8px; font-weight: bold; margin-bottom: 15px; transition: 0.3s; }
+        .custom-file-upload:hover { background: #333; border-color: var(--accent-gold); }
 
         .game-logo {
             font-size: 50px;
@@ -116,12 +134,26 @@
 
     <div id="main-screen" class="screen">
         <div class="header-ui">
-            <div id="ui-name-label" style="font-weight: bold; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;"></div>
-            <div class="level-container">
-                <div id="level-bar" class="level-bar"></div>
-                <div class="level-text" id="ui-level-val">0 / 100000 XP</div>
+            <div class="ui-top-row">
+                <div id="ui-name-label" style="font-weight: bold; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;"></div>
+                <div class="bars-stack">
+                    <div class="bar-wrapper">
+                        <div class="bar-label">Oyuncu XP:</div>
+                        <div class="level-container">
+                            <div id="level-bar" class="level-bar"></div>
+                            <div class="level-text" id="ui-level-val">0 / 100000 XP</div>
+                        </div>
+                    </div>
+                    <div id="ui-team-bar-container" class="bar-wrapper" style="display: none;">
+                        <div id="ui-team-bar-title" class="bar-label">Takım Barı:</div>
+                        <div class="level-container">
+                            <div id="team-level-bar" class="team-level-bar"></div>
+                            <div class="level-text" id="ui-team-level-val">0 / 100000 XP</div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="resetGame()" style="background: #600; font-size: 9px;">SIFIRLA</button>
             </div>
-            <button onclick="resetGame()" style="background: #600; font-size: 9px;">SIFIRLA</button>
         </div>
 
         <div id="main-layout">
@@ -131,6 +163,9 @@
                 <div class="sidebar-item" onclick="showSection('training')">🏋️ ANTRENMAN</div>
                 <div id="mh-btn" class="sidebar-item" onclick="showSection('mahalle')" style="color:#00ff00;">MAHALLE (100 XP)</div>
                 <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">🏆 TAKIMLAR (30 XP)</div>
+                <div id="custom-team-btn" class="sidebar-item" onclick="showSection('customteam')" style="color: cyan;">🛡️ TAKIM OLUŞTUR (50 SV)</div>
+                <div id="mkt-btn" class="sidebar-item" onclick="showSection('market')" style="color: #ffcc00; display: none;">🛒 OYUNCU MARKETİ</div>
+                <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc; display: none;">🏃 ALINAN OYUNCULAR</div>
                 <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">🌍 MİLLİ (1000 XP)</div>
                 <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">💬 YORUMLAR</div>
             </div>
@@ -175,6 +210,53 @@
                     <button id="tm-match-btn" style="display:none; margin-top:20px; background:red;" onclick="startMatch('kulup')">KULÜP MAÇI YAP</button>
                 </div>
 
+                <div id="view-customteam" style="display:none;">
+                    <div id="ct-setup" style="display: none;">
+                        <h2>KENDİ TAKIMINI KUR</h2>
+                        <input type="text" id="ct-name-input" placeholder="Takım İsmi..." style="width: 280px;"><br>
+                        <label class="custom-file-upload">
+                            <input type="file" id="ct-logo-input" accept="image/*" style="display: none;" onchange="previewLogo(this)">
+                            🖼️ LOGO SEÇ
+                        </label>
+                        <div id="ct-preview-container" style="margin-bottom: 15px; display: none;">
+                            <img id="ct-logo-preview" src="" style="max-width: 100px; max-height: 100px; border-radius: 10px; border: 2px solid var(--accent-gold);">
+                        </div>
+                        <br>
+                        <button onclick="createCustomTeam()" style="background: cyan; color: black; font-size: 14px; padding: 12px 30px;">TAKIMI KUR 🚀</button>
+                    </div>
+                    <div id="ct-dashboard" style="display: none;">
+                        <h2 id="ct-dash-title" style="color: cyan; letter-spacing: 2px;"></h2>
+                        <div style="margin: 20px auto; width: 120px; height: 120px; background: rgba(0,0,0,0.5); border: 2px solid cyan; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                            <img id="ct-dash-logo" src="" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px;">
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; max-width: 400px; margin: 0 auto 15px auto; border: 1px solid #333;">
+                            <h4>⚙️ TAKIMI DÜZENLE</h4>
+                            <input type="text" id="ct-edit-name" placeholder="Yeni Takım İsmi..." style="width: 80%; font-size: 14px; padding: 8px;"><br>
+                            <label class="custom-file-upload" style="padding: 6px 12px; font-size: 11px;">
+                                <input type="file" id="ct-edit-logo" accept="image/*" style="display: none;" onchange="updateCustomLogo(this)">
+                                🖼️ YENİ LOGO SEÇ
+                            </label>
+                            <br>
+                            <button onclick="saveTeamEdits()" style="background: #00aa00; font-size: 11px; padding: 6px 12px;">DEĞİŞİKLİKLERİ KAYDET</button>
+                        </div>
+
+                        <button id="ct-match-start-btn" style="background: cyan; color: black; font-size: 14px; padding: 15px 35px;" onclick="tryCustomMatch()">KENDİ TAKIMINLA MAÇ YAP</button>
+                    </div>
+                </div>
+
+                <div id="view-market" style="display:none;">
+                    <h2>🛒 OYUNCU MARKETİ</h2>
+                    <p style="color: #aaa;">Güçlü transferler için takım seviyesini (XP) kullanabilirsin.</p>
+                    <div id="market-players-list" class="market-grid"></div>
+                </div>
+
+                <div id="view-myplayers" style="display:none;">
+                    <h2>🏃 ALINAN OYUNCULAR</h2>
+                    <p style="color: #00ffcc; font-weight: bold;">Maç yapabilmek için kadroyu tam 5 kişi yapmak zorundasın! (Şu an: <span id="squad-count-val">0</span>/5)</p>
+                    <div id="my-players-list" class="market-grid"></div>
+                </div>
+
                 <div id="view-milli" style="display:none;">
                     <h2>MİLLİ TAKIMLAR</h2>
                     <div id="ml-list" class="team-grid" style="grid-template-columns: repeat(4, 1fr);"></div>
@@ -193,7 +275,17 @@
         <div style="flex: 1; text-align: center;">
             <div style="font-size: 40px; margin-bottom: 5px;">⚔️</div>
             <h2 id="m-status">MAÇ BAŞLIYOR</h2>
-            <div class="scoreboard"><span id="s-1">0</span> - <span id="s-2">0</span></div>
+            
+            <div class="match-display-container">
+                <div id="m-logo-home-container" class="match-logo-frame" style="display: none;">
+                    <img id="m-logo-home" src="">
+                </div>
+                <div class="scoreboard"><span id="s-1">0</span> - <span id="s-2">0</span></div>
+                <div id="m-logo-away-container" class="match-logo-frame" style="display: none;">
+                    <img id="m-logo-away" src="">
+                </div>
+            </div>
+
             <div id="goal-info" style="color:var(--accent-gold); font-weight:bold; height:30px;"></div>
             <p id="time-display">Dakika: 0'</p>
             <button id="m-finish" style="display:none;" onclick="showScreen('main-screen')">DEVAM ET</button>
@@ -205,40 +297,30 @@
     </div>
 
     <script>
-        let p = { name: "", role: "", lv: 0, tm: "", mh: "", ml: "", comments: [] };
+        // Gelişmiş veri mimarisi (Market ve Kadro dizileri entegre edildi)
+        let p = { 
+            name: "", role: "", lv: 0, tm: "", mh: "", ml: "", comments: [], 
+            hasTeam: false, teamName: "", teamLogo: "", teamLv: 0,
+            marketGenerated: false, marketPool: [], boughtPool: [], squadIds: [] 
+        };
         
-        // Gönderdiğin tüm 20 logonun tam listesi
         const kulupler = [
-            "AKINCILAR SPOR.jpeg",
-            "ALEV ATLAR.jpeg",
-            "ANADOLU BİZONLARI.jpeg",
-            "BABALAR FUTBOL.jpeg",
-            "BUZ ASLANLARI FUTBOL KULÜBÜ.jpeg",
-            "CELIK BIRLIK FUTBOL KULUBU.jpeg",
-            "EFSANE SPOR KULÜBÜ.jpeg",
-            "FIRTINA KIRAN SPOR KULÜBÜ.jpeg",
-            "GECE MUHAFIZLARI SPOR.jpeg",
-            "GÜMÜŞ TİLKİ SPOR.jpeg",
-            "HÜKÜM DAĞI.jpeg",
-            "KADIKÖY BOĞA SPOR.jpeg",
-            "KAHRAMANLAR YURDU.jpeg",
-            "KARDEŞ KURTLAR SPOR KULÜBÜ.jpeg",
-            "KARTAL KANAT SPOR KULUBU.jpeg",
-            "KORSANLAR.jpeg",
-            "KRALLAR.jpeg",
-            "KYS.jpeg",
-            "PARSLAR.jpeg",
-            "ZFK.jpeg"
+            "AKINCILAR SPOR.jpeg", "ALEV ATLAR.jpeg", "ANADOLU BİZONLARI.jpeg", "BABALAR FUTBOL.jpeg",
+            "BUZ ASLANLARI FUTBOL KULÜBÜ.jpeg", "CELIK BIRLIK FUTBOL KULUBU.jpeg", "EFSANE SPOR KULÜBÜ.jpeg",
+            "FIRTINA KIRAN SPOR KULÜBÜ.jpeg", "GECE MUHAFIZLARI SPOR.jpeg", "GÜMÜŞ TİLKİ SPOR.jpeg",
+            "HÜKÜM DAĞI.jpeg", "KADIKÖY BOĞA SPOR.jpeg", "KAHRAMANLAR YURDU.jpeg", "KARDEŞ KURTLAR SPOR KULÜBÜ.jpeg",
+            "KARTAL KANAT SPOR KULUBU.jpeg", "KORSANLAR.jpeg", "KRALLAR.jpeg", "KYS.jpeg", "PARSLAR.jpeg", "ZFK.jpeg"
         ];
         
         const milliler = ["🇹🇷 Türkiye", "🇧🇷 Brezilya", "🇦🇷 Arjantin", "🇫🇷 Fransa", "🇩🇪 Almanya", "🏴󠁧󠁢󠁥󠁮󠁧󠁿 İngiltere", "🇵🇹 Portekiz", "🇪🇸 İspanya"];
         const mahalleler = ["🧱 Çıkmaz Sokak FC", "🏡 Yıkık Duvar Gençlik", "🪵 Hurdalık Spor", "⚡ Beton Saha Gücü"];
         
-        const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz"];
+        const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz", "Volkan", "Serkan", "Hüseyin", "Gökhan", "Kaan", "Tolga"];
+        const soyisimler = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir", "Arslan", "Doğan", "Kılıç"];
 
-        function save() { localStorage.setItem('ayazKariyer_v8', JSON.stringify(p)); }
+        function save() { localStorage.setItem('ayazKariyer_v10', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v8');
+            let s = localStorage.getItem('ayazKariyer_v10');
             if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
         }
         window.onload = load;
@@ -263,20 +345,106 @@
 
         function updateUI() {
             let currentTeamDisplay = `🏃 ${p.name} (${p.role})`;
-            if(p.tm) {
-                currentTeamDisplay += ` <img src="${p.tm}" class="ui-team-logo">`;
-            }
+            if(p.tm) { currentTeamDisplay += ` <img src="${p.tm}" class="ui-team-logo">`; }
             document.getElementById('ui-name-label').innerHTML = currentTeamDisplay;
+            
             document.getElementById('ui-level-val').innerText = `${p.lv} / 100000 XP`;
             document.getElementById('level-bar').style.width = (p.lv / 1000) + "%";
+            
+            if(p.hasTeam) {
+                document.getElementById('ui-team-bar-container').style.display = 'flex';
+                document.getElementById('ui-team-bar-title').innerText = `${p.teamName}:`;
+                document.getElementById('ui-team-level-val').innerText = `${p.teamLv} / 100000 XP`;
+                document.getElementById('team-level-bar').style.width = (p.teamLv / 1000) + "%";
+                document.getElementById('mkt-btn').style.display = 'block';
+                document.getElementById('sqd-btn').style.display = 'block';
+            } else {
+                document.getElementById('ui-team-bar-container').style.display = 'none';
+                document.getElementById('mkt-btn').style.display = 'none';
+                document.getElementById('sqd-btn').style.display = 'none';
+            }
+
             document.getElementById('mh-btn').style.opacity = p.lv >= 100 ? "1" : "0.4";
             document.getElementById('tm-btn').style.opacity = p.lv >= 30 ? "1" : "0.4";
+            document.getElementById('custom-team-btn').style.opacity = p.lv >= 50 ? "1" : "0.4";
             document.getElementById('ml-btn').style.opacity = p.lv >= 1000 ? "1" : "0.4";
+        }
+
+        function previewLogo(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('ct-logo-preview').src = e.target.result;
+                    document.getElementById('ct-preview-container').style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function updateCustomLogo(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    p.teamLogo = e.target.result;
+                    document.getElementById('ct-dash-logo').src = p.teamLogo;
+                    save();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveTeamEdits() {
+            let newName = document.getElementById('ct-edit-name').value;
+            if(newName) {
+                p.teamName = newName;
+                document.getElementById('ct-dash-title').innerText = p.teamName.toUpperCase();
+                alert("Takım adı başarıyla güncellendi!");
+            }
+            save(); updateUI();
+        }
+
+        function createCustomTeam() {
+            let name = document.getElementById('ct-name-input').value;
+            let previewSrc = document.getElementById('ct-logo-preview').src;
+            
+            if(!name) return alert("Lütfen bir takım ismi girin!");
+            if(!previewSrc || document.getElementById('ct-preview-container').style.display === 'none') return alert("Lütfen bir takım logosu seçin!");
+
+            p.hasTeam = true;
+            p.teamName = name;
+            p.teamLogo = previewSrc;
+            p.teamLv = 0;
+            generateMarketPlayers();
+            save(); updateUI(); showSection('customteam');
+        }
+
+        function generateMarketPlayers() {
+            if(p.marketGenerated) return;
+            p.marketPool = [];
+            
+            // 5 Tane Bedava Oyuncu (60-80 GEN arası, Fiyat: 0)
+            for(let i=0; i<5; i++) {
+                let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
+                let gen = Math.floor(Math.random() * 21) + 60; // 60 - 80
+                p.marketPool.push({ id: "free_" + i, name: rName, gen: gen, price: 0, isBought: false });
+            }
+            
+            // 10 Tane Normal/Yüksek Seviye Paralı Oyuncu (60-100 GEN arası)
+            for(let i=0; i<10; i++) {
+                let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
+                let gen = Math.floor(Math.random() * 41) + 60; // 60 - 100
+                let price = Math.floor(gen * 2.5); // Güce göre XP fiyatı
+                p.marketPool.push({ id: "paid_" + i, name: rName, gen: gen, price: price, isBought: false });
+            }
+            p.marketGenerated = true;
         }
 
         function showSection(s) {
             if(s === 'mahalle' && p.lv < 100) return alert("100 XP lazım!");
             if(s === 'teams' && p.lv < 30) return alert("30 XP lazım!");
+            if(s === 'customteam' && p.lv < 50) return alert("En az 50 Seviye (XP) olmalısın!");
+            if(s === 'market' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
+            if(s === 'myplayers' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
             if(s === 'milli' && p.lv < 1000) return alert("1000 XP lazım!");
             
             document.querySelectorAll('#content-area > div').forEach(v => v.style.display = 'none');
@@ -287,20 +455,116 @@
                 document.getElementById('p-role').innerText = p.role;
                 document.getElementById('p-lv').innerText = p.lv;
                 
-                if(p.ml) {
-                    document.getElementById('p-tm').innerHTML = p.ml;
-                } else if(p.tm) {
-                    document.getElementById('p-tm').innerHTML = `<img src="${p.tm}" class="profile-team-logo">`;
-                } else if(p.mh) {
-                    document.getElementById('p-tm').innerHTML = p.mh;
-                } else {
-                    document.getElementById('p-tm').innerHTML = "Boşta 🗓️";
-                }
+                if(p.ml) { document.getElementById('p-tm').innerHTML = p.ml; } 
+                else if(p.tm) { document.getElementById('p-tm').innerHTML = `<img src="${p.tm}" class="profile-team-logo">`; } 
+                else if(p.mh) { document.getElementById('p-tm').innerHTML = p.mh; } 
+                else { document.getElementById('p-tm').innerHTML = "Boşta 🗓️"; }
             }
             if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh', false);
             if(s === 'teams') renderList('tm-list', kulupler, 'tm', true); 
+            
+            if(s === 'customteam') {
+                if(!p.hasTeam) {
+                    document.getElementById('ct-setup').style.display = 'block';
+                    document.getElementById('ct-dashboard').style.display = 'none';
+                } else {
+                    document.getElementById('ct-setup').style.display = 'none';
+                    document.getElementById('ct-dashboard').style.display = 'block';
+                    document.getElementById('ct-dash-title').innerText = p.teamName.toUpperCase();
+                    document.getElementById('ct-dash-logo').src = p.teamLogo;
+                    document.getElementById('ct-edit-name').value = p.teamName;
+                }
+            }
+            
+            if(s === 'market') renderMarket();
+            if(s === 'myplayers') renderMyPlayers();
             if(s === 'milli') renderList('ml-list', milliles, 'ml', false);
             if(s === 'comments') renderComments();
+        }
+
+        function renderMarket() {
+            let container = document.getElementById('market-players-list');
+            container.innerHTML = p.marketPool.map(player => {
+                let btnText = player.price === 0 ? "BEDAVA AL" : `SATIN AL (${player.price} TAKIM XP)`;
+                if(player.isBought) btnText = "ALINDI";
+                return `
+                    <div class="market-card">
+                        <div class="market-info">
+                            <h4>${player.name}</h4>
+                            <p>Fiyat: ${player.price === 0 ? 'Bedava' : player.price + ' Takım XP'}</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="gen-badge">${player.gen}</div>
+                            <button onclick="buyPlayer('${player.id}')" ${player.isBought?'disabled':''}>${btnText}</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function buyPlayer(id) {
+            let target = p.marketPool.find(x => x.id === id);
+            if(!target || target.isBought) return;
+
+            if(p.teamLv < target.price) {
+                return alert("Bu oyuncuyu transfer etmek için yeterli 'Takım Barı' seviyeniz (XP) yok!");
+            }
+
+            p.teamLv -= target.price;
+            target.isBought = true;
+            p.boughtPool.push(target);
+            save(); updateUI(); renderMarket();
+            alert(`${target.name} transfer edildi! 'Alınan Oyuncular' sekmesinden kadroya ekleyebilirsiniz.`);
+        }
+
+        function renderMyPlayers() {
+            document.getElementById('squad-count-val').innerText = p.squadIds.length;
+            let container = document.getElementById('my-players-list');
+            
+            if(p.boughtPool.length === 0) {
+                container.innerHTML = `<p style="color: #aaa; grid-column: span 2; margin-top: 20px;">Henüz satın alınmış oyuncu yok. Marketten oyuncu transfer edin!</p>`;
+                return;
+            }
+
+            container.innerHTML = p.boughtPool.map(player => {
+                let inSquad = p.squadIds.includes(player.id);
+                let btnAction = inSquad ? `onclick="removeFromSquad('${player.id}')" style="background:#cc0000;"` : `onclick="addToSquad('${player.id}')" style="background:#00ccaa;"`;
+                let btnText = inSquad ? "KADRODAN ÇIKAR" : "KADROYA EKLE";
+                return `
+                    <div class="market-card">
+                        <div class="market-info">
+                            <h4>${player.name}</h4>
+                            <p>Durum: ${inSquad ? 'Kadroda ⚔️' : 'Yedek 🪑'}</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="gen-badge">${player.gen}</div>
+                            <button ${btnAction}>${btnText}</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToSquad(id) {
+            if(p.squadIds.length >= 5) return alert("Kadronuz zaten maksimum limit olan 5 kişiye ulaştı!");
+            if(p.squadIds.includes(id)) return;
+
+            p.squadIds.push(id);
+            save(); renderMyPlayers();
+            alert("Oyuncu başarıyla kadroya eklendi!");
+        }
+
+        function removeFromSquad(id) {
+            p.squadIds = p.squadIds.filter(x => x !== id);
+            save(); renderMyPlayers();
+            alert("Oyuncu kadrodan çıkarıldı!");
+        }
+
+        function tryCustomMatch() {
+            if(p.squadIds.length < 5) {
+                return alert("Önce marketten oyuncu alıp kadronu tam 5 kişiye tamamlamalısın! Eksik kadroyla maça çıkılamaz.");
+            }
+            startMatch('custom');
         }
 
         function renderList(id, arr, key, isImage) {
@@ -327,7 +591,30 @@
             document.getElementById('s-2').innerText = 0;
             document.getElementById('m-finish').style.display = 'none';
             
-            let kadro = [`🧤 GK: ${isimler[0]}`, `🛡️ DEF: ${isimler[1]}`, `🏃 MID: ${p.name} (SEN)`, `👟 MID: ${isimler[3]}`, `🔥 FOR: ${isimler[4]}`];
+            let homeLogoContainer = document.getElementById('m-logo-home-container');
+            let awayLogoContainer = document.getElementById('m-logo-away-container');
+            
+            let kadro = [];
+            
+            if(type === 'custom') {
+                homeLogoContainer.style.display = 'flex';
+                awayLogoContainer.style.display = 'flex';
+                document.getElementById('m-logo-home').src = p.teamLogo;
+                
+                let randomOpponentLogo = kulupler[Math.floor(Math.random() * kulupler.length)];
+                document.getElementById('m-logo-away').src = randomOpponentLogo;
+                
+                // Kendi kurduğumuz takımdaki gerçek satın alınan oyuncuları listeleme
+                kadro = p.squadIds.map((id, index) => {
+                    let pl = p.boughtPool.find(x => x.id === id);
+                    return `🏃 [${pl.gen} GEN] ${pl.name}`;
+                });
+            } else {
+                homeLogoContainer.style.display = 'none';
+                awayLogoContainer.style.display = 'none';
+                kadro = [`🧤 GK: ${isimler[0]}`, `🛡️ DEF: ${isimler[1]}`, `🏃 MID: ${p.name} (SEN)`, `👟 MID: ${isimler[3]}`, `🔥 FOR: ${isimler[4]}`];
+            }
+            
             document.getElementById('squad-content').innerHTML = kadro.map(k => `<div class="player-line">${k}</div>`).join('');
 
             const speed = type === 'mahalle' ? 1000 : 300;
@@ -343,10 +630,21 @@
                     document.getElementById('time-display').innerText = `🕒 Dakika: ${clock}'`;
                 }
                 
-                if(Math.random() > 0.7) {
-                    if(Math.random() > 0.5) { s1++; document.getElementById('s-1').innerText = s1; document.getElementById('goal-info').innerText = "⚽ GOL: " + (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]); }
-                    else { s2++; document.getElementById('s-2').innerText = s2; document.getElementById('goal-info').innerText = "❌ GOL: Rakip"; }
-                    setTimeout(() => document.getElementById('goal-info').innerText = "", 500);
+                // Dengelenmiş Düşük Skor Motoru (Abartılı skorlar önlendi)
+                if(Math.random() > 0.88) { 
+                    if(Math.random() > 0.5) { 
+                        if(s1 < 4) { // Maksimum gerçekçi gol bariyeri
+                            s1++; document.getElementById('s-1').innerText = s1; 
+                            let scorer = type === 'custom' ? p.boughtPool.find(x=>x.id===p.squadIds[Math.floor(Math.random()*5)]).name : (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]);
+                            document.getElementById('goal-info').innerText = "⚽ GOL: " + scorer;
+                        }
+                    } else { 
+                        if(s2 < 4) {
+                            s2++; document.getElementById('s-2').innerText = s2; 
+                            document.getElementById('goal-info').innerText = "❌ GOL: Rakip"; 
+                        }
+                    }
+                    setTimeout(() => document.getElementById('goal-info').innerText = "", 600);
                 }
 
                 let isOver = false;
@@ -364,6 +662,12 @@
                     else if(result === "draw") xp = (type==='mahalle'?2:20);
                     
                     p.lv = Math.min(100000, p.lv + xp);
+                    
+                    // Kendi oluşturduğu takımla maç yaptıysa beşer (5 XP) artar
+                    if(type === 'custom' && (result === "win" || result === "draw")) {
+                        p.teamLv = Math.min(100000, p.teamLv + 5);
+                    }
+                    
                     addComment(result);
                     save(); updateUI();
                 }
@@ -377,7 +681,7 @@
         }
 
         function renderComments() { document.getElementById('comment-list').innerHTML = p.comments.map(c => `<div class="comment">${c}</div>`).join(''); }
-        function resetGame() { if(confirm("Sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
+        function resetGame() { if(confirm("Tüm kariyeriniz sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
