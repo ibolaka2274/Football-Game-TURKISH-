@@ -179,12 +179,13 @@
                 
                 <div id="view-player" style="display:none;">
                     <h2>OYUNCU KARTI</h2>
-                    <div style="border: 1px solid var(--accent-gold); padding: 20px; display: inline-block; text-align: left; background: rgba(0,0,0,0.5); border-radius: 12px;">
+                    <div style="border: 1px solid var(--accent-gold); padding: 20px; display: inline-block; text-align: left; background: rgba(0,0,0,0.5); border-radius: 12px; min-width: 280px;">
                         <p>👤 İsim: <span id="p-name"></span></p>
                         <p>⚽ Mevki: <span id="p-role"></span></p>
-                        <p>⭐ Level: <span id="p-lv"></span></p>
+                        <p>⭐ Level: <span id="p-lv"></span> XP</p>
+                        <p>🛡️ Kurulan Takım Seviyesi: <span id="p-team-lv-display" style="color: #00ff00; font-weight: bold;">Takım Kurulmadı ❌</span></p>
                         <div style="display: flex; align-items: center; gap: 10px; margin: 14px 0;">
-                            <span>🏠 Takım:</span>
+                            <span>🏠 Güncel Takım:</span>
                             <span id="p-tm"></span>
                         </div>
                     </div>
@@ -297,7 +298,6 @@
     </div>
 
     <script>
-        // Gelişmiş veri mimarisi (Market ve Kadro dizileri entegre edildi)
         let p = { 
             name: "", role: "", lv: 0, tm: "", mh: "", ml: "", comments: [], 
             hasTeam: false, teamName: "", teamLogo: "", teamLv: 0,
@@ -318,9 +318,9 @@
         const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz", "Volkan", "Serkan", "Hüseyin", "Gökhan", "Kaan", "Tolga"];
         const soyisimler = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir", "Arslan", "Doğan", "Kılıç"];
 
-        function save() { localStorage.setItem('ayazKariyer_v10', JSON.stringify(p)); }
+        function save() { localStorage.setItem('ayazKariyer_v11', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v10');
+            let s = localStorage.getItem('ayazKariyer_v11');
             if(s) { p = JSON.parse(s); updateUI(); if(p.name) showScreen('main-screen'); }
         }
         window.onload = load;
@@ -422,18 +422,16 @@
             if(p.marketGenerated) return;
             p.marketPool = [];
             
-            // 5 Tane Bedava Oyuncu (60-80 GEN arası, Fiyat: 0)
             for(let i=0; i<5; i++) {
                 let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
-                let gen = Math.floor(Math.random() * 21) + 60; // 60 - 80
+                let gen = Math.floor(Math.random() * 21) + 60; 
                 p.marketPool.push({ id: "free_" + i, name: rName, gen: gen, price: 0, isBought: false });
             }
             
-            // 10 Tane Normal/Yüksek Seviye Paralı Oyuncu (60-100 GEN arası)
             for(let i=0; i<10; i++) {
                 let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
-                let gen = Math.floor(Math.random() * 41) + 60; // 60 - 100
-                let price = Math.floor(gen * 2.5); // Güce göre XP fiyatı
+                let gen = Math.floor(Math.random() * 41) + 60; 
+                let price = Math.floor(gen * 2.5); 
                 p.marketPool.push({ id: "paid_" + i, name: rName, gen: gen, price: price, isBought: false });
             }
             p.marketGenerated = true;
@@ -454,6 +452,14 @@
                 document.getElementById('p-name').innerText = p.name;
                 document.getElementById('p-role').innerText = p.role;
                 document.getElementById('p-lv').innerText = p.lv;
+                
+                // PROFIL KISMINA TAKIM SEVIYESINI YAZDIRMA ALANI
+                let teamLvDisplay = document.getElementById('p-team-lv-display');
+                if(p.hasTeam) {
+                    teamLvDisplay.innerText = `${p.teamName} (${p.teamLv} / 100000 XP)`;
+                } else {
+                    teamLvDisplay.innerText = "Takım Kurulmadı ❌";
+                }
                 
                 if(p.ml) { document.getElementById('p-tm').innerHTML = p.ml; } 
                 else if(p.tm) { document.getElementById('p-tm').innerHTML = `<img src="${p.tm}" class="profile-team-logo">`; } 
@@ -604,7 +610,6 @@
                 let randomOpponentLogo = kulupler[Math.floor(Math.random() * kulupler.length)];
                 document.getElementById('m-logo-away').src = randomOpponentLogo;
                 
-                // Kendi kurduğumuz takımdaki gerçek satın alınan oyuncuları listeleme
                 kadro = p.squadIds.map((id, index) => {
                     let pl = p.boughtPool.find(x => x.id === id);
                     return `🏃 [${pl.gen} GEN] ${pl.name}`;
@@ -630,10 +635,9 @@
                     document.getElementById('time-display').innerText = `🕒 Dakika: ${clock}'`;
                 }
                 
-                // Dengelenmiş Düşük Skor Motoru (Abartılı skorlar önlendi)
                 if(Math.random() > 0.88) { 
                     if(Math.random() > 0.5) { 
-                        if(s1 < 4) { // Maksimum gerçekçi gol bariyeri
+                        if(s1 < 4) { 
                             s1++; document.getElementById('s-1').innerText = s1; 
                             let scorer = type === 'custom' ? p.boughtPool.find(x=>x.id===p.squadIds[Math.floor(Math.random()*5)]).name : (Math.random()>0.5?p.name:isimler[Math.floor(Math.random()*5)]);
                             document.getElementById('goal-info').innerText = "⚽ GOL: " + scorer;
@@ -663,7 +667,6 @@
                     
                     p.lv = Math.min(100000, p.lv + xp);
                     
-                    // Kendi oluşturduğu takımla maç yaptıysa beşer (5 XP) artar
                     if(type === 'custom' && (result === "win" || result === "draw")) {
                         p.teamLv = Math.min(100000, p.teamLv + 5);
                     }
