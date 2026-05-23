@@ -129,9 +129,16 @@
             to { transform: scale(1.05); text-shadow: 0 0 25px var(--accent-red), 0 0 10px var(--accent-gold); }
         }
 
-        /* AVRUPA KUPALARI ÖZEL PANEL STİLİ */
         .euro-bracket { background: rgba(0,0,0,0.6); border-radius: 12px; border: 1px solid var(--accent-gold); padding: 20px; margin-top: 15px; text-align: center; }
         .euro-match-box { display: flex; align-items: center; justify-content: center; gap: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 15px auto; max-width: 500px; border: 1px solid #444; }
+
+        /* GÜNLÜK HEDİYE ÖZEL STİLLERİ */
+        .gift-box-container { display: flex; justify-content: center; gap: 25px; margin-top: 30px; }
+        .gift-box { width: 140px; height: 140px; background: linear-gradient(135deg, #333, #222); border: 3px solid var(--accent-gold); border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 40px; font-weight: bold; color: var(--accent-gold); cursor: pointer; transition: 0.3s; position: relative; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .gift-box:hover:not(.opened):not(.disabled) { transform: scale(1.08) translateY(-5px); box-shadow: 0 0 25px var(--accent-gold); background: linear-gradient(135deg, #444, #333); }
+        .gift-box.opened { background: rgba(0, 255, 204, 0.1); border-color: #00ffcc; color: #00ffcc; cursor: default; }
+        .gift-box.disabled { opacity: 0.4; cursor: not-allowed; border-color: #555; color: #555; }
+        .gift-box .box-label { font-size: 11px; margin-top: 8px; color: #ccc; font-family: sans-serif; text-transform: uppercase; font-weight: normal; }
     </style>
 </head>
 <body>
@@ -181,6 +188,7 @@
             <div class="sidebar">
                 <div class="sidebar-item" onclick="showSection('home')">🏠 ANA SAYFA</div>
                 <div class="sidebar-item" onclick="showSection('player')">👤 PROFİL</div>
+                <div id="gift-menu-btn" class="sidebar-item" onclick="showSection('gifts')" style="color: #ff3e82; font-weight: bold; display: none;">🎁 GÜNLÜK HEDİYE</div>
                 <div class="sidebar-item" onclick="showSection('training')">🏋️ ANTRENMAN</div>
                 <div class="sidebar-item" onclick="showSection('missions')">📜 GÖREVLER</div>
                 <div id="league-btn" class="sidebar-item" onclick="showSection('league')" style="color: var(--accent-gold); display: none; font-weight: bold;">🏆 LİG</div>
@@ -221,8 +229,22 @@
                     </div>
                 </div>
 
+                <div id="view-gifts" style="display:none;">
+                    <h2>🎁 SAATLİK ŞANS KUTULARI</h2>
+                    <p style="color: #aaa; font-size: 13px;">Her 1 saatte bir kutular yenilenir. İçlerinden biri <b>KURALSIZ KESİN 95 GEN</b> oyuncu barındırır!</p>
+                    <div style="background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 8px; display: inline-block; border: 1px solid #444; margin-bottom: 10px;">
+                        ⏳ Yeni Kutuların Gelmesine: <span id="gift-countdown" style="color:#ff3e82; font-weight:bold;">00:00:00</span>
+                    </div>
+                    <div class="gift-box-container">
+                        <div id="gift-box-0" class="gift-box" onclick="openGiftBox(0)">? <div class="box-label">1. Kutu</div></div>
+                        <div id="gift-box-1" class="gift-box" onclick="openGiftBox(1)">? <div class="box-label">2. Kutu</div></div>
+                        <div id="gift-box-2" class="gift-box" onclick="openGiftBox(2)">? <div class="box-label">3. Kutu</div></div>
+                    </div>
+                    <div id="gift-result-text" style="margin-top: 25px; font-size: 16px; font-weight: bold; color: #00ffcc; height: 30px;"></div>
+                </div>
+
                 <div id="view-training" style="display:none;">
-                    <h2>TESİSELER</h2>
+                    <h2>TESİSLER</h2>
                     <div id="training-cards-container"></div>
                     <p id="t-log" style="margin-top: 10px; font-weight: bold; color: var(--accent-gold); height: 20px;"></p>
                 </div>
@@ -334,7 +356,10 @@
 
                 <div id="view-market" style="display:none;">
                     <h2>🛒 OYUNCU MARKETİ</h2>
-                    <p style="color: #aaa;">Güçlü transferler için takım seviyesini (XP) kullanabilirsin.</p>
+                    <p style="color: #aaa; margin-bottom: 5px;">Güçlü transferler için takım seviyesini (XP) kullanabilirsin.</p>
+                    <div style="background: rgba(0,0,0,0.4); padding: 6px 15px; border-radius: 6px; display: inline-block; border: 1px solid #444; margin-bottom: 15px; font-size:12px;">
+                        🔄 Marketin Otomatik Yenilenmesine: <span id="market-countdown" style="color:var(--accent-gold); font-weight:bold;">02:00:00</span>
+                    </div>
                     <div id="market-players-list" class="market-grid"></div>
                 </div>
 
@@ -395,8 +420,9 @@
             stats: { matchesPlayed: 0, wins: 0, trainingsDone: 0 },
             leagueTier: 2, championships: 0, leagueResetTime: 0, leagueTimerTarget: 0, leagueTimerType: "", leagueStatus: "active",
             currentLeagueMatchIdx: 0, leagueFixtures: [], leagueTeamsData: [],
-            // AVRUPA KUPALARI VERİ YAPISI
-            euroType: "uel", euroStage: 16, euroLeg: 1, euroScoreHome: 0, euroScoreAway: 0, euroOpponent: "", euroTimer: 0, uclWins: 0
+            euroType: "uel", euroStage: 16, euroLeg: 1, euroScoreHome: 0, euroScoreAway: 0, euroOpponent: "", euroTimer: 0, uclWins: 0,
+            // YENİ EKLEMELER
+            giftTimestamp: 0, giftBoxesOpened: [false, false, false], giftBoxRewards: [], marketTimestamp: 0
         };
         
         let matchLoopInterval = null; 
@@ -436,9 +462,9 @@
             { id: "match_2", desc: "Sahaya hükmet: Toplam 2 Maç yap", targetType: "matchesPlayed", targetVal: 2 }
         ];
 
-        function save() { localStorage.setItem('ayazKariyer_v14', JSON.stringify(p)); }
+        function save() { localStorage.setItem('ayazKariyer_v15', JSON.stringify(p)); }
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v14');
+            let s = localStorage.getItem('ayazKariyer_v15');
             if(s) { 
                 p = JSON.parse(s); 
                 if(!p.matchHistory) p.matchHistory = [];
@@ -446,16 +472,19 @@
                 if(!p.stats) p.stats = { matchesPlayed: 0, wins: 0, trainingsDone: 0 };
                 if(p.leagueTier === undefined) { p.leagueTier = 2; p.championships = 0; p.leagueResetTime = 0; p.leagueTimerTarget = 0; p.leagueTimerType = ""; p.leagueStatus = "active"; p.currentLeagueMatchIdx = 0; p.leagueFixtures = []; p.leagueTeamsData = []; }
                 if(p.euroType === undefined) { p.euroType = "uel"; p.euroStage = 16; p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = ""; p.euroTimer = 0; p.uclWins = 0; }
+                if(p.giftTimestamp === undefined) { p.giftTimestamp = 0; p.giftBoxesOpened = [false, false, false]; p.giftBoxRewards = []; p.marketTimestamp = 0; }
                 updateUI(); 
                 if(p.name) showScreen('main-screen'); 
             }
             setupMissions();
             checkLeagueResetAndTimers();
             checkEuroTimers();
+            checkTimedSystems();
             setInterval(() => {
                 updateMissionTimer();
                 checkLeagueResetAndTimers();
                 checkEuroTimers();
+                checkTimedSystems();
             }, 1000);
         }
         window.onload = load;
@@ -512,8 +541,8 @@
                 document.getElementById('sqd-btn').style.display = 'block';
                 document.getElementById('history-btn').style.display = 'block';
                 document.getElementById('league-btn').style.display = 'block';
+                document.getElementById('gift-menu-btn').style.display = 'block';
                 
-                // EURO KUPALARI SEKMESİ ŞARTI (5K SEVİYE VE TAKIM VARSA)
                 if(p.lv >= 5000) {
                     document.getElementById('euro-btn').style.display = 'block';
                 } else {
@@ -526,6 +555,7 @@
                 document.getElementById('history-btn').style.display = 'none';
                 document.getElementById('league-btn').style.display = 'none';
                 document.getElementById('euro-btn').style.display = 'none';
+                document.getElementById('gift-menu-btn').style.display = 'none';
             }
 
             document.getElementById('mh-btn').style.opacity = p.lv >= 100 ? "1" : "0.4";
@@ -572,6 +602,113 @@
             if(timerSpan) {
                 timerSpan.innerText = `${saat.toString().padStart(2,'0')}:${dakika.toString().padStart(2,'0')}:${saniye.toString().padStart(2,'0')}`;
             }
+        }
+
+        // KUTU VE MARKET ZAMAN KONTROLLERİ
+        function checkTimedSystems() {
+            if(!p.hasTeam) return;
+            let simdi = Date.now();
+            let birSaat = 1 * 60 * 60 * 1000;
+            let ikiSaat = 2 * 60 * 60 * 1000;
+
+            // Günlük/Saatlik Hediye Kontrolü
+            if(!p.giftTimestamp || (simdi - p.giftTimestamp >= birSaat)) {
+                p.giftTimestamp = simdi;
+                p.giftBoxesOpened = [false, false, false];
+                
+                // Ödülleri havuzla: 3 kutudan birine kesin 95 GEN koy
+                let rewards = [];
+                let ninetyFivePlayerName = "⭐ " + isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
+                rewards.push({ type: 'player', name: ninetyFivePlayerName, gen: 95 });
+
+                // Diğer iki kutu rastgele ödül
+                for(let k=0; k<2; k++) {
+                    if(Math.random() > 0.5) {
+                        let randomXp = Math.random() > 0.5 ? 350 : 500;
+                        rewards.push({ type: 'xp', value: randomXp });
+                    } else {
+                        let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
+                        let rGen = Math.floor(Math.random() * 11) + 80; // 80-90 arası oyuncu
+                        rewards.push({ type: 'player', name: rName, gen: rGen });
+                    }
+                }
+                // Kutuları karıştır
+                p.giftBoxRewards = rewards.sort(() => 0.5 - Math.random());
+                save();
+                if(document.getElementById('view-gifts').style.display === 'block') renderGiftBoxes();
+            }
+
+            // Oyuncu Marketi 2 Saatte Bir Yenilenme Kontrolü
+            if(!p.marketTimestamp || (simdi - p.marketTimestamp >= ikiSaat)) {
+                p.marketTimestamp = simdi;
+                p.marketGenerated = false;
+                generateMarketPlayers();
+                save();
+                if(document.getElementById('view-market').style.display === 'block') renderMarket();
+            }
+
+            // Arayüz Sayaç Yazıları Güncelleme
+            let kalanGift = birSaat - (simdi - p.giftTimestamp);
+            let gS = Math.floor((kalanGift / 1000) % 60);
+            let gD = Math.floor((kalanGift / (1000 * 60)) % 60);
+            let gSa = Math.floor((kalanGift / (1000 * 60 * 60)) % 24);
+            let giftTimer = document.getElementById('gift-countdown');
+            if(giftTimer) giftTimer.innerText = `${gSa.toString().padStart(2,'0')}:${gD.toString().padStart(2,'0')}:${gS.toString().padStart(2,'0')}`;
+
+            let kalanMarket = ikiSaat - (simdi - p.marketTimestamp);
+            let mS = Math.floor((kalanMarket / 1000) % 60);
+            let mD = Math.floor((kalanMarket / (1000 * 60)) % 60);
+            let mSa = Math.floor((kalanMarket / (1000 * 60 * 60)) % 24);
+            let marketTimer = document.getElementById('market-countdown');
+            if(marketTimer) marketTimer.innerText = `${mSa.toString().padStart(2,'0')}:${mD.toString().padStart(2,'0')}:${mS.toString().padStart(2,'0')}`;
+        }
+
+        function renderGiftBoxes() {
+            document.getElementById('gift-result-text').innerText = "";
+            for(let i=0; i<3; i++) {
+                let boxEl = document.getElementById(`gift-box-${i}`);
+                if(p.giftBoxesOpened[i]) {
+                    boxEl.classList.add('opened');
+                    boxEl.classList.remove('disabled');
+                    let r = p.giftBoxRewards[i];
+                    if(r.type === 'xp') {
+                        boxEl.innerHTML = `✨<div class="box-label">+${r.value} XP</div>`;
+                    } else {
+                        boxEl.innerHTML = `🏃<div class="box-label">${r.gen} GEN</div>`;
+                    }
+                } else {
+                    boxEl.classList.remove('opened');
+                    // Eğer kutulardan biri açıldıysa diğerleri kilitlenir
+                    if(p.giftBoxesOpened.includes(true)) {
+                        boxEl.classList.add('disabled');
+                    } else {
+                        boxEl.classList.remove('disabled');
+                    }
+                    boxEl.innerHTML = `? <div class="box-label">${i+1}. Kutu</div>`;
+                }
+            }
+        }
+
+        function openGiftBox(idx) {
+            if(p.giftBoxesOpened.includes(true)) return alert("Bu saatlik hakkını zaten kullandın! Bir sonraki saati bekle.");
+            if(p.giftBoxesOpened[idx]) return;
+
+            p.giftBoxesOpened[idx] = true;
+            let reward = p.giftBoxRewards[idx];
+            let msg = "";
+
+            if(reward.type === 'xp') {
+                p.teamLv = Math.min(100000, p.teamLv + reward.value);
+                msg = `🎁 Kutudan Mükemmel Ödül Çıktı! Takımına +${reward.value} Takım Seviyesi (XP) Eklendi!`;
+            } else {
+                let generatedId = "gift_" + Date.now();
+                let newPlayer = { id: generatedId, name: reward.name, gen: reward.gen, price: 0, isBought: true };
+                p.boughtPool.push(newPlayer);
+                msg = `🔥 İNANILMAZ! ${reward.gen} GEN Gücündeki Yıldız Oyuncu "${reward.name}" Takımına Katıldı!`;
+            }
+
+            document.getElementById('gift-result-text').innerText = msg;
+            save(); updateUI(); renderGiftBoxes();
         }
 
         function checkMissionProgress() {
@@ -713,6 +850,7 @@
             
             p.leagueTier = 2;
             p.leagueResetTime = Date.now(); 
+            p.marketTimestamp = Date.now();
             generateLeagueData();
             generateMarketPlayers();
             
@@ -786,7 +924,6 @@
             }
         }
 
-        // AVRUPA KUPALARI SÜRE KONTROLÜ
         function checkEuroTimers() {
             if(!p.hasTeam || !p.euroTimer) return;
             let simdi = Date.now();
@@ -880,7 +1017,6 @@
             }
         }
 
-        // AVRUPA KUPALARI PANEL GÖRÜNÜMÜ VE ARKA PLAN AYARI
         function renderEuro() {
             let titleBox = document.getElementById('euro-cup-title');
             let timerStatus = document.getElementById('euro-timer-status');
@@ -1012,19 +1148,18 @@
             for(let i=0; i<5; i++) {
                 let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
                 let gen = Math.floor(Math.random() * 21) + 60; 
-                p.marketPool.push({ id: "free_" + i, name: rName, gen: gen, price: 0, isBought: false });
+                p.marketPool.push({ id: "free_" + i + "_" + Date.now(), name: rName, gen: gen, price: 0, isBought: false });
             }
             
             for(let i=0; i<10; i++) {
                 let rName = isimler[Math.floor(Math.random()*isimler.length)] + " " + soyisimler[Math.floor(Math.random()*soyisimler.length)];
                 let gen = Math.floor(Math.random() * 41) + 60; 
                 let price = Math.floor(gen * 2.5); 
-                p.marketPool.push({ id: "paid_" + i, name: rName, gen: gen, price: price, isBought: false });
+                p.marketPool.push({ id: "paid_" + i + "_" + Date.now(), name: rName, gen: gen, price: price, isBought: false });
             }
             p.marketGenerated = true;
         }
 
-        // BÖLÜM GEÇİŞİ VE ARKA PLAN KONTROL SİSTEMİ
         function showSection(s) {
             if(s === 'mahalle' && p.lv < 100) return alert("100 XP lazım!");
             if(s === 'teams' && p.lv < 30) return alert("30 XP lazım!");
@@ -1033,13 +1168,13 @@
             if(s === 'myplayers' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
             if(s === 'history' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
             if(s === 'league' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
+            if(s === 'gifts' && !p.hasTeam) return alert("Önce takım oluşturmalısın!");
             if(s === 'euro' && (p.lv < 5000 || !p.hasTeam)) return alert("Avrupa Kupaları için 5000 XP ve kurulmuş bir takım gereklidir!");
             if(s === 'milli' && p.lv < 1000) return alert("1000 XP lazım!");
             
             document.querySelectorAll('#content-area > div').forEach(v => v.style.display = 'none');
             document.getElementById('view-' + s).style.display = 'block';
 
-            // DİNAMİK ARKA PLAN DEĞİŞİMİ
             if(s === 'euro') {
                 if(p.euroType === "uel" || p.euroType === "wait_uecl") {
                     document.body.style.backgroundImage = "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('b4b7d586-c5fd-49b3-8187-d9e289b668ff - Kopya.webp')";
@@ -1049,7 +1184,6 @@
                     document.body.style.backgroundImage = "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uclheader1.png - Kopya.avif')";
                 }
             } else {
-                // EURO KUPALARINDAN ÇIKINCA ARKA PLAN ESKİ HALİNE DÖNER
                 document.body.style.backgroundImage = "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('8iXhR.jpg')";
             }
 
@@ -1082,6 +1216,7 @@
             if(s === 'missions') renderMissions();
             if(s === 'league') renderLeague();
             if(s === 'euro') renderEuro();
+            if(s === 'gifts') renderGiftBoxes();
             if(s === 'history') renderHistory();
             if(s === 'mahalle') renderList('mh-list', mahalleler, 'mh', false);
             if(s === 'teams') renderList('tm-list', kulupler, 'tm', true); 
@@ -1145,7 +1280,7 @@
             let container = document.getElementById('my-players-list');
             
             if(p.boughtPool.length === 0) {
-                container.innerHTML = `<p style="color: #aaa; grid-column: span 2; margin-top: 20px;">Henüz satın alınmış oyuncu yok. Marketten oyuncu transfer edin!</p>`;
+                container.innerHTML = `<p style="color: #aaa; grid-column: span 2; margin-top: 20px;">Henüz satın alınmış oyuncu yok. Marketten veya kutulardan oyuncu kazanın!</p>`;
                 return;
             }
 
@@ -1450,12 +1585,10 @@
             save();
         }
 
-        // AVRUPA KUPALARI TUR ATALAMA VE RÖVANŞ ALGORİTMASI
         function applyEuroMatchResult(s1, s2) {
             let kupaIsmi = p.euroType.toUpperCase();
             
             if(p.euroStage === 1) {
-                // FİNAL TEK MAÇTIR
                 let resStr = s1 > s2 ? "GALİBİYET" : (s1 === s2 ? "BERABERLİK" : "MAĞLUBİYET");
                 p.matchHistory.unshift({
                     type: `${kupaIsmi} FİNAL`,
@@ -1479,7 +1612,7 @@
                     } else if(p.euroType === "ucl") {
                         p.uclWins = (p.uclWins || 0) + 1;
                         p.euroType = "wait_reset";
-                        p.euroTimer = simdi + (5 * 24 * 60 * 60 * 1000); // 5 gün sonra en baştan
+                        p.euroTimer = simdi + (5 * 24 * 60 * 60 * 1000); 
                         alert("👑 AVRUPANIN EN BÜYÜĞÜ! Şampiyonlar Ligi kupasını kaldırdınız! Turnuva 5 gün sonra baştan başlayacak.");
                     }
                 } else {
@@ -1487,7 +1620,6 @@
                     p.euroStage = 16; p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = "";
                 }
             } else {
-                // RÖVANŞLI TURLAR (SON 16, ÇEYREK FİNAL, YARI FİNAL)
                 if(p.euroLeg === 1) {
                     p.euroScoreHome = s1;
                     p.euroScoreAway = s2;
@@ -1501,7 +1633,6 @@
                     });
                     alert(`İlk Maç Bitti: ${s1} - ${s2}. Şimdi rövanş zamanı!`);
                 } else {
-                    // 2. MAÇ: TOPLAM SKOR HESAPLANIR
                     let totalUser = p.euroScoreHome + s1;
                     let totalOpp = p.euroScoreAway + s2;
                     
@@ -1515,10 +1646,9 @@
 
                     if(totalUser > totalOpp) {
                         alert(`🎉 Toplam skorda ${totalUser} - ${totalOpp} kazandınız ve tur atladınız!`);
-                        p.euroStage = p.euroStage / 2; // 16 -> 8 (Çeyrek) -> 4 (Yarı) -> 1 (Final)
+                        p.euroStage = p.euroStage / 2; 
                         p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = "";
                     } else if(totalUser === totalOpp) {
-                        // Uzatmalarda yazı tura atışı gibi rastgele belirleniyor
                         if(Math.random() > 0.5) {
                             alert(`⚖️ Toplam skor eşit (${totalUser}-${totalOpp})! Penaltılarda siz kazandınız ve tur atladınız!`);
                             p.euroStage = p.euroStage / 2;
