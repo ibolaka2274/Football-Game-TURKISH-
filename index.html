@@ -399,7 +399,48 @@
             </div>
 
             <div id="goal-info" style="color:var(--accent-gold); font-weight:bold; height:30px;"></div>
+
             <p id="time-display">Dakika: 0'</p>
+
+            <div id="match-stats" style="
+            margin-top:15px;
+            background:rgba(255,255,255,0.05);
+            padding:15px;
+            border-radius:12px;
+            border:1px solid #444;
+            width:320px;
+            margin-left:auto;
+            margin-right:auto;
+            font-size:13px;
+            text-align:left;
+            ">
+
+                <div style="display:flex; justify-content:space-between;">
+                    <span>⚽ Topa Sahip Olma</span>
+                    <span id="stat-possession">50% - 50%</span>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <span>🎯 Şut</span>
+                    <span id="stat-shots">0 - 0</span>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <span>🥅 İsabetli Şut</span>
+                    <span id="stat-ontarget">0 - 0</span>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <span>🚫 Faul</span>
+                    <span id="stat-fouls">0 - 0</span>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <span>🚩 Korner</span>
+                    <span id="stat-corners">0 - 0</span>
+                </div>
+
+            </div>
             <button id="m-finish" style="display:none; margin: 20px auto;" onclick="finishCurrentMatch()">DEVAM ET</button>
             
             <button id="m-forfeit" class="forfeit-btn" onclick="forfeitMatch()">MAÇTAN ÇEKİL 🏳️</button>
@@ -428,7 +469,20 @@
         let matchLoopInterval = null; 
         let currentOpponentName = ""; 
         let currentOpponentLogo = ""; 
-        let currentMatchType = ""; 
+        let currentMatchType = "";
+
+        let liveStats = {
+            possessionHome: 50,
+            possessionAway: 50,
+            shotsHome: 0,
+            shotsAway: 0,
+            onTargetHome: 0,
+            onTargetAway: 0,
+            foulsHome: 0,
+            foulsAway: 0,
+            cornersHome: 0,
+            cornersAway: 0
+        }; 
 
         const kulupler = [
             "AKINCILAR SPOR.jpeg", "ALEV ATLAR.jpeg", "ANADOLU BİZONLARI.jpeg", "BABALAR FUTBOL.jpeg",
@@ -1382,6 +1436,21 @@
         function startMatch(type) {
             currentMatchType = type;
             showScreen('match-screen');
+
+            liveStats = {
+                possessionHome: 50,
+                possessionAway: 50,
+                shotsHome: 0,
+                shotsAway: 0,
+                onTargetHome: 0,
+                onTargetAway: 0,
+                foulsHome: 0,
+                foulsAway: 0,
+                cornersHome: 0,
+                cornersAway: 0
+            };
+
+            updateMatchStats();
             let s1 = 0, s2 = 0, clock = 0;
             document.getElementById('s-1').innerText = 0;
             document.getElementById('s-2').innerText = 0;
@@ -1674,6 +1743,48 @@
 
         function renderComments() { document.getElementById('comment-list').innerHTML = p.comments.map(c => `<div class="comment">${c}</div>`).join(''); }
         function resetGame() { if(confirm("Tüm kariyeriniz ve kurduğunuz takım sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
-    </script>
+    
+        function updateMatchStats() {
+
+            let possessionEl = document.getElementById('stat-possession');
+            let shotsEl = document.getElementById('stat-shots');
+            let targetEl = document.getElementById('stat-ontarget');
+            let foulsEl = document.getElementById('stat-fouls');
+            let cornersEl = document.getElementById('stat-corners');
+
+            if(!possessionEl || !shotsEl || !targetEl || !foulsEl || !cornersEl) return;
+
+            liveStats.possessionHome = Math.floor(Math.random() * 31) + 35;
+            liveStats.possessionAway = 100 - liveStats.possessionHome;
+
+            if(Math.random() > 0.4) liveStats.shotsHome++;
+            if(Math.random() > 0.4) liveStats.shotsAway++;
+
+            if(Math.random() > 0.6) liveStats.onTargetHome++;
+            if(Math.random() > 0.6) liveStats.onTargetAway++;
+
+            if(Math.random() > 0.5) liveStats.foulsHome++;
+            if(Math.random() > 0.5) liveStats.foulsAway++;
+
+            if(Math.random() > 0.7) liveStats.cornersHome++;
+            if(Math.random() > 0.7) liveStats.cornersAway++;
+
+            possessionEl.innerText =
+                `${liveStats.possessionHome}% - ${liveStats.possessionAway}%`;
+
+            shotsEl.innerText =
+                `${liveStats.shotsHome} - ${liveStats.shotsAway}`;
+
+            targetEl.innerText =
+                `${liveStats.onTargetHome} - ${liveStats.onTargetAway}`;
+
+            foulsEl.innerText =
+                `${liveStats.foulsHome} - ${liveStats.foulsAway}`;
+
+            cornersEl.innerText =
+                `${liveStats.cornersHome} - ${liveStats.cornersAway}`;
+        }
+
+</script>
 </body>
 </html>
