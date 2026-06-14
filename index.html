@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -138,7 +138,26 @@
         .gift-box:hover:not(.opened):not(.disabled) { transform: scale(1.08) translateY(-5px); box-shadow: 0 0 25px var(--accent-gold); background: linear-gradient(135deg, #444, #333); }
         .gift-box.opened { background: rgba(0, 255, 204, 0.1); border-color: #00ffcc; color: #00ffcc; cursor: default; }
         .gift-box.disabled { opacity: 0.4; cursor: not-allowed; border-color: #555; color: #555; }
-        .gift-box .box-label { font-size: 11px; margin-top: 8px; color: #ccc; font-family: sans-serif; text-transform: uppercase; font-weight: normal; }
+        .gift-box .box-label { font-size: 11px; margin-top: 8px; color: #ccc; font-family: sans-serif; text-transform: uppercase; font-weight: normal; }        .fk-coin-display { color: var(--accent-gold); font-weight: bold; background: rgba(255, 215, 0, 0.08); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 8px; padding: 8px 12px; font-size: 12px; }
+        .pack-card { background: rgba(255,255,255,0.05); border: 1px solid var(--accent-gold); border-radius: 12px; padding: 18px; text-align: left; }
+        .pack-card h3 { margin: 0 0 8px 0; color: var(--accent-gold); }
+        .pack-card p { margin: 0 0 12px 0; color: #bbb; font-size: 12px; }
+        #pack-opening-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); z-index: 50; }
+        #pack-opening-box { width: 190px; height: 190px; border: 3px solid var(--accent-gold); border-radius: 18px; background: linear-gradient(145deg, #171717, #2a2200); color: var(--accent-gold); font-size: 90px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 35px rgba(255,215,0,0.45); transition: 0.25s; }
+        #pack-opening-box:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,215,0,0.7); }
+        #pack-result { display: none; min-width: 280px; max-width: 420px; border: 2px solid var(--accent-gold); border-radius: 16px; background: rgba(10,10,10,0.95); padding: 25px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.9); }
+        #pack-result h2 { color: var(--accent-gold); margin-top: 0; }        .pack-reward-card { border-radius: 14px; padding: 18px; margin: 12px auto; max-width: 280px; color: white; border: 2px solid rgba(255,255,255,0.35); box-shadow: 0 0 28px rgba(0,0,0,0.65); }
+        .pack-reward-card .reward-gen { display: inline-block; padding: 5px 10px; border-radius: 7px; background: rgba(0,0,0,0.45); font-weight: bold; font-size: 24px; margin-bottom: 10px; }
+        .pack-reward-card h3 { margin: 6px 0; color: inherit; }
+        .pack-reward-coin { border-radius: 14px; padding: 20px; margin: 12px auto; max-width: 280px; background: linear-gradient(145deg, #2a2200, #5c4a00); border: 2px solid var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 28px rgba(255,215,0,0.35); }
+        .pack-card-ender { background: linear-gradient(145deg, #3b0505, #b31212); border-color: #ff3e3e; box-shadow: 0 0 32px rgba(255,62,62,0.6); }
+        .pack-card-efsane { background: linear-gradient(145deg, #5a4300, #ffd700); color: #1a1200; border-color: #fff3a0; box-shadow: 0 0 36px rgba(255,215,0,0.75); }
+        .pack-card-ultra { background: conic-gradient(from 140deg, #00f5ff, #7a00ff, #ff2fd6, #fff200, #00f5ff); color: #060018; border-color: #ffffff; box-shadow: 0 0 45px rgba(0,245,255,0.8), inset 0 0 30px rgba(255,255,255,0.35); animation: ultraCardGlow 1.7s infinite alternate; }
+        @keyframes ultraCardGlow { from { filter: saturate(1); transform: scale(1); } to { filter: saturate(1.35); transform: scale(1.02); } }        .inbox-btn { position: relative; background: #1c3f66; border: 1px solid #5ab4ff; }
+        .inbox-count { position: absolute; top: -7px; right: -7px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent-red); color: white; font-size: 10px; line-height: 18px; display: none; }
+        #inbox-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 60; }
+        #inbox-panel { width: 420px; max-width: 90vw; max-height: 70vh; overflow-y: auto; background: rgba(10,10,10,0.96); border: 2px solid #5ab4ff; border-radius: 16px; padding: 22px; box-shadow: 0 0 35px rgba(90,180,255,0.35); text-align: center; }
+        .inbox-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border: 1px solid #333; border-radius: 10px; padding: 12px; margin: 10px 0; text-align: left; }
     </style>
 </head>
 <body>
@@ -180,6 +199,8 @@
                         </div>
                     </div>
                 </div>
+                <button class="inbox-btn" onclick="openInbox()">GELEN KUTUSU <span id="inbox-count" class="inbox-count">0</span></button>
+                <div id="fk-coin-display" class="fk-coin-display">fk coins: <span id="ui-fk-coins">0</span></div>
                 <button onclick="resetGame()" style="background: #600; font-size: 9px;">SIFIRLA</button>
             </div>
         </div>
@@ -197,6 +218,7 @@
                 <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">🏆 TAKIMLAR (30 XP)</div>
                 <div id="custom-team-btn" class="sidebar-item" onclick="showSection('customteam')" style="color: cyan;">🛡️ TAKIM OLUŞTUR (50 SV)</div>
                 <div id="mkt-btn" class="sidebar-item" onclick="showSection('market')" style="color: #ffcc00; display: none;">🛒 OYUNCU MARKETİ</div>
+                <div id="pack-market-btn" class="sidebar-item" onclick="showSection('packmarket')" style="color: var(--accent-gold); font-weight: bold;">PAKET MARKETİ</div>
                 <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc; display: none;">🏃 ALINAN OYUNCULAR</div>
                 <div id="history-btn" class="sidebar-item" onclick="showSection('history')" style="color: #e0aaff; display: none;">📊 MAÇ GEÇMİŞİ</div>
                 <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">🌍 MİLLİ (1000 XP)</div>
@@ -362,6 +384,14 @@
                     </div>
                     <div id="market-players-list" class="market-grid"></div>
                 </div>
+                <div id="view-packmarket" style="display:none;">
+                    <h2>PAKET MARKETİ</h2>
+                    <p style="color: #aaa; margin-bottom: 5px;">fk coins ile paket al, kutuya tıkla ve ödülünü aç.</p>
+                    <div style="background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 6px; display: inline-block; border: 1px solid #444; margin-bottom: 15px; font-size:13px;">
+                        Bakiyen: <span id="pack-fk-coins" style="color:var(--accent-gold); font-weight:bold;">0</span> fk coins
+                    </div>
+                    <div id="fk-pack-list" class="market-grid"></div>
+                </div>
 
                 <div id="view-myplayers" style="display:none;">
                     <h2>🏃 ALINAN OYUNCULAR</h2>
@@ -383,6 +413,26 @@
         </div>
     </div>
 
+
+
+    <div id="inbox-overlay">
+        <div id="inbox-panel">
+            <h2 style="color:#5ab4ff; margin-top:0;">GELEN KUTUSU</h2>
+            <div id="inbox-list"></div>
+            <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+                <button onclick="collectInboxCoins()" style="background:var(--accent-gold); color:black;">TÜMÜNÜ AL</button>
+                <button onclick="closeInbox()">KAPAT</button>
+            </div>
+        </div>
+    </div>
+    <div id="pack-opening-overlay">
+        <div id="pack-opening-box" onclick="openFkPackBox()">?</div>
+        <div id="pack-result">
+            <h2 id="pack-result-title">Paket Açıldı!</h2>
+            <div id="pack-result-body" style="margin: 15px 0; color: #ddd;"></div>
+            <button id="pack-result-action" onclick="nextFkPackReward()" style="background:var(--accent-gold); color:black;">DEVAM ET</button>
+        </div>
+    </div>
     <div id="match-screen" class="screen" style="flex-direction: row; justify-content: space-around;">
         <div style="flex: 1; text-align: center; position: relative; height: 100%;">
             <div style="font-size: 40px; margin-bottom: 5px;">⚔️</div>
@@ -463,13 +513,15 @@
             currentLeagueMatchIdx: 0, leagueFixtures: [], leagueTeamsData: [],
             euroType: "uel", euroStage: 16, euroLeg: 1, euroScoreHome: 0, euroScoreAway: 0, euroOpponent: "", euroTimer: 0, uclWins: 0,
             // YENİ EKLEMELER
-            giftTimestamp: 0, giftBoxesOpened: [false, false, false], giftBoxRewards: [], marketTimestamp: 0
+            giftTimestamp: 0, giftBoxesOpened: [false, false, false], giftBoxRewards: [], marketTimestamp: 0, fkCoins: 100, pendingFkPack: null, openedFkPacks: {}, fkInbox: []
         };
         
         let matchLoopInterval = null; 
         let currentOpponentName = ""; 
         let currentOpponentLogo = ""; 
         let currentMatchType = "";
+        let currentFkPackRewards = [];
+        let currentFkPackRewardIndex = 0;
 
         let liveStats = {
             possessionHome: 50,
@@ -507,6 +559,15 @@
 
         const isimler = ["Ahmet", "Mehmet", "Can", "Efe", "Burak", "Mert", "Arda", "Selim", "Hakan", "Yavuz", "Emre", "Oğuz", "Volkan", "Serkan", "Hüseyin", "Gökhan", "Kaan", "Tolga"];
         const soyisimler = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir", "Arslan", "Doğan", "Kılıç"];
+        const fkPackDefinitions = [
+            { key: "madrid", name: "Madrid Paketi", cost: 100, coinCount: 4, coinValue: 20, firstCard: { name: "Ronaldo", gen: 98, rarity: "ENDER" }, laterRarity: "ENDER", laterGen: [94, 98] },
+            { key: "dream", name: "Dream Paketi", cost: 100, coinCount: 5, coinValue: 10, firstCard: { name: "Messi", gen: 98, rarity: "ENDER" }, laterRarity: "ENDER", laterGen: [94, 98] },
+            { key: "efsane", name: "Efsane Kart Paketi", cost: 500, coinCount: 4, coinValue: 50, firstCard: { name: "Z. Zidane", gen: 100, rarity: "EFSANE" }, laterRarity: "EFSANE", laterGen: [98, 100] },
+            { key: "ender", name: "Ender Kart Paketi", cost: 250, coinCount: 4, coinValue: 25, firstCard: { name: "Neymar", gen: 98, rarity: "ENDER" }, laterRarity: "ENDER", laterGen: [94, 98] },
+            { key: "ultra", name: "Ultra Paket", cost: 3000, coinCount: 5, coinValue: 100, firstCard: { name: "M. Reus", gen: 105, rarity: "ULTRA" }, laterRarity: "ULTRA", laterGen: [101, 105] }
+        ];
+
+        const fkPackCardNames = ["R. Lewandowski", "K. Mbappe", "E. Haaland", "L. Modric", "K. De Bruyne", "A. Iniesta", "Xavi", "Ronaldinho", "Kaka", "T. Henry", "A. Pirlo", "S. Ramos", "Benzema", "G. Bale"];
 
         const tumGorevler = [
             { id: "train_3", desc: "Tesislerde 3 kez Antrenman yap", targetType: "trainsDone", targetVal: 3 },
@@ -527,6 +588,10 @@
                 if(p.leagueTier === undefined) { p.leagueTier = 2; p.championships = 0; p.leagueResetTime = 0; p.leagueTimerTarget = 0; p.leagueTimerType = ""; p.leagueStatus = "active"; p.currentLeagueMatchIdx = 0; p.leagueFixtures = []; p.leagueTeamsData = []; }
                 if(p.euroType === undefined) { p.euroType = "uel"; p.euroStage = 16; p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = ""; p.euroTimer = 0; p.uclWins = 0; }
                 if(p.giftTimestamp === undefined) { p.giftTimestamp = 0; p.giftBoxesOpened = [false, false, false]; p.giftBoxRewards = []; p.marketTimestamp = 0; }
+                if(p.fkCoins === undefined) p.fkCoins = 100;
+                if(p.pendingFkPack === undefined) p.pendingFkPack = null;
+                if(p.openedFkPacks === undefined) p.openedFkPacks = {};
+                if(p.fkInbox === undefined) p.fkInbox = [];
                 updateUI(); 
                 if(p.name) showScreen('main-screen'); 
             }
@@ -576,6 +641,19 @@
                     }
                 }
             }, 1000);
+        }
+        function updateFkCoinDisplays() {
+            let amount = p.fkCoins || 0;
+            let topCoinDisplay = document.getElementById('ui-fk-coins');
+            if(topCoinDisplay) topCoinDisplay.innerText = amount;
+            let packCoinDisplay = document.getElementById('pack-fk-coins');
+            if(packCoinDisplay) packCoinDisplay.innerText = amount;
+            let inboxCount = document.getElementById('inbox-count');
+            if(inboxCount) {
+                let count = (p.fkInbox || []).length;
+                inboxCount.innerText = count;
+                inboxCount.style.display = count > 0 ? 'inline-block' : 'none';
+            }
         }
 
         function updateUI() {
@@ -1289,11 +1367,159 @@
             }
             
             if(s === 'market') renderMarket();
+            if(s === 'packmarket') renderPackMarket();
             if(s === 'myplayers') renderMyPlayers();
             if(s === 'milli') renderList('ml-list', milliles, 'ml', false);
             if(s === 'comments') renderComments();
         }
 
+        function openInbox() {
+            renderInbox();
+            document.getElementById('inbox-overlay').style.display = 'flex';
+        }
+
+        function closeInbox() {
+            document.getElementById('inbox-overlay').style.display = 'none';
+        }
+
+        function renderInbox() {
+            let list = document.getElementById('inbox-list');
+            if(!list) return;
+            let items = p.fkInbox || [];
+            if(items.length === 0) {
+                list.innerHTML = `<p style="color:#aaa;">Gelen kutusunda alınacak fk coin yok.</p>`;
+                return;
+            }
+            list.innerHTML = items.map((item, idx) => `
+                <div class="inbox-item">
+                    <div>
+                        <strong>${item.source || 'Paket Hediyesi'}</strong>
+                        <div style="font-size:12px;color:#aaa;">${item.label || 'fk coin hediyesi'}</div>
+                    </div>
+                    <div style="color:var(--accent-gold);font-weight:bold;">+${item.amount} fk</div>
+                </div>
+            `).join('');
+        }
+
+        function collectInboxCoins() {
+            let items = p.fkInbox || [];
+            if(items.length === 0) return alert("Gelen kutusunda alınacak fk coin yok!");
+            let total = items.reduce((sum, item) => sum + (item.amount || 0), 0);
+            p.fkCoins = (p.fkCoins || 0) + total;
+            p.fkInbox = [];
+            save(); updateUI(); renderInbox();
+            alert(`Gelen kutusundan ${total} fk coins aldın!`);
+        }
+        function renderPackMarket() {
+            updateFkCoinDisplays();
+            let list = document.getElementById('fk-pack-list');
+            if(!list) return;
+            list.innerHTML = fkPackDefinitions.map(pack => `
+                <div class="pack-card">
+                    <h3>${pack.name}</h3>
+                    <p>${pack.coinCount} tane ${pack.coinValue} fk coin sonucu ve 1 tane ${pack.firstCard.rarity.toLowerCase()} kart şansı var.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                        <span class="gen-badge">${pack.cost} fk</span>
+                        <button onclick="buyFkPack('${pack.key}')" style="background:var(--accent-gold); color:black;">PAKET AL</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function buyFkPack(packKey) {
+            let pack = fkPackDefinitions.find(x => x.key === packKey);
+            if(!pack) return;
+            if((p.fkCoins || 0) < pack.cost) return alert("Bu paketi almak için yeterli fk coins yok!");
+            p.fkCoins -= pack.cost;
+            p.pendingFkPack = pack.key;
+            save(); updateUI(); renderPackMarket();
+            if(confirm("paketi şimdi aç")) showFkPackOverlay();
+        }
+
+        function showFkPackOverlay() {
+            document.getElementById('pack-opening-overlay').style.display = 'flex';
+            document.getElementById('pack-opening-box').style.display = 'flex';
+            document.getElementById('pack-result').style.display = 'none';
+        }
+
+        function randomFkPackPlayer(pack) {
+            let gen = Math.floor(Math.random() * (pack.laterGen[1] - pack.laterGen[0] + 1)) + pack.laterGen[0];
+            let name = fkPackCardNames[Math.floor(Math.random() * fkPackCardNames.length)];
+            return { name: name, gen: gen, rarity: pack.laterRarity };
+        }
+
+        function getPackRarityClass(rarity) {
+            if(rarity === "ULTRA") return "pack-card-ultra";
+            if(rarity === "EFSANE") return "pack-card-efsane";
+            return "pack-card-ender";
+        }
+
+        function openFkPackBox() {
+            let pack = fkPackDefinitions.find(x => x.key === p.pendingFkPack);
+            if(!pack) return;
+            if(!p.openedFkPacks) p.openedFkPacks = {};
+
+            let card = p.openedFkPacks[pack.key] ? randomFkPackPlayer(pack) : pack.firstCard;
+            p.openedFkPacks[pack.key] = true;
+            let player = { id: "pack_" + pack.key + "_" + Date.now(), name: card.name, gen: card.gen, rarity: card.rarity, price: 0, isBought: true };
+            p.boughtPool.push(player);
+
+            currentFkPackRewards = [];
+            for(let i = 0; i < pack.coinCount; i++) {
+                if(!p.fkInbox) p.fkInbox = [];
+                p.fkInbox.push({ amount: pack.coinValue, source: pack.name, label: `${i + 1}. fk coin hediyesi` });
+                currentFkPackRewards.push({ type: "coin", value: pack.coinValue, index: i + 1, total: pack.coinCount });
+            }
+            currentFkPackRewards.push({ type: "card", card: card });
+            currentFkPackRewardIndex = 0;
+
+            p.pendingFkPack = null;
+            save(); updateUI();
+            document.getElementById('pack-opening-box').style.display = 'none';
+            document.getElementById('pack-result').style.display = 'block';
+            renderCurrentFkPackReward();
+        }
+
+        function renderCurrentFkPackReward() {
+            let reward = currentFkPackRewards[currentFkPackRewardIndex];
+            if(!reward) return closeFkPackOverlay();
+
+            let isLast = currentFkPackRewardIndex >= currentFkPackRewards.length - 1;
+            document.getElementById('pack-result-action').innerText = isLast ? "ÇIK" : "DEVAM ET";
+            document.getElementById('pack-result-title').innerText = `Hediye ${currentFkPackRewardIndex + 1}/${currentFkPackRewards.length}`;
+
+            if(reward.type === "coin") {
+                document.getElementById('pack-result-body').innerHTML = `
+                    <div class="pack-reward-coin">
+                        <div style="font-size:42px;font-weight:bold;">+${reward.value}</div>
+                        <div>${reward.index}. fk coin hediyesi gelen kutusuna eklendi</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let card = reward.card;
+            document.getElementById('pack-result-body').innerHTML = `
+                <div class="pack-reward-card ${getPackRarityClass(card.rarity)}">
+                    <div class="reward-gen">${card.gen} GEN</div>
+                    <h3>${card.rarity} ${card.name}</h3>
+                    <div>Oyuncu alınan oyunculara eklendi.</div>
+                </div>
+            `;
+        }
+
+        function nextFkPackReward() {
+            if(currentFkPackRewardIndex >= currentFkPackRewards.length - 1) {
+                closeFkPackOverlay();
+                return;
+            }
+            currentFkPackRewardIndex++;
+            renderCurrentFkPackReward();
+        }
+        function closeFkPackOverlay() {
+            document.getElementById('pack-opening-overlay').style.display = 'none';
+            if(document.getElementById('view-myplayers').style.display === 'block') renderMyPlayers();
+        }
         function renderMarket() {
             let container = document.getElementById('market-players-list');
             container.innerHTML = p.marketPool.map(player => {
@@ -1337,16 +1563,17 @@
                 container.innerHTML = `<p style="color: #aaa; grid-column: span 2; margin-top: 20px;">Henüz satın alınmış oyuncu yok. Marketten veya kutulardan oyuncu kazanın!</p>`;
                 return;
             }
-
             container.innerHTML = p.boughtPool.map(player => {
                 let inSquad = p.squadIds.includes(player.id);
                 let btnAction = inSquad ? `onclick="removeFromSquad('${player.id}')" style="background:#cc0000;"` : `onclick="addToSquad('${player.id}')" style="background:#00ccaa;"`;
                 let btnText = inSquad ? "KADRODAN ÇIKAR" : "KADROYA EKLE";
+                let rarityClass = player.rarity ? ` pack-reward-card ${getPackRarityClass(player.rarity)}` : "";
+                let rarityLabel = player.rarity ? `${player.rarity} Kart` : "Market Oyuncusu";
                 return `
-                    <div class="market-card">
+                    <div class="market-card${rarityClass}">
                         <div class="market-info">
-                            <h4>${player.name}</h4>
-                            <p>Durum: ${inSquad ? 'Kadroda ⚔️' : 'Yedek 🪑'}</p>
+                            <h4>${player.rarity ? player.rarity + ' ' : ''}${player.name}</h4>
+                            <p>${rarityLabel} • ${inSquad ? 'Kadroda ⚔️' : 'Yedek 🪑'}</p>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div class="gen-badge">${player.gen}</div>
@@ -1573,8 +1800,11 @@
                     }
                     
                     p.lv = Math.min(100000, p.lv + xp);
-                    
-                    if(type === 'custom' && (s1 >= s2)) {
+                    if(type === 'custom' && (s1 > s2)) {
+                        p.teamLv = Math.min(100000, p.teamLv + 5);
+                        p.fkCoins = (p.fkCoins || 0) + 50;
+                        alert("Kendi takımınla maçı kazandın! +50 fk coins kazandın.");
+                    } else if(type === 'custom' && (s1 === s2)) {
                         p.teamLv = Math.min(100000, p.teamLv + 5);
                     }
                     
