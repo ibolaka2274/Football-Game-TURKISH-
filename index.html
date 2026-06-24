@@ -47,7 +47,7 @@
         }
 
         .active { display: flex; flex-direction: column; }
-        #start-screen.active, #role-screen.active, #match-screen.active { justify-content: center; align-items: center; }
+        #auth-screen.active, #start-screen.active, #role-screen.active, #match-screen.active { justify-content: center; align-items: center; }
 
         input { padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: white; border-radius: 8px; font-size: 18px; margin-bottom: 10px; width: 250px; text-align: center;}
         button { padding: 10px 15px; margin: 5px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #333; color: white; transition: 0.3s; text-transform: uppercase; font-size: 11px; }
@@ -79,7 +79,11 @@
         .logo-btn.selected { border-color: var(--accent-gold); background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
         
         .ui-team-logo { width: 30px; height: 30px; object-fit: contain; vertical-align: middle; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
+        .ui-role-logo { width: 34px; height: 34px; object-fit: cover; vertical-align: middle; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25); }
         .profile-team-logo { width: 60px; height: 60px; object-fit: contain; display: block; margin-top: 5px; border-radius: 8px; border: 1px solid #444; }
+        .role-choice-grid { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+        .role-choice { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .role-choice img { width: 130px; height: 170px; object-fit: cover; border-radius: 10px; border: 2px solid #333; box-shadow: 0 0 12px rgba(0,0,0,0.45); }
 
         .match-display-container { display: flex; align-items: center; justify-content: center; gap: 30px; margin: 15px 0; }
         .match-logo-frame { width: 90px; height: 90px; background: rgba(255,255,255,0.05); border: 2px solid #444; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 5px; }
@@ -158,11 +162,31 @@
         #inbox-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 60; }
         #inbox-panel { width: 420px; max-width: 90vw; max-height: 70vh; overflow-y: auto; background: rgba(10,10,10,0.96); border: 2px solid #5ab4ff; border-radius: 16px; padding: 22px; box-shadow: 0 0 35px rgba(90,180,255,0.35); text-align: center; }
         .inbox-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border: 1px solid #333; border-radius: 10px; padding: 12px; margin: 10px 0; text-align: left; }
+        .auth-link { color: var(--accent-gold); cursor: pointer; font-weight: bold; }
+        .auth-note { color: #aaa; font-size: 13px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="start-screen" class="screen active">
+    <div id="auth-screen" class="screen active">
+        <div class="game-logo">⚽</div>
+        <h1 style="color: var(--accent-red); letter-spacing: 4px; margin-top: 5px;">OTURUM AÇ</h1>
+        <div id="login-form" style="text-align:center;">
+            <input type="email" id="login-email" placeholder="Email...">
+            <input type="password" id="login-password" placeholder="Şifre...">
+            <button onclick="loginAccount()">OTURUM AÇ</button>
+            <div class="auth-note">Hesabın yokmu <span class="auth-link" onclick="showAuthMode('register')">Kaydol</span></div>
+        </div>
+        <div id="register-form" style="display:none; text-align:center;">
+            <input type="email" id="register-email" placeholder="Email...">
+            <input type="password" id="register-password" placeholder="Şifre...">
+            <div style="color:#ffcc00; font-size:12px; margin-bottom:8px;">Sadece gmail kabul edilir</div>
+            <button onclick="registerAccount()">KAYDOL</button>
+            <div class="auth-note">Zaten hesabın var mı <span class="auth-link" onclick="showAuthMode('login')">Oturum aç</span></div>
+        </div>
+    </div>
+
+    <div id="start-screen" class="screen">
         <div class="game-logo">⚽</div>
         <h1 style="color: var(--accent-red); letter-spacing: 5px; margin-top: 5px;">AYAZ ENTERTAINMENT</h1>
         <input type="text" id="player-name-input" placeholder="Futbolcu İsmi...">
@@ -171,11 +195,23 @@
 
     <div id="role-screen" class="screen">
         <h2 style="color: var(--accent-gold);">MEVKİ SEÇİMİ</h2>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="setRole('Forvet')">FORVET</button>
-            <button onclick="setRole('Orta Saha')">ORTA SAHA</button>
-            <button onclick="setRole('Defans')">DEFANS</button>
-            <button onclick="setRole('Kaleci')">KALECİ</button>
+        <div class="role-choice-grid">
+            <div class="role-choice">
+                <img src="Atak.png" alt="Forvet">
+                <button onclick="setRole('Forvet')">FORVET</button>
+            </div>
+            <div class="role-choice">
+                <img src="Orta.png" alt="Orta Saha">
+                <button onclick="setRole('Orta Saha')">ORTA SAHA</button>
+            </div>
+            <div class="role-choice">
+                <img src="Defans.png" alt="Defans">
+                <button onclick="setRole('Defans')">DEFANS</button>
+            </div>
+            <div class="role-choice">
+                <img src="Kale.png" alt="Kaleci">
+                <button onclick="setRole('Kaleci')">KALECİ</button>
+            </div>
         </div>
     </div>
 
@@ -522,6 +558,8 @@
         let currentMatchType = "";
         let currentFkPackRewards = [];
         let currentFkPackRewardIndex = 0;
+        let activeAccountEmail = "";
+        let timedSystemsStarted = false;
 
         let liveStats = {
             possessionHome: 50,
@@ -577,34 +615,93 @@
             { id: "match_2", desc: "Sahaya hükmet: Toplam 2 Maç yap", targetType: "matchesPlayed", targetVal: 2 }
         ];
 
-        function save() { localStorage.setItem('ayazKariyer_v15', JSON.stringify(p)); }
+        function getAccounts() {
+            return JSON.parse(localStorage.getItem('ayazAccounts_v1') || '{}');
+        }
+
+        function saveAccounts(accounts) {
+            localStorage.setItem('ayazAccounts_v1', JSON.stringify(accounts));
+        }
+
+        function normalizeEmail(email) {
+            return (email || '').trim().toLowerCase();
+        }
+
+        function accountGameKey(email) {
+            return 'ayazKariyer_v15_' + normalizeEmail(email);
+        }
+
+        function showAuthMode(mode) {
+            document.getElementById('login-form').style.display = mode === 'login' ? 'block' : 'none';
+            document.getElementById('register-form').style.display = mode === 'register' ? 'block' : 'none';
+        }
+
+        function registerAccount() {
+            let email = normalizeEmail(document.getElementById('register-email').value);
+            let password = document.getElementById('register-password').value;
+            if(!email || !password) return alert("Email ve şifre gir!");
+            if(!email.endsWith('@gmail.com')) return alert("Sadece gmail kabul edilir");
+            let accounts = getAccounts();
+            accounts[email] = { password: password };
+            localStorage.removeItem(accountGameKey(email));
+            saveAccounts(accounts);
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = "";
+            document.getElementById('register-password').value = "";
+            alert("Kaydoldunuz şimdi oturum açın");
+            showAuthMode('login');
+        }
+
+        function loginAccount() {
+            let email = normalizeEmail(document.getElementById('login-email').value);
+            let password = document.getElementById('login-password').value;
+            let accounts = getAccounts();
+            if(!accounts[email] || accounts[email].password !== password) return alert("Email veya şifre hatalı!");
+            activeAccountEmail = email;
+            loadGameForAccount();
+        }
+
+        function save() {
+            if(!activeAccountEmail) return;
+            localStorage.setItem(accountGameKey(activeAccountEmail), JSON.stringify(p));
+        }
+
         function load() {
-            let s = localStorage.getItem('ayazKariyer_v15');
+            showAuthMode('login');
+            showScreen('auth-screen');
+        }
+
+        function loadGameForAccount() {
+            let s = localStorage.getItem(accountGameKey(activeAccountEmail));
             if(s) { 
                 p = JSON.parse(s); 
-                if(!p.matchHistory) p.matchHistory = [];
-                if(!p.missions) p.missions = [];
-                if(!p.stats) p.stats = { matchesPlayed: 0, wins: 0, trainingsDone: 0 };
-                if(p.leagueTier === undefined) { p.leagueTier = 2; p.championships = 0; p.leagueResetTime = 0; p.leagueTimerTarget = 0; p.leagueTimerType = ""; p.leagueStatus = "active"; p.currentLeagueMatchIdx = 0; p.leagueFixtures = []; p.leagueTeamsData = []; }
-                if(p.euroType === undefined) { p.euroType = "uel"; p.euroStage = 16; p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = ""; p.euroTimer = 0; p.uclWins = 0; }
-                if(p.giftTimestamp === undefined) { p.giftTimestamp = 0; p.giftBoxesOpened = [false, false, false]; p.giftBoxRewards = []; p.marketTimestamp = 0; }
-                if(p.fkCoins === undefined) p.fkCoins = 100;
-                if(p.pendingFkPack === undefined) p.pendingFkPack = null;
-                if(p.openedFkPacks === undefined) p.openedFkPacks = {};
-                if(p.fkInbox === undefined) p.fkInbox = [];
-                updateUI(); 
-                if(p.name) showScreen('main-screen'); 
             }
+            if(!p.matchHistory) p.matchHistory = [];
+            if(!p.missions) p.missions = [];
+            if(!p.stats) p.stats = { matchesPlayed: 0, wins: 0, trainingsDone: 0 };
+            if(p.leagueTier === undefined) { p.leagueTier = 2; p.championships = 0; p.leagueResetTime = 0; p.leagueTimerTarget = 0; p.leagueTimerType = ""; p.leagueStatus = "active"; p.currentLeagueMatchIdx = 0; p.leagueFixtures = []; p.leagueTeamsData = []; }
+            if(p.euroType === undefined) { p.euroType = "uel"; p.euroStage = 16; p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = ""; p.euroTimer = 0; p.uclWins = 0; }
+            if(p.giftTimestamp === undefined) { p.giftTimestamp = 0; p.giftBoxesOpened = [false, false, false]; p.giftBoxRewards = []; p.marketTimestamp = 0; }
+            if(p.fkCoins === undefined) p.fkCoins = 100;
+            if(p.pendingFkPack === undefined) p.pendingFkPack = null;
+            if(p.openedFkPacks === undefined) p.openedFkPacks = {};
+            if(p.fkInbox === undefined) p.fkInbox = [];
+            updateUI(); 
+            if(p.name) showScreen('main-screen');
+            else showScreen('start-screen');
             setupMissions();
             checkLeagueResetAndTimers();
             checkEuroTimers();
             checkTimedSystems();
-            setInterval(() => {
-                updateMissionTimer();
-                checkLeagueResetAndTimers();
-                checkEuroTimers();
-                checkTimedSystems();
-            }, 1000);
+            if(!timedSystemsStarted) {
+                timedSystemsStarted = true;
+                setInterval(() => {
+                    updateMissionTimer();
+                    checkLeagueResetAndTimers();
+                    checkEuroTimers();
+                    checkTimedSystems();
+                }, 1000);
+            }
         }
         window.onload = load;
 
@@ -616,6 +713,14 @@
         }
 
         function setRole(r) { p.role = r; save(); updateUI(); showScreen('main-screen'); }
+
+        function getRoleImage(role) {
+            if(role === 'Forvet') return 'Atak.png';
+            if(role === 'Orta Saha') return 'Orta.png';
+            if(role === 'Defans') return 'Defans.png';
+            if(role === 'Kaleci') return 'Kale.png';
+            return '';
+        }
 
         function doTrain(x, msg) {
             document.querySelectorAll('.t-btn').forEach(b => b.disabled = true);
@@ -658,6 +763,8 @@
 
         function updateUI() {
             let currentTeamDisplay = `🏃 ${p.name} (${p.role})`;
+            let roleImg = getRoleImage(p.role);
+            if(roleImg) { currentTeamDisplay += ` <img src="${roleImg}" class="ui-role-logo">`; }
             if(p.tm) { currentTeamDisplay += ` <img src="${p.tm}" class="ui-team-logo">`; }
             document.getElementById('ui-name-label').innerHTML = currentTeamDisplay;
             
@@ -1972,7 +2079,12 @@
         }
 
         function renderComments() { document.getElementById('comment-list').innerHTML = p.comments.map(c => `<div class="comment">${c}</div>`).join(''); }
-        function resetGame() { if(confirm("Tüm kariyeriniz ve kurduğunuz takım sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
+        function resetGame() {
+            if(confirm("Tüm kariyeriniz ve kurduğunuz takım sıfırlansın mı?")) {
+                if(activeAccountEmail) localStorage.removeItem(accountGameKey(activeAccountEmail));
+                location.reload();
+            }
+        }
     
         function updateMatchStats() {
 
