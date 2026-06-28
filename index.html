@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -586,6 +586,78 @@
         let currentOpponentName = ""; 
         let currentOpponentLogo = ""; 
         let currentMatchType = "";
+
+        // ---- GLOBAL TARAFTAR SESİ ----
+        let crowdAudioCtx = null;
+        let crowdNodes = [];
+        function startCrowdSound() {
+            try {
+                crowdAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const masterGain = crowdAudioCtx.createGain();
+                masterGain.gain.setValueAtTime(0, crowdAudioCtx.currentTime);
+                masterGain.gain.linearRampToValueAtTime(0.18, crowdAudioCtx.currentTime + 2);
+                masterGain.connect(crowdAudioCtx.destination);
+                for(let i = 0; i < 6; i++) {
+                    const buf = crowdAudioCtx.createBuffer(1, crowdAudioCtx.sampleRate * 4, crowdAudioCtx.sampleRate);
+                    const data = buf.getChannelData(0);
+                    for(let j = 0; j < data.length; j++) data[j] = Math.random() * 2 - 1;
+                    const src = crowdAudioCtx.createBufferSource();
+                    src.buffer = buf; src.loop = true;
+                    src.loopStart = Math.random() * 2; src.loopEnd = 4;
+                    const bpf = crowdAudioCtx.createBiquadFilter();
+                    bpf.type = 'bandpass';
+                    bpf.frequency.value = 200 + i * 120;
+                    bpf.Q.value = 0.5 + i * 0.3;
+                    const g = crowdAudioCtx.createGain();
+                    g.gain.value = 0.3 + Math.random() * 0.2;
+                    src.connect(bpf); bpf.connect(g); g.connect(masterGain);
+                    src.start(0);
+                    crowdNodes.push({ src, gain: g });
+                }
+                const lowBuf = crowdAudioCtx.createBuffer(1, crowdAudioCtx.sampleRate * 2, crowdAudioCtx.sampleRate);
+                const lowData = lowBuf.getChannelData(0);
+                for(let j = 0; j < lowData.length; j++) lowData[j] = Math.random() * 2 - 1;
+                const lowSrc = crowdAudioCtx.createBufferSource();
+                lowSrc.buffer = lowBuf; lowSrc.loop = true;
+                const lowFilter = crowdAudioCtx.createBiquadFilter();
+                lowFilter.type = 'lowpass'; lowFilter.frequency.value = 180;
+                const lowGain = crowdAudioCtx.createGain(); lowGain.gain.value = 0.5;
+                lowSrc.connect(lowFilter); lowFilter.connect(lowGain); lowGain.connect(masterGain);
+                lowSrc.start(0);
+                crowdNodes.push({ src: lowSrc, gain: lowGain });
+                crowdNodes._master = masterGain;
+                let chantInterval = setInterval(() => {
+                    if(!crowdAudioCtx || crowdAudioCtx.state === 'closed') { clearInterval(chantInterval); return; }
+                    const now = crowdAudioCtx.currentTime;
+                    masterGain.gain.cancelScheduledValues(now);
+                    masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+                    const peak = 0.18 + Math.random() * 0.22;
+                    masterGain.gain.linearRampToValueAtTime(peak, now + 1.5);
+                    masterGain.gain.linearRampToValueAtTime(0.15, now + 4);
+                }, 3500);
+                crowdNodes._chantInterval = chantInterval;
+            } catch(e) { console.log('Ses başlatılamadı:', e); }
+        }
+        function goalCrowdRoar() {
+            if(!crowdAudioCtx || !crowdNodes._master) return;
+            const now = crowdAudioCtx.currentTime;
+            const mg = crowdNodes._master;
+            mg.gain.cancelScheduledValues(now);
+            mg.gain.setValueAtTime(mg.gain.value, now);
+            mg.gain.linearRampToValueAtTime(0.7, now + 0.3);
+            mg.gain.linearRampToValueAtTime(0.55, now + 1.5);
+            mg.gain.linearRampToValueAtTime(0.2, now + 4);
+        }
+        function stopCrowdSound() {
+            if(!crowdAudioCtx) return;
+            try {
+                if(crowdNodes._chantInterval) clearInterval(crowdNodes._chantInterval);
+                if(crowdNodes._master) {
+                    crowdNodes._master.gain.linearRampToValueAtTime(0, crowdAudioCtx.currentTime + 2);
+                }
+                setTimeout(() => { try { crowdAudioCtx.close(); } catch(e){} crowdAudioCtx = null; crowdNodes = []; }, 2500);
+            } catch(e) {}
+        }
         let currentFkPackRewards = [];
         let currentFkPackRewardIndex = 0;
         let activeAccountEmail = "";
@@ -1774,6 +1846,7 @@
             if(confirm("Maçtan çekilmek istediğine emin misin? Hükmen 3-0 mağlubiyet sayılacaktır!")) {
                 clearInterval(matchLoopInterval);
                 matchLoopInterval = null;
+                stopCrowdSound();
                 
                 let s1 = 0, s2 = 3;
                 document.getElementById('s-1').innerText = s1;
@@ -1879,7 +1952,7 @@
 
             const speed = type === 'mahalle' ? 80 : 667; // 90 tık × 667ms ≈ 60 saniye (1 dakika)
 
-            // ---- MİNİ SAHA DEĞİŞKENLERİ ----
+            startCrowdSound();
             let pitchPhase = 'middle'; // 'user_attack','user_goal_area','opp_attack','opp_goal_area','middle'
             const spikerUserAtak = [
                 "📣 Harika bir hücum organizasyonu!",
@@ -2000,6 +2073,7 @@
                         s1++; 
                         document.getElementById('s-1').innerText = s1;
                         updateMiniPitch('user_goal_area');
+                        goalCrowdRoar();
                         let scorer = (type === 'custom' || type === 'league' || type === 'euro') ? p.boughtPool.find(x=>x.id===p.squadIds[Math.floor(Math.random()*5)]).name : (Math.random()>0.4?p.name:isimler[Math.floor(Math.random()*5)]);
                         document.getElementById('goal-info').innerText = "⚽ GOL: " + scorer;
                         document.getElementById('mini-commentator').innerText = "🎉 GOOOOL! " + scorer + " attı! Muhteşem!";
@@ -2007,6 +2081,7 @@
                         s2++; 
                         document.getElementById('s-2').innerText = s2;
                         updateMiniPitch('opp_goal_area');
+                        goalCrowdRoar();
                         document.getElementById('goal-info').innerText = "❌ GOL: " + currentOpponentName;
                         document.getElementById('mini-commentator').innerText = "😱 RAKİP GOOOOL! " + currentOpponentName + " skoru eşitledi!";
                     }
@@ -2024,6 +2099,7 @@
                 if(isOver) {
                     clearInterval(matchLoopInterval);
                     matchLoopInterval = null;
+                    stopCrowdSound();
                     
                     // Mini sahayı sıfırla
                     const endOverlay = document.getElementById('mini-pitch-overlay');
