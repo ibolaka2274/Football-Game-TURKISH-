@@ -486,7 +486,37 @@
 
             <div id="goal-info" style="color:var(--accent-gold); font-weight:bold; height:30px;"></div>
 
-            <p id="time-display">Dakika: 0'</p>
+            <!-- MİNİ SAHA -->
+            <div id="mini-pitch-wrapper" style="margin: 8px auto 0 auto; width: 320px;">
+                <div id="mini-pitch-label" style="font-size:12px; font-weight:bold; letter-spacing:1px; color:#fff; text-align:center; margin-bottom:4px; height:18px;"></div>
+                <div id="mini-pitch" style="
+                    position:relative; width:320px; height:80px;
+                    background: linear-gradient(90deg, #1a6b1a 0%, #1e7d1e 16.6%, #1a6b1a 33.2%, #1e7d1e 49.8%, #1a6b1a 66.4%, #1e7d1e 83%, #1a6b1a 100%);
+                    border: 2px solid #fff; border-radius:6px; overflow:hidden;
+                    box-shadow: 0 0 12px rgba(0,0,0,0.6);">
+                    <!-- Orta çizgi -->
+                    <div style="position:absolute; left:50%; top:0; width:2px; height:100%; background:rgba(255,255,255,0.5);"></div>
+                    <!-- Sol kale alanı -->
+                    <div style="position:absolute; left:0; top:20%; width:7%; height:60%; border:1px solid rgba(255,255,255,0.5); border-left:none; box-sizing:border-box;"></div>
+                    <!-- Sağ kale alanı -->
+                    <div style="position:absolute; right:0; top:20%; width:7%; height:60%; border:1px solid rgba(255,255,255,0.5); border-right:none; box-sizing:border-box;"></div>
+                    <!-- Orta çember -->
+                    <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:36px; height:36px; border:1px solid rgba(255,255,255,0.4); border-radius:50%;"></div>
+                    <!-- Atak renk overlay -->
+                    <div id="mini-pitch-overlay" style="position:absolute; inset:0; transition: background 0.4s; border-radius:4px;"></div>
+                    <!-- Top ikonu -->
+                    <div id="mini-ball" style="position:absolute; top:50%; transform:translateY(-50%); font-size:16px; transition: left 0.5s ease; left:46%;">⚽</div>
+                </div>
+                <!-- Spiker -->
+                <div id="mini-commentator" style="
+                    margin-top:6px; font-size:11px; color:#ddd; font-style:italic;
+                    background:rgba(0,0,0,0.4); border-radius:6px; padding:4px 10px;
+                    min-height:20px; text-align:center; border:1px solid #333;
+                    transition: opacity 0.3s;
+                ">📣 Maç başlıyor...</div>
+            </div>
+
+            <p id="time-display" style="margin-top:8px;">Dakika: 0'</p>
 
             <div id="match-stats" style="
             margin-top:15px;
@@ -1517,12 +1547,21 @@
             save(); updateUI(); renderInbox();
             alert(`Gelen kutusundan ${total} fk coins aldın!`);
         }
+        const fkPackImages = {
+            madrid: "WhatsApp_Image_2026-06-25_at_14_47_50-removebg-preview.png",
+            dream:  "Dream-removebg-preview.png",
+            efsane: "Efsane-removebg-preview.png",
+            ender:  "Ender-removebg-preview.png",
+            ultra:  "ultra-removebg-preview.png"
+        };
+
         function renderPackMarket() {
             updateFkCoinDisplays();
             let list = document.getElementById('fk-pack-list');
             if(!list) return;
             list.innerHTML = fkPackDefinitions.map(pack => `
                 <div class="pack-card">
+                    ${fkPackImages[pack.key] ? `<img src="${fkPackImages[pack.key]}" alt="${pack.name}" style="width:100%; max-height:160px; object-fit:contain; border-radius:8px; margin-bottom:10px; display:block;">` : ''}
                     <h3>${pack.name}</h3>
                     <p>${pack.coinCount} tane ${pack.coinValue} fk coin sonucu ve 1 tane ${pack.firstCard.rarity.toLowerCase()} kart şansı var.</p>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
@@ -1838,11 +1877,105 @@
             
             document.getElementById('squad-content').innerHTML = kadro.map(k => `<div class="player-line">${k}</div>`).join('');
 
-            const speed = type === 'mahalle' ? 80 : 40; 
+            const speed = type === 'mahalle' ? 80 : 667; // 90 tık × 667ms ≈ 60 saniye (1 dakika)
+
+            // ---- MİNİ SAHA DEĞİŞKENLERİ ----
+            let pitchPhase = 'middle'; // 'user_attack','user_goal_area','opp_attack','opp_goal_area','middle'
+            const spikerUserAtak = [
+                "📣 Harika bir hücum organizasyonu!",
+                "📣 Takım ilerliyor, baskı artıyor!",
+                "📣 Defansı delip geçiyoruz!",
+                "📣 Süper bir kombinasyon geliyor!",
+                "📣 Rakip ceza sahasına giriyoruz!"
+            ];
+            const spikerUserGol = [
+                "📣 KAAAAALE ÖNÜNDE! Şut geliyor!",
+                "📣 Kaleci karşı karşıya! Vur!",
+                "📣 Tek başına kaldı! Bu gol!",
+                "📣 Müthiş pozisyon! Kalenin önündeyiz!"
+            ];
+            const spikerOppAtak = [
+                "📣 Rakip tehlikeli hücumda!",
+                "📣 Defans dikkat! Rakip geliyor!",
+                "📣 Baskı altındayız, top rakipte!",
+                "📣 Rakip kombinasyon yapıyor!"
+            ];
+            const spikerOppGol = [
+                "📣 Rakip kale önünde! Tehlike!",
+                "📣 Kalecimiz karşı karşıya! Dur!",
+                "📣 Rakip serbest kaldı! Kritik an!",
+                "📣 Defansımız sıkıştı, kaleci hazır!"
+            ];
+            const spikerMiddle = [
+                "📣 Her iki takım da orta sahada mücadele ediyor.",
+                "📣 Tempo biraz düştü, taktik savaş sürüyor.",
+                "📣 Topun kontrolü el değiştiriyor.",
+                "📣 İki takım da pozisyon arıyor."
+            ];
+
+            function updateMiniPitch(phase) {
+                pitchPhase = phase;
+                const overlay = document.getElementById('mini-pitch-overlay');
+                const ball    = document.getElementById('mini-ball');
+                const label   = document.getElementById('mini-pitch-label');
+                const comment = document.getElementById('mini-commentator');
+                if(!overlay || !ball || !label || !comment) return;
+
+                if(phase === 'user_attack') {
+                    // Sağ yarı (kullanıcı rakip kalesine doğru) turuncu
+                    overlay.style.background = 'rgba(255,140,0,0.35)';
+                    overlay.style.left = '50%'; overlay.style.width = '50%';
+                    overlay.style.inset = 'auto';
+                    overlay.style.cssText = 'position:absolute; left:50%; top:0; width:50%; height:100%; background:rgba(255,140,0,0.35); transition:all 0.4s; border-radius:0 4px 4px 0;';
+                    ball.style.left = '62%';
+                    label.innerText = '⚡ SENİN ATAĞI';
+                    label.style.color = '#ff8c00';
+                    comment.innerText = spikerUserAtak[Math.floor(Math.random()*spikerUserAtak.length)];
+                } else if(phase === 'user_goal_area') {
+                    // Sağ kale alanı — kırmızı
+                    overlay.style.cssText = 'position:absolute; right:0; top:0; width:50%; height:100%; background:rgba(255,40,40,0.45); transition:all 0.4s; border-radius:0 4px 4px 0;';
+                    ball.style.left = '84%';
+                    label.innerText = '🔥 KALE ÖNÜNDE!';
+                    label.style.color = '#ff3e3e';
+                    comment.innerText = spikerUserGol[Math.floor(Math.random()*spikerUserGol.length)];
+                } else if(phase === 'opp_attack') {
+                    // Sol yarı — turuncu
+                    overlay.style.cssText = 'position:absolute; left:0; top:0; width:50%; height:100%; background:rgba(255,140,0,0.35); transition:all 0.4s; border-radius:4px 0 0 4px;';
+                    ball.style.left = '28%';
+                    label.innerText = '⚠️ RAKİP ATAĞI';
+                    label.style.color = '#ff8c00';
+                    comment.innerText = spikerOppAtak[Math.floor(Math.random()*spikerOppAtak.length)];
+                } else if(phase === 'opp_goal_area') {
+                    // Sol kale alanı — kırmızı
+                    overlay.style.cssText = 'position:absolute; left:0; top:0; width:50%; height:100%; background:rgba(255,40,40,0.45); transition:all 0.4s; border-radius:4px 0 0 4px;';
+                    ball.style.left = '6%';
+                    label.innerText = '🚨 KALEMİZ TEHLİKEDE!';
+                    label.style.color = '#ff3e3e';
+                    comment.innerText = spikerOppGol[Math.floor(Math.random()*spikerOppGol.length)];
+                } else {
+                    // Orta saha
+                    overlay.style.cssText = 'position:absolute; inset:0; background:transparent; transition:all 0.4s; border-radius:4px;';
+                    ball.style.left = '46%';
+                    label.innerText = '⚽ ORTA SAHA';
+                    label.style.color = '#ccc';
+                    comment.innerText = spikerMiddle[Math.floor(Math.random()*spikerMiddle.length)];
+                }
+            }
+
+            // Başlangıçta orta saha
+            updateMiniPitch('middle');
 
             matchLoopInterval = setInterval(() => {
                 clock++;
                 
+                // Her tick'te saha fazını güncelle (gol olmayan anlarda)
+                const r = Math.random();
+                if(r < 0.25) updateMiniPitch('middle');
+                else if(r < 0.50) updateMiniPitch('user_attack');
+                else if(r < 0.62) updateMiniPitch('user_goal_area');
+                else if(r < 0.82) updateMiniPitch('opp_attack');
+                else updateMiniPitch('opp_goal_area');
+
                 if(type === 'mahalle') {
                     let mins = Math.floor(clock / 6);
                     let secs = (clock % 6) * 10;
@@ -1865,18 +1998,23 @@
 
                     if(Math.random() < userAttackChance) { 
                         s1++; 
-                        document.getElementById('s-1').innerText = s1; 
+                        document.getElementById('s-1').innerText = s1;
+                        updateMiniPitch('user_goal_area');
                         let scorer = (type === 'custom' || type === 'league' || type === 'euro') ? p.boughtPool.find(x=>x.id===p.squadIds[Math.floor(Math.random()*5)]).name : (Math.random()>0.4?p.name:isimler[Math.floor(Math.random()*5)]);
                         document.getElementById('goal-info').innerText = "⚽ GOL: " + scorer;
+                        document.getElementById('mini-commentator').innerText = "🎉 GOOOOL! " + scorer + " attı! Muhteşem!";
                     } else { 
                         s2++; 
-                        document.getElementById('s-2').innerText = s2; 
-                        document.getElementById('goal-info').innerText = "❌ GOL: " + currentOpponentName; 
+                        document.getElementById('s-2').innerText = s2;
+                        updateMiniPitch('opp_goal_area');
+                        document.getElementById('goal-info').innerText = "❌ GOL: " + currentOpponentName;
+                        document.getElementById('mini-commentator').innerText = "😱 RAKİP GOOOOL! " + currentOpponentName + " skoru eşitledi!";
                     }
                     setTimeout(() => {
                         let infoDiv = document.getElementById('goal-info');
                         if(infoDiv) infoDiv.innerText = "";
-                    }, 800);
+                        updateMiniPitch('middle');
+                    }, 1200);
                 }
 
                 let isOver = false;
@@ -1887,6 +2025,16 @@
                     clearInterval(matchLoopInterval);
                     matchLoopInterval = null;
                     
+                    // Mini sahayı sıfırla
+                    const endOverlay = document.getElementById('mini-pitch-overlay');
+                    if(endOverlay) endOverlay.style.cssText = 'position:absolute; inset:0; background:transparent; border-radius:4px;';
+                    const endBall = document.getElementById('mini-ball');
+                    if(endBall) endBall.style.left = '46%';
+                    const endLabel = document.getElementById('mini-pitch-label');
+                    if(endLabel) { endLabel.innerText = '🏁 MAÇ BİTTİ'; endLabel.style.color = '#fff'; }
+                    const endComment = document.getElementById('mini-commentator');
+                    if(endComment) endComment.innerText = s1 > s2 ? '📣 Mükemmel bir galibiyet! Tebrikler!' : (s1 === s2 ? '📣 Berabere bitti. İki takım da mücadele etti.' : '📣 Bugün rakip daha iyiydi. Devam edin!');
+
                     document.getElementById('m-status').innerText = "🏁 MAÇ BİTTİ!";
                     document.getElementById('m-forfeit').style.display = 'none';
                     document.getElementById('m-finish').style.display = 'block';
