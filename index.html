@@ -5,19 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Futbol Kariyerim - Ayaz Entertainment</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
         :root {
-            --dark-bg: #0a0a0a;
-            --panel-bg: rgba(10, 10, 10, 0.9); 
+            --dark-bg: #060810;
+            --panel-bg: rgba(8,12,22,0.96);
             --accent-red: #ff3e3e;
             --accent-gold: #ffd700;
-            --text-color: #ffffff;
-            --sidebar-hover: #2a2a2a;
+            --accent-cyan: #00e5ff;
+            --accent-green: #00e676;
+            --text-color: #e8eaf6;
+            --sidebar-hover: #0d1529;
+            --border-glow: rgba(255,215,0,0.15);
+            --card-bg: rgba(255,255,255,0.04);
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
             background-color: var(--dark-bg);
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('8iXhR.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('8iXhR.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -33,151 +41,304 @@
 
         .screen {
             display: none;
-            width: 95%;
-            max-width: 1100px;
-            height: 700px;
+            width: 97%;
+            max-width: 1140px;
+            height: 92vh;
+            max-height: 760px;
             background: var(--panel-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,215,0,0.12);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
             position: relative;
-            padding: 30px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            padding: 22px 26px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
             z-index: 2;
+            overflow: hidden;
+        }
+        .screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.02) 0%, transparent 50%, rgba(0,229,255,0.02) 100%);
+            pointer-events: none;
         }
 
         .active { display: flex; flex-direction: column; }
         #auth-screen.active, #start-screen.active, #role-screen.active, #match-screen.active { justify-content: center; align-items: center; }
 
-        input { padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: white; border-radius: 8px; font-size: 18px; margin-bottom: 10px; width: 250px; text-align: center;}
-        button { padding: 10px 15px; margin: 5px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #333; color: white; transition: 0.3s; text-transform: uppercase; font-size: 11px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; background: #222 !important; box-shadow: none !important; transform: none !important; }
-        button:hover:not(:disabled) { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); transform: translateY(-2px); }
+        input {
+            padding: 13px 18px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,215,0,0.2);
+            color: white;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-bottom: 10px;
+            width: 270px;
+            text-align: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        input:focus { border-color: var(--accent-gold); box-shadow: 0 0 12px rgba(255,215,0,0.2); }
 
-        .sidebar { width: 180px; display: flex; flex-direction: column; gap: 8px; border-left: 4px solid var(--accent-red); padding-left: 15px; overflow-y: auto; height: 100%; }
-        .sidebar-item { background: rgba(17, 17, 17, 0.6); padding: 10px; font-size: 12px; cursor: pointer; text-align: center; border: 1px solid #333; border-radius: 4px; transition: 0.2s; }
-        .sidebar-item:hover { background: var(--sidebar-hover); border-color: var(--accent-red); color: var(--accent-red); }
+        button {
+            padding: 10px 18px;
+            margin: 4px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #e0e0e0;
+            transition: all 0.25s;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        button:disabled { opacity: 0.4; cursor: not-allowed; background: #111 !important; box-shadow: none !important; transform: none !important; }
+        button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 14px rgba(255,62,62,0.45), 0 4px 12px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
+            color: #fff;
+        }
 
-        .header-ui { display: flex; flex-direction: column; width: 100%; margin-bottom: 15px; background: rgba(0,0,0,0.8); padding: 12px; border-radius: 12px; border-bottom: 2px solid var(--accent-red); gap: 10px; }
-        .ui-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-        
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 175px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-left: 3px solid var(--accent-red);
+            padding-left: 12px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,62,62,0.4); border-radius: 4px; }
+
+        .sidebar-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+            color: #b0b8c8;
+        }
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, rgba(255,62,62,0.12), rgba(255,62,62,0.04));
+            border-color: rgba(255,62,62,0.4);
+            color: #ff8080;
+            transform: translateX(3px);
+        }
+
+        /* ── HEADER ── */
+        .header-ui {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(10,15,30,0.8));
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,215,0,0.12);
+            border-bottom: 2px solid rgba(255,62,62,0.5);
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+        .ui-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; flex-wrap: wrap; }
         .bars-stack { display: flex; flex-direction: column; gap: 5px; }
         .bar-wrapper { display: flex; align-items: center; gap: 10px; }
-        .bar-label { font-size: 10px; font-weight: bold; color: var(--accent-gold); width: 80px; text-align: right; text-transform: uppercase; }
-        .level-container { background: #222; width: 300px; height: 22px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #444; }
-        .level-bar { background: linear-gradient(90deg, #ff3e3e, #ff8e53); height: 100%; width: 0%; transition: width 0.5s; }
-        .team-level-bar { background: linear-gradient(90deg, #00ff00, #00aa00); height: 100%; width: 0%; transition: width 0.5s; }
-        .level-text { position: absolute; width: 100%; text-align: center; line-height: 22px; font-weight: bold; font-size: 10px; text-shadow: 1px 1px 2px black; }
+        .bar-label { font-size: 9px; font-weight: 700; color: var(--accent-gold); width: 75px; text-align: right; text-transform: uppercase; letter-spacing: 0.5px; }
+        .level-container {
+            background: rgba(0,0,0,0.6);
+            width: 280px;
+            height: 20px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.5);
+        }
+        .level-bar { background: linear-gradient(90deg, #c0392b, #ff8c42, #ffd700); height: 100%; width: 0%; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); border-radius: 12px; }
+        .team-level-bar { background: linear-gradient(90deg, #00695c, #00e676, #b2ff59); height: 100%; width: 0%; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); border-radius: 12px; }
+        .level-text { position: absolute; width: 100%; text-align: center; line-height: 20px; font-weight: 700; font-size: 9px; text-shadow: 0 1px 3px black; letter-spacing: 0.3px; }
 
-        #main-layout { display: flex; height: 85%; overflow: hidden; }
-        #content-area { flex: 1; padding: 20px; overflow-y: auto; text-align: center; }
+        #main-layout { display: flex; height: 83%; overflow: hidden; gap: 12px; }
+        #content-area { flex: 1; padding: 16px 20px; overflow-y: auto; text-align: center; }
+        #content-area::-webkit-scrollbar { width: 5px; }
+        #content-area::-webkit-scrollbar-track { background: transparent; }
+        #content-area::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.25); border-radius: 4px; }
 
+        h2 { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: 2px; color: #fff; margin-top: 0; }
+
+        /* ── TEAM GRID / LOGO BUTTONS ── */
         .team-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 10px; justify-items: center; }
-        .logo-btn { background: rgba(255,255,255,0.05); border: 2px solid #333; border-radius: 15px; padding: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; width: 100px; height: 100px; }
-        .logo-btn img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; }
-        .logo-btn:hover { border-color: var(--accent-red); transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 62, 62, 0.4); }
-        .logo-btn.selected { border-color: var(--accent-gold); background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
-        
-        .ui-team-logo { width: 30px; height: 30px; object-fit: contain; vertical-align: middle; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
-        .ui-role-logo { width: 34px; height: 34px; object-fit: cover; vertical-align: middle; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25); }
-        .profile-team-logo { width: 60px; height: 60px; object-fit: contain; display: block; margin-top: 5px; border-radius: 8px; border: 1px solid #444; }
+        .logo-btn {
+            background: rgba(255,255,255,0.04);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90px;
+            height: 90px;
+        }
+        .logo-btn img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+        .logo-btn:hover { border-color: var(--accent-red); transform: scale(1.07) translateY(-3px); box-shadow: 0 8px 20px rgba(255,62,62,0.3); }
+        .logo-btn.selected { border-color: var(--accent-gold); background: rgba(255,215,0,0.08); box-shadow: 0 0 18px rgba(255,215,0,0.35); }
+
+        .ui-team-logo { width: 28px; height: 28px; object-fit: contain; vertical-align: middle; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); }
+        .ui-role-logo { width: 32px; height: 32px; object-fit: cover; vertical-align: middle; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); }
+        .profile-team-logo { width: 60px; height: 60px; object-fit: contain; display: block; margin-top: 5px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.3); }
         .role-choice-grid { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
         .role-choice { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .role-choice img { width: 130px; height: 170px; object-fit: cover; border-radius: 10px; border: 2px solid #333; box-shadow: 0 0 12px rgba(0,0,0,0.45); }
+        .role-choice img { width: 130px; height: 170px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 0 18px rgba(0,0,0,0.6); transition: 0.25s; }
+        .role-choice img:hover { border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
 
-        .match-display-container { display: flex; align-items: center; justify-content: center; gap: 30px; margin: 15px 0; }
-        .match-logo-frame { width: 60px; height: 60px; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,200,0,0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 5px; box-shadow: 0 0 12px rgba(255,200,0,0.15); }
-        .match-logo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
-        .scoreboard { font-size: 4rem; font-family: monospace; color: var(--accent-red); line-height: 1; }
-        .stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:12px; color:#ccc; }
+        /* ── MATCH ── */
+        .match-display-container { display:flex; align-items:center; justify-content:center; gap:24px; margin:12px 0; }
+        .match-logo-frame { width:58px; height:58px; background:rgba(255,255,255,0.06); border:2px solid rgba(255,200,0,0.3); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:5px; box-shadow:0 0 14px rgba(255,200,0,0.12); }
+        .match-logo-frame img { max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; }
+        .scoreboard { font-size:3.8rem; font-family:'Orbitron',monospace; font-weight:900; color:#fff; line-height:1; }
+        .stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:12px; color:#b0b8c8; }
         .stat-row:last-child { border-bottom:none; }
-        .match-slot { width:52px; height:52px; border-radius:50%; background:rgba(0,0,0,0.55); border:2px solid rgba(255,255,255,0.25); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:7px; color:rgba(255,255,255,0.6); font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.4); text-align:center; line-height:1.2; overflow:hidden; transition:border-color 0.2s; }
-        .match-slot.ms-filled { border-color:var(--accent-gold); background:rgba(40,25,0,0.8); }
+        .match-slot { width:52px; height:52px; border-radius:50%; background:rgba(0,0,0,0.55); border:2px solid rgba(255,255,255,0.2); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:7px; color:rgba(255,255,255,0.5); font-weight:700; box-shadow:0 2px 8px rgba(0,0,0,0.5); text-align:center; line-height:1.2; overflow:hidden; transition:border-color 0.25s,background 0.25s; }
+        .match-slot.ms-filled { border-color:var(--accent-gold); background:rgba(40,25,0,0.85); box-shadow:0 0 10px rgba(255,215,0,0.25); }
         .match-slot .ms-gen { font-size:12px; color:var(--accent-gold); font-weight:900; }
         .match-slot .ms-name { font-size:7px; color:#fff; max-width:48px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-        .match-slot .ms-pos { font-size:6px; color:rgba(255,200,0,0.6); letter-spacing:0.3px; }
-        #squad-list { width: 220px; background: rgba(0,0,0,0.7); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 15px; text-align: left; font-size: 13px; }
-        .squad-title { color: var(--accent-gold); font-weight: bold; border-bottom: 1px solid #444; margin-bottom: 10px; text-align: center; }
-        .player-line { margin: 5px 0; color: #ccc; }
-        .comment-box { background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 15px; height: 350px; overflow-y: auto; border: 1px solid #333; text-align: left; }
-        .comment { padding: 8px; border-bottom: 1px solid #222; color: #ddd; font-size: 0.9rem; }
-        .training-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px; border: 1px solid #444; display: inline-block; width: 160px; }
-        .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
-        .market-card { background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
-        .market-info h4 { margin: 0 0 5px 0; color: #fff; }
-        .market-info p { margin: 0; font-size: 12px; color: #aaa; }
-        .gen-badge { background: var(--accent-gold); color: black; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 14px; }
-        /* SAHA SLOTLARI */
+        .match-slot .ms-pos { font-size:6px; color:rgba(255,200,0,0.6); }
+        .squad-title { color:var(--accent-gold); font-weight:700; border-bottom:1px solid rgba(255,215,0,0.2); margin-bottom:10px; text-align:center; font-family:'Rajdhani',sans-serif; letter-spacing:1px; }
+        .player-line { margin:5px 0; color:#b0b8c8; font-size:13px; }
+        .forfeit-btn { background:linear-gradient(135deg,#5a0000,#3a0000); border:2px solid rgba(255,50,50,0.6); padding:10px 18px; color:white; border-radius:10px; cursor:pointer; font-weight:700; transition:all 0.2s; font-size:11px; letter-spacing:1px; margin-top:6px; font-family:'Rajdhani',sans-serif; }
+        .forfeit-btn:hover { background:linear-gradient(135deg,#900,#600); box-shadow:0 0 22px rgba(255,50,50,0.5); transform:translateY(-1px); }
+
+        /* ── CARDS / MARKET ── */
+        .comment-box { background:rgba(0,0,0,0.4); border-radius:12px; padding:14px; height:340px; overflow-y:auto; border:1px solid rgba(255,255,255,0.07); text-align:left; }
+        .comment-box::-webkit-scrollbar { width:4px; }
+        .comment-box::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.25); border-radius:4px; }
+        .comment { padding:8px; border-bottom:1px solid rgba(255,255,255,0.05); color:#c0c8d8; font-size:0.88rem; }
+        .training-card { background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); padding:16px; border-radius:14px; margin:8px; border:1px solid rgba(255,255,255,0.1); display:inline-block; width:160px; transition:all 0.25s; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+        .training-card:hover { transform:translateY(-3px); border-color:rgba(255,215,0,0.3); box-shadow:0 8px 20px rgba(0,0,0,0.4); }
+        .market-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:14px; }
+        .market-card { background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.09); border-radius:14px; padding:14px; display:flex; justify-content:space-between; align-items:center; text-align:left; transition:all 0.2s; }
+        .market-card:hover { border-color:rgba(255,215,0,0.25); background:linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03)); transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.35); }
+        .market-info h4 { margin:0 0 4px 0; color:#fff; font-family:'Rajdhani',sans-serif; font-size:14px; font-weight:700; }
+        .market-info p { margin:0; font-size:11px; color:#8090a8; }
+        .gen-badge { background:linear-gradient(135deg,#b8860b,#ffd700); color:#000; padding:4px 10px; border-radius:8px; font-weight:900; font-size:14px; font-family:'Orbitron',monospace; box-shadow:0 0 8px rgba(255,215,0,0.3); }
+
+        /* ── PITCH SLOTS ── */
         .pitch-slot { width:72px; height:72px; z-index:5; }
-        .slot-inner { width:72px; height:72px; border-radius:50%; border:2px dashed rgba(255,255,255,0.6); background:rgba(0,0,0,0.35); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:border-color 0.2s, background 0.2s; box-shadow:0 0 8px rgba(0,0,0,0.5); }
-        .slot-inner:hover { border-color:#fff; background:rgba(0,0,0,0.5); }
-        .slot-inner.filled { border:2px solid var(--accent-gold); background:rgba(30,20,0,0.7); }
-        .slot-label { font-size:9px; font-weight:bold; color:rgba(255,255,255,0.7); letter-spacing:0.5px; margin-top:2px; }
-        .slot-player-name { font-size:8px; color:#fff; font-weight:bold; text-align:center; line-height:1.1; max-width:64px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-        .slot-player-gen { font-size:10px; color:var(--accent-gold); font-weight:bold; }
+        .slot-inner { width:72px; height:72px; border-radius:50%; border:2px dashed rgba(255,255,255,0.4); background:rgba(0,0,0,0.4); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; box-shadow:0 0 10px rgba(0,0,0,0.5); }
+        .slot-inner:hover { border-color:#fff; background:rgba(0,0,0,0.6); box-shadow:0 0 16px rgba(255,255,255,0.15); }
+        .slot-inner.filled { border:2px solid var(--accent-gold); background:rgba(40,25,0,0.8); box-shadow:0 0 14px rgba(255,215,0,0.25); }
+        .slot-label { font-size:9px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:0.5px; margin-top:2px; }
+        .slot-player-name { font-size:8px; color:#fff; font-weight:700; text-align:center; line-height:1.1; max-width:64px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+        .slot-player-gen { font-size:10px; color:var(--accent-gold); font-weight:900; }
         .slot-remove-btn { font-size:8px; background:#cc2222; border:none; color:#fff; border-radius:4px; padding:1px 4px; cursor:pointer; margin-top:1px; }
-        .draggable-player { cursor:grab; transition:opacity 0.15s; }
-        .draggable-player.dragging { opacity:0.4; }
-        .mevki-badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:11px; font-weight:bold; background:#1a3a6e; color:#aaddff; margin-left:5px; }
-        .custom-file-upload { border: 1px solid #555; display: inline-block; padding: 12px 20px; cursor: pointer; background: #222; border-radius: 8px; font-weight: bold; margin-bottom: 15px; transition: 0.3s; }
-        .custom-file-upload:hover { background: #333; border-color: var(--accent-gold); }
-        .forfeit-btn { background:linear-gradient(135deg,#5a0000,#3a0000); border:2px solid #f33; padding:10px 20px; color:white; border-radius:10px; cursor:pointer; font-weight:bold; transition:0.2s; font-size:12px; letter-spacing:1px; margin-top:6px; }
-        .forfeit-btn:hover { background:linear-gradient(135deg,#900,#600); box-shadow:0 0 20px rgba(255,50,50,0.5); }
-        
-        .history-card { background: rgba(255,255,255,0.05); border: 1px solid #333; padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
-        .history-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
-        
-        .mission-card { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-gold); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .draggable-player { cursor:grab; transition:opacity 0.15s,transform 0.15s; }
+        .draggable-player:hover { transform:translateY(-1px); }
+        .draggable-player.dragging { opacity:0.35; transform:scale(0.97); }
+        .mevki-badge { display:inline-block; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; background:linear-gradient(135deg,#0d2244,#1a3a6e); color:#7ab8ff; border:1px solid rgba(122,184,255,0.2); margin-left:5px; }
 
-        .league-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: rgba(0,0,0,0.5); font-size: 13px; }
-        .league-table th, .league-table td { padding: 10px; text-align: center; border-bottom: 1px solid #333; }
-        .league-table th { background: rgba(255,255,255,0.1); color: var(--accent-gold); }
-        .league-table tr.user-team-row { background: rgba(0, 255, 204, 0.15); font-weight: bold; color: #00ffcc; }
-        .league-grid { display: flex; gap: 20px; height: 430px; overflow: hidden; text-align: left; }
-        .league-side-panel { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; border: 1px solid #333; }
+        /* ── FILE UPLOAD ── */
+        .custom-file-upload { border:1px solid rgba(255,255,255,0.15); display:inline-block; padding:10px 18px; cursor:pointer; background:rgba(255,255,255,0.05); border-radius:10px; font-weight:700; margin-bottom:14px; transition:all 0.25s; font-family:'Rajdhani',sans-serif; }
+        .custom-file-upload:hover { background:rgba(255,215,0,0.08); border-color:var(--accent-gold); box-shadow:0 0 12px rgba(255,215,0,0.2); }
 
-        .game-logo {
-            font-size: 50px;
-            margin: 0;
-            text-shadow: 0 0 20px var(--accent-red);
-            animation: pulse 2s infinite alternate;
-        }
+        /* ── HISTORY ── */
+        .history-card { background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.08); padding:12px 18px; border-radius:12px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; text-align:left; transition:0.2s; }
+        .history-card:hover { border-color:rgba(255,215,0,0.2); transform:translateX(3px); }
+        .history-badge { padding:4px 9px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
+
+        /* ── MISSIONS ── */
+        .mission-card { background:linear-gradient(135deg,rgba(255,215,0,0.05),rgba(255,215,0,0.01)); border:1px solid rgba(255,215,0,0.25); border-radius:14px; padding:14px; margin-bottom:14px; text-align:left; display:flex; justify-content:space-between; align-items:center; transition:0.2s; }
+        .mission-card:hover { border-color:rgba(255,215,0,0.45); box-shadow:0 4px 16px rgba(255,215,0,0.08); }
+
+        /* ── LEAGUE ── */
+        .league-table { width:100%; border-collapse:collapse; margin-top:14px; background:rgba(0,0,0,0.4); font-size:12px; border-radius:10px; overflow:hidden; }
+        .league-table th, .league-table td { padding:9px 10px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .league-table th { background:rgba(255,215,0,0.08); color:var(--accent-gold); font-weight:700; letter-spacing:0.5px; font-family:'Rajdhani',sans-serif; }
+        .league-table tr:hover td { background:rgba(255,255,255,0.03); }
+        .league-table tr.user-team-row { background:rgba(0,230,118,0.1); font-weight:700; color:#00e676; }
+        .league-grid { display:flex; gap:18px; height:420px; overflow:hidden; text-align:left; }
+        .league-side-panel { flex:1; overflow-y:auto; background:rgba(0,0,0,0.3); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.07); }
+        .league-side-panel::-webkit-scrollbar { width:4px; }
+        .league-side-panel::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.2); border-radius:4px; }
+
+        /* ── LOGO / ANIMATIONS ── */
+        .game-logo { font-size:52px; margin:0; text-shadow:0 0 30px var(--accent-red); animation:pulse 2s infinite alternate; }
         @keyframes pulse {
-            from { transform: scale(1); text-shadow: 0 0 10px var(--accent-red); }
-            to { transform: scale(1.05); text-shadow: 0 0 25px var(--accent-red), 0 0 10px var(--accent-gold); }
+            from { transform:scale(1); text-shadow:0 0 12px var(--accent-red); }
+            to { transform:scale(1.06); text-shadow:0 0 28px var(--accent-red),0 0 14px var(--accent-gold); }
         }
 
-        .euro-bracket { background: rgba(0,0,0,0.6); border-radius: 12px; border: 1px solid var(--accent-gold); padding: 20px; margin-top: 15px; text-align: center; }
-        .euro-match-box { display: flex; align-items: center; justify-content: center; gap: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 15px auto; max-width: 500px; border: 1px solid #444; }
+        /* ── EURO ── */
+        .euro-bracket { background:rgba(0,0,0,0.5); border-radius:14px; border:1px solid rgba(255,215,0,0.3); padding:20px; margin-top:14px; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
+        .euro-match-box { display:flex; align-items:center; justify-content:center; gap:18px; background:rgba(255,255,255,0.04); padding:14px; border-radius:10px; margin:14px auto; max-width:500px; border:1px solid rgba(255,255,255,0.08); }
 
-        /* GÜNLÜK HEDİYE ÖZEL STİLLERİ */
-        .gift-box-container { display: flex; justify-content: center; gap: 25px; margin-top: 30px; }
-        .gift-box { width: 140px; height: 140px; background: linear-gradient(135deg, #333, #222); border: 3px solid var(--accent-gold); border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 40px; font-weight: bold; color: var(--accent-gold); cursor: pointer; transition: 0.3s; position: relative; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .gift-box:hover:not(.opened):not(.disabled) { transform: scale(1.08) translateY(-5px); box-shadow: 0 0 25px var(--accent-gold); background: linear-gradient(135deg, #444, #333); }
-        .gift-box.opened { background: rgba(0, 255, 204, 0.1); border-color: #00ffcc; color: #00ffcc; cursor: default; }
-        .gift-box.disabled { opacity: 0.4; cursor: not-allowed; border-color: #555; color: #555; }
-        .gift-box .box-label { font-size: 11px; margin-top: 8px; color: #ccc; font-family: sans-serif; text-transform: uppercase; font-weight: normal; }        .fk-coin-display { color: var(--accent-gold); font-weight: bold; background: rgba(255, 215, 0, 0.08); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 8px; padding: 8px 12px; font-size: 12px; }
-        .pack-card { background: rgba(255,255,255,0.05); border: 1px solid var(--accent-gold); border-radius: 12px; padding: 18px; text-align: left; }
-        .pack-card h3 { margin: 0 0 8px 0; color: var(--accent-gold); }
-        .pack-card p { margin: 0 0 12px 0; color: #bbb; font-size: 12px; }
-        #pack-opening-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); z-index: 50; }
-        #pack-opening-box { width: 190px; height: 190px; border: 3px solid var(--accent-gold); border-radius: 18px; background: linear-gradient(145deg, #171717, #2a2200); color: var(--accent-gold); font-size: 90px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 35px rgba(255,215,0,0.45); transition: 0.25s; }
-        #pack-opening-box:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,215,0,0.7); }
-        #pack-result { display: none; min-width: 280px; max-width: 420px; border: 2px solid var(--accent-gold); border-radius: 16px; background: rgba(10,10,10,0.95); padding: 25px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.9); }
-        #pack-result h2 { color: var(--accent-gold); margin-top: 0; }        .pack-reward-card { border-radius: 14px; padding: 18px; margin: 12px auto; max-width: 280px; color: white; border: 2px solid rgba(255,255,255,0.35); box-shadow: 0 0 28px rgba(0,0,0,0.65); }
-        .pack-reward-card .reward-gen { display: inline-block; padding: 5px 10px; border-radius: 7px; background: rgba(0,0,0,0.45); font-weight: bold; font-size: 24px; margin-bottom: 10px; }
-        .pack-reward-card h3 { margin: 6px 0; color: inherit; }
-        .pack-reward-coin { border-radius: 14px; padding: 20px; margin: 12px auto; max-width: 280px; background: linear-gradient(145deg, #2a2200, #5c4a00); border: 2px solid var(--accent-gold); color: var(--accent-gold); box-shadow: 0 0 28px rgba(255,215,0,0.35); }
-        .pack-card-ender { background: linear-gradient(145deg, #3b0505, #b31212); border-color: #ff3e3e; box-shadow: 0 0 32px rgba(255,62,62,0.6); }
-        .pack-card-efsane { background: linear-gradient(145deg, #5a4300, #ffd700); color: #1a1200; border-color: #fff3a0; box-shadow: 0 0 36px rgba(255,215,0,0.75); }
-        .pack-card-ultra { background: conic-gradient(from 140deg, #00f5ff, #7a00ff, #ff2fd6, #fff200, #00f5ff); color: #060018; border-color: #ffffff; box-shadow: 0 0 45px rgba(0,245,255,0.8), inset 0 0 30px rgba(255,255,255,0.35); animation: ultraCardGlow 1.7s infinite alternate; }
-        @keyframes ultraCardGlow { from { filter: saturate(1); transform: scale(1); } to { filter: saturate(1.35); transform: scale(1.02); } }        .inbox-btn { position: relative; background: #1c3f66; border: 1px solid #5ab4ff; }
-        .inbox-count { position: absolute; top: -7px; right: -7px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent-red); color: white; font-size: 10px; line-height: 18px; display: none; }
-        #inbox-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 60; }
-        #inbox-panel { width: 420px; max-width: 90vw; max-height: 70vh; overflow-y: auto; background: rgba(10,10,10,0.96); border: 2px solid #5ab4ff; border-radius: 16px; padding: 22px; box-shadow: 0 0 35px rgba(90,180,255,0.35); text-align: center; }
-        .inbox-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border: 1px solid #333; border-radius: 10px; padding: 12px; margin: 10px 0; text-align: left; }
-        .auth-link { color: var(--accent-gold); cursor: pointer; font-weight: bold; }
-        .auth-note { color: #aaa; font-size: 13px; margin-top: 10px; }
+        /* ── GIFTS ── */
+        .gift-box-container { display:flex; justify-content:center; gap:22px; margin-top:28px; flex-wrap:wrap; }
+        .gift-box { width:140px; height:140px; background:linear-gradient(135deg,#1a1a2e,#16213e); border:2px solid var(--accent-gold); border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:40px; font-weight:700; color:var(--accent-gold); cursor:pointer; transition:all 0.3s; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.5); }
+        .gift-box:hover:not(.opened):not(.disabled) { transform:scale(1.08) translateY(-6px); box-shadow:0 0 30px rgba(255,215,0,0.4); border-color:#fff3a0; }
+        .gift-box.opened { background:rgba(0,230,118,0.08); border-color:#00e676; color:#00e676; cursor:default; }
+        .gift-box.disabled { opacity:0.35; cursor:not-allowed; border-color:#444; color:#555; }
+        .gift-box .box-label { font-size:10px; margin-top:8px; color:#8090a8; font-family:'Rajdhani',sans-serif; text-transform:uppercase; font-weight:600; }
+
+        /* ── FK COINS / PACKS ── */
+        .fk-coin-display { color:var(--accent-gold); font-weight:700; background:rgba(255,215,0,0.07); border:1px solid rgba(255,215,0,0.3); border-radius:10px; padding:7px 13px; font-size:12px; font-family:'Rajdhani',sans-serif; letter-spacing:0.3px; }
+        .pack-card { background:linear-gradient(135deg,rgba(255,215,0,0.06),rgba(255,215,0,0.02)); border:1px solid rgba(255,215,0,0.3); border-radius:14px; padding:16px; text-align:left; transition:all 0.25s; }
+        .pack-card:hover { border-color:rgba(255,215,0,0.55); box-shadow:0 4px 18px rgba(255,215,0,0.1); transform:translateY(-2px); }
+        .pack-card h3 { margin:0 0 6px 0; color:var(--accent-gold); font-family:'Rajdhani',sans-serif; font-weight:700; }
+        .pack-card p { margin:0 0 10px 0; color:#8090a8; font-size:12px; }
+        #pack-opening-overlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); backdrop-filter:blur(10px); z-index:50; }
+        #pack-opening-box { width:190px; height:190px; border:3px solid var(--accent-gold); border-radius:20px; background:linear-gradient(145deg,#0d1117,#2a2200); color:var(--accent-gold); font-size:90px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 0 40px rgba(255,215,0,0.5); transition:0.25s; }
+        #pack-opening-box:hover { transform:scale(1.06); box-shadow:0 0 55px rgba(255,215,0,0.75); }
+        #pack-result { display:none; min-width:280px; max-width:420px; border:2px solid var(--accent-gold); border-radius:18px; background:rgba(8,10,18,0.97); padding:24px; text-align:center; box-shadow:0 0 45px rgba(0,0,0,0.95); }
+        #pack-result h2 { color:var(--accent-gold); margin-top:0; font-family:'Rajdhani',sans-serif; }
+        .pack-reward-card { border-radius:14px; padding:18px; margin:12px auto; max-width:280px; color:white; border:2px solid rgba(255,255,255,0.3); box-shadow:0 0 28px rgba(0,0,0,0.65); }
+        .pack-reward-card .reward-gen { display:inline-block; padding:5px 12px; border-radius:8px; background:rgba(0,0,0,0.45); font-weight:900; font-size:24px; margin-bottom:10px; font-family:'Orbitron',monospace; }
+        .pack-reward-card h3 { margin:6px 0; color:inherit; font-family:'Rajdhani',sans-serif; }
+        .pack-reward-coin { border-radius:14px; padding:20px; margin:12px auto; max-width:280px; background:linear-gradient(145deg,#2a2200,#5c4a00); border:2px solid var(--accent-gold); color:var(--accent-gold); box-shadow:0 0 28px rgba(255,215,0,0.3); }
+        .pack-card-ender { background:linear-gradient(145deg,#3b0505,#b31212); border-color:#ff3e3e; box-shadow:0 0 32px rgba(255,62,62,0.6); }
+        .pack-card-efsane { background:linear-gradient(145deg,#5a4300,#ffd700); color:#1a1200; border-color:#fff3a0; box-shadow:0 0 36px rgba(255,215,0,0.75); }
+        .pack-card-ultra { background:conic-gradient(from 140deg,#00f5ff,#7a00ff,#ff2fd6,#fff200,#00f5ff); color:#060018; border-color:#fff; box-shadow:0 0 45px rgba(0,245,255,0.8),inset 0 0 30px rgba(255,255,255,0.35); animation:ultraCardGlow 1.7s infinite alternate; }
+        @keyframes ultraCardGlow { from { filter:saturate(1); transform:scale(1); } to { filter:saturate(1.35); transform:scale(1.02); } }
+
+        /* ── INBOX ── */
+        .inbox-btn { position:relative; background:linear-gradient(135deg,#0d2244,#1a3a6e); border:1px solid rgba(90,180,255,0.4); }
+        .inbox-btn:hover:not(:disabled) { background:linear-gradient(135deg,#1a3a6e,#2a5a9e) !important; border-color:#5ab4ff !important; box-shadow:0 0 16px rgba(90,180,255,0.35) !important; }
+        .inbox-count { position:absolute; top:-7px; right:-7px; min-width:18px; height:18px; padding:0 5px; border-radius:999px; background:var(--accent-red); color:white; font-size:10px; line-height:18px; display:none; }
+        #inbox-overlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); z-index:60; }
+        #inbox-panel { width:420px; max-width:92vw; max-height:70vh; overflow-y:auto; background:rgba(8,12,22,0.97); border:2px solid rgba(90,180,255,0.5); border-radius:18px; padding:22px; box-shadow:0 0 40px rgba(90,180,255,0.25); text-align:center; }
+        .inbox-item { display:flex; justify-content:space-between; align-items:center; gap:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; margin:10px 0; text-align:left; transition:0.2s; }
+        .inbox-item:hover { border-color:rgba(90,180,255,0.3); background:rgba(255,255,255,0.06); }
+        .auth-link { color:var(--accent-gold); cursor:pointer; font-weight:700; }
+        .auth-note { color:#6a7a8a; font-size:13px; margin-top:10px; }
+
+        /* ── MOBILE ── */
+        @media (max-width:600px) {
+            .screen { padding:12px 10px; height:98vh; border-radius:16px; width:99%; }
+            .sidebar { width:140px; gap:4px; }
+            .sidebar-item { font-size:10px; padding:8px 8px; }
+            .level-container { width:160px; }
+            .market-grid { grid-template-columns:1fr; }
+            .team-grid { grid-template-columns:repeat(3,1fr); }
+            #main-layout { gap:6px; }
+            .header-ui { padding:8px 10px; }
+        }
     </style>
 </head>
 <body>
@@ -250,6 +411,8 @@
                     </div>
                 </div>
                 <button class="inbox-btn" onclick="openInbox()">GELEN KUTUSU <span id="inbox-count" class="inbox-count">0</span></button>
+                <button onclick="openMoneyExchange()" style="background:linear-gradient(135deg,#1a4a1a,#2d7a2d);border:1px solid rgba(0,230,118,0.4);color:#00e676;font-size:11px;padding:7px 12px;border-radius:10px;font-weight:700;">💱 PARA ÇEVİR</button>
+                <div id="money-display" style="color:#00e676;font-weight:700;background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.3);border-radius:10px;padding:7px 13px;font-size:12px;font-family:'Rajdhani',sans-serif;">💰 <span id="ui-money">100,000</span> ₺</div>
                 <div id="fk-coin-display" class="fk-coin-display">fk coins: <span id="ui-fk-coins">0</span></div>
                 <button onclick="resetGame()" style="background: #600; font-size: 9px;">SIFIRLA</button>
             </div>
@@ -271,6 +434,7 @@
                 <div id="pack-market-btn" class="sidebar-item" onclick="showSection('packmarket')" style="color: var(--accent-gold); font-weight: bold;">PAKET MARKETİ</div>
                 <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc; display: none;">🏃 ALINAN OYUNCULAR</div>
                 <div id="history-btn" class="sidebar-item" onclick="showSection('history')" style="color: #e0aaff; display: none;">📊 MAÇ GEÇMİŞİ</div>
+                <div id="bet-btn" class="sidebar-item" onclick="showSection('betting')" style="color:#00e676;font-weight:bold;display:none;">🎰 BAHİS</div>
                 <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">🌍 MİLLİ (1000 XP)</div>
                 <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">💬 YORUMLAR</div>
             </div>
@@ -530,6 +694,15 @@
                     <button id="ml-match-btn" style="display:none; margin-top:20px; background:white; color:black;" onclick="startMatch('milli')">MAHALLE MAÇI YAP</button>
                 </div>
 
+                <div id="view-betting" style="display:none;">
+                    <h2>🎰 BAHİS</h2>
+                    <p style="color:#aaa;font-size:12px;margin-bottom:10px;">Maçlara bahis yap, kazanırsan 3 katını, yakın çıkarsa 2 katını kazan!</p>
+                    <div style="background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:8px 16px;display:inline-block;margin-bottom:14px;">
+                        💰 Bakiye: <span id="bet-money-display" style="color:#00e676;font-weight:900;font-family:'Orbitron',monospace;">0</span> ₺
+                    </div>
+                    <div id="bet-matches-list" style="display:flex;flex-direction:column;gap:10px;max-height:480px;overflow-y:auto;padding-right:4px;"></div>
+                </div>
+
                 <div id="view-comments" style="display:none;">
                     <h2>TARAFTAR YORUMLARI</h2>
                     <div id="comment-list" class="comment-box"></div>
@@ -550,6 +723,59 @@
             </div>
         </div>
     </div>
+
+    <!-- PARA ÇEVİRME OVERLAY -->
+    <div id="money-exchange-overlay" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:70;">
+        <div style="background:rgba(8,14,26,0.98);border:2px solid rgba(0,230,118,0.4);border-radius:20px;padding:28px 32px;min-width:320px;text-align:center;box-shadow:0 0 40px rgba(0,230,118,0.2);">
+            <h2 style="color:#00e676;margin-top:0;font-family:'Rajdhani',sans-serif;letter-spacing:2px;">💱 PARA ÇEVİR</h2>
+            <p style="color:#aaa;font-size:13px;margin-bottom:4px;">1 ₺ = 1 FK Coin</p>
+            <div style="background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.2);border-radius:8px;padding:8px;margin-bottom:16px;">
+                💰 Bakiye: <span id="exchange-money-show" style="color:#00e676;font-weight:900;font-family:'Orbitron',monospace;">0</span> ₺
+            </div>
+            <input type="number" id="exchange-amount-input" placeholder="Miktar gir..." min="1" style="width:200px;font-size:15px;padding:10px;margin-bottom:14px;text-align:center;">
+            <br>
+            <button onclick="doMoneyExchange()" style="background:linear-gradient(135deg,#006622,#00aa44);color:#fff;font-size:13px;padding:10px 28px;border-radius:10px;font-weight:700;margin-right:8px;">ÇEVİR</button>
+            <button onclick="closeMoneyExchange()" style="background:#333;font-size:13px;padding:10px 20px;border-radius:10px;">İPTAL</button>
+        </div>
+    </div>
+
+    <!-- BAHİS OVERLAY (maç detay) -->
+    <div id="bet-detail-overlay" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:70;">
+        <div style="background:rgba(8,14,26,0.98);border:2px solid rgba(0,230,118,0.35);border-radius:20px;padding:26px 28px;min-width:340px;max-width:420px;text-align:center;box-shadow:0 0 40px rgba(0,230,118,0.15);">
+            <h3 id="bet-detail-title" style="color:#00e676;margin-top:0;font-family:'Rajdhani',sans-serif;letter-spacing:1px;"></h3>
+            <div id="bet-detail-match" style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px;margin-bottom:14px;font-size:14px;color:#fff;"></div>
+            <p style="color:#aaa;font-size:12px;margin-bottom:8px;">Tahminini seç:</p>
+            <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;">
+                <button id="bet-pick-home" onclick="selectBetPick('home')" style="flex:1;background:#1a2a4a;border:2px solid #333;border-radius:10px;padding:10px;color:#fff;font-weight:700;font-family:'Rajdhani',sans-serif;font-size:13px;">EV SAHİBİ KAZANIR</button>
+                <button id="bet-pick-draw" onclick="selectBetPick('draw')" style="flex:1;background:#1a2a4a;border:2px solid #333;border-radius:10px;padding:10px;color:#fff;font-weight:700;font-family:'Rajdhani',sans-serif;font-size:13px;">BERABERE</button>
+                <button id="bet-pick-away" onclick="selectBetPick('away')" style="flex:1;background:#1a2a4a;border:2px solid #333;border-radius:10px;padding:10px;color:#fff;font-weight:700;font-family:'Rajdhani',sans-serif;font-size:13px;">DEPLASMAN KAZANIR</button>
+            </div>
+            <div style="background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.2);border-radius:8px;padding:8px;margin-bottom:12px;font-size:12px;color:#aaa;">
+                💰 Bakiye: <span id="bet-detail-money" style="color:#00e676;font-weight:900;font-family:'Orbitron',monospace;">0</span> ₺ &nbsp;|&nbsp; Kazanç: tam→3x | yakın→2x
+            </div>
+            <input type="number" id="bet-amount-input" placeholder="Bahis miktarı gir..." min="1" style="width:200px;font-size:14px;padding:9px;margin-bottom:12px;text-align:center;">
+            <br>
+            <button onclick="confirmBet()" style="background:linear-gradient(135deg,#006622,#00aa44);color:#fff;font-size:13px;padding:10px 24px;border-radius:10px;font-weight:700;margin-right:8px;">BAHİSİ TAMAMLA</button>
+            <button onclick="closeBetDetail()" style="background:#333;font-size:13px;padding:10px 16px;border-radius:10px;">İPTAL</button>
+        </div>
+    </div>
+
+    <!-- MİNİ SCOREBOARD (maç izlerken sağ alt) -->
+    <div id="mini-scoreboard" style="position:fixed;bottom:16px;right:16px;display:none;z-index:80;
+        background:linear-gradient(135deg,rgba(8,14,26,0.97),rgba(4,10,20,0.99));
+        border:2px solid rgba(255,215,0,0.4);border-radius:14px;padding:12px 18px;
+        box-shadow:0 4px 24px rgba(0,0,0,0.8);min-width:200px;text-align:center;
+        font-family:'Rajdhani',sans-serif;">
+        <div id="msb-title" style="font-size:10px;color:#aaa;letter-spacing:1px;margin-bottom:4px;">CANLI</div>
+        <div id="msb-teams" style="font-size:12px;color:#fff;font-weight:700;margin-bottom:4px;"></div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+            <span id="msb-s1" style="font-size:2rem;font-family:'Orbitron',monospace;font-weight:900;color:#4db8ff;">0</span>
+            <span style="color:#555;font-size:1.2rem;">-</span>
+            <span id="msb-s2" style="font-size:2rem;font-family:'Orbitron',monospace;font-weight:900;color:#ff6060;">0</span>
+        </div>
+        <div id="msb-min" style="font-size:11px;color:#ffd700;margin-top:2px;"></div>
+        <button onclick="closeMiniScoreboard()" style="margin-top:8px;background:#333;font-size:10px;padding:4px 10px;border-radius:6px;">KAPAT</button>
+    </div>
     <div id="pack-opening-overlay">
         <div id="pack-opening-box" onclick="openFkPackBox()">?</div>
         <div id="pack-result">
@@ -558,125 +784,133 @@
             <button id="pack-result-action" onclick="nextFkPackReward()" style="background:var(--accent-gold); color:black;">DEVAM ET</button>
         </div>
     </div>
-    <div id="match-screen" class="screen" style="flex-direction: row; justify-content: space-around; align-items: flex-start; padding: 20px 10px; gap: 16px; overflow-y: auto;">
+    <div id="match-screen" class="screen" style="flex-direction:column; padding:12px 14px; gap:0; overflow-y:auto;">
 
-        <!-- SOL: SKOR + MİNİ SAHA + İSTATİSTİK -->
-        <div style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:10px;">
+        <!-- ── ÜSTTE: TARİH ── -->
+        <div id="match-date-bar" style="
+            text-align:center; font-size:12px; font-weight:700; letter-spacing:1.5px;
+            color:rgba(255,255,255,0.6); font-family:'Rajdhani',sans-serif;
+            margin-bottom:6px;
+        "></div>
 
-            <!-- STATUS -->
-            <div id="m-status" style="
-                font-size:15px; font-weight:bold; letter-spacing:2px;
-                background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,80,80,0.1));
-                border: 1px solid rgba(255,200,0,0.3); border-radius:10px;
-                padding:8px 24px; color:#ffd700; text-shadow: 0 0 10px rgba(255,200,0,0.5);
-                width:100%; text-align:center; box-sizing:border-box;
-            ">MAÇ BAŞLIYOR</div>
-
-            <!-- SKOR ALANI -->
-            <div style="
-                display:flex; align-items:center; justify-content:center; gap:16px;
-                background: linear-gradient(135deg, #0d1b2a, #1a2a3a);
-                border:2px solid rgba(255,200,0,0.3); border-radius:16px;
-                padding:12px 20px; width:100%; box-sizing:border-box;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-            ">
-                <div id="m-logo-home-container" class="match-logo-frame" style="display:none;">
-                    <img id="m-logo-home" src="">
+        <!-- ── SKOR BOARD (fotoğraftaki gibi) ── -->
+        <div id="match-scoreboard" style="
+            display:grid; grid-template-columns:1fr auto 1fr;
+            align-items:center;
+            background:linear-gradient(180deg,#0a1628 0%,#060e1f 100%);
+            border:1px solid rgba(255,215,0,0.2); border-radius:14px;
+            padding:10px 14px; gap:8px;
+            box-shadow:0 4px 24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
+            margin-bottom:8px;
+        ">
+            <!-- EV SAHİBİ -->
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div id="m-logo-home-container" style="width:44px;height:44px;background:rgba(255,255,255,0.06);border:2px solid rgba(255,215,0,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                    <img id="m-logo-home" src="" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;">
                 </div>
-                <div style="text-align:center;">
-                    <div id="goal-info" style="color:#ffd700; font-weight:bold; font-size:12px; min-height:18px; margin-bottom:4px;"></div>
-                    <div style="
-                        font-size:3.5rem; font-family:monospace; font-weight:900;
-                        color:#fff; text-shadow: 0 0 20px rgba(255,80,80,0.8), 0 2px 4px rgba(0,0,0,0.5);
-                        line-height:1; letter-spacing:8px;
-                    "><span id="s-1">0</span><span style="color:#555; font-size:2rem; margin:0 4px;">-</span><span id="s-2">0</span></div>
-                    <div id="time-display" style="font-size:12px; color:#aaa; margin-top:4px; letter-spacing:1px;">⏱ Dakika: 0'</div>
-                </div>
-                <div id="m-logo-away-container" class="match-logo-frame" style="display:none;">
-                    <img id="m-logo-away" src="">
+                <div>
+                    <div id="home-team-name" style="font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;font-family:'Rajdhani',sans-serif;text-transform:uppercase;"></div>
+                    <div id="home-team-gen" style="font-size:10px;color:rgba(255,215,0,0.7);font-weight:700;"></div>
                 </div>
             </div>
 
-            <!-- MİNİ SAHA -->
-            <div id="mini-pitch-wrapper" style="width:100%; max-width:340px;">
-                <div id="mini-pitch-label" style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#fff; text-align:center; margin-bottom:4px; min-height:16px;"></div>
-                <div id="mini-pitch" style="
-                    position:relative; width:100%; height:72px;
-                    background: linear-gradient(90deg,#1a5c1a 0%,#1e6e1e 14%,#1a5c1a 28%,#1e6e1e 42%,#1a5c1a 56%,#1e6e1e 70%,#1a5c1a 84%,#1e6e1e 100%);
-                    border:2px solid rgba(255,255,255,0.6); border-radius:8px; overflow:hidden;
-                    box-shadow: 0 0 16px rgba(0,200,0,0.15), 0 4px 12px rgba(0,0,0,0.4);">
-                    <div style="position:absolute;left:50%;top:0;width:2px;height:100%;background:rgba(255,255,255,0.4);"></div>
-                    <div style="position:absolute;left:0;top:18%;width:6%;height:64%;border:1px solid rgba(255,255,255,0.4);border-left:none;box-sizing:border-box;"></div>
-                    <div style="position:absolute;right:0;top:18%;width:6%;height:64%;border:1px solid rgba(255,255,255,0.4);border-right:none;box-sizing:border-box;"></div>
-                    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:32px;height:32px;border:1px solid rgba(255,255,255,0.3);border-radius:50%;"></div>
-                    <div id="mini-pitch-overlay" style="position:absolute;inset:0;transition:background 0.4s;border-radius:6px;"></div>
-                    <div id="mini-ball" style="position:absolute;top:50%;transform:translateY(-50%);font-size:14px;transition:left 0.5s ease;left:46%;">⚽</div>
+            <!-- ORTA: SKOR -->
+            <div style="text-align:center; min-width:120px;">
+                <div id="goal-info" style="color:#ffd700;font-weight:700;font-size:11px;min-height:16px;margin-bottom:2px;font-family:'Rajdhani',sans-serif;"></div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                    <span id="s-1" style="font-size:2.8rem;font-family:'Orbitron',monospace;font-weight:900;color:#fff;text-shadow:0 0 18px rgba(80,180,255,0.6);">0</span>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                        <div id="m-status" style="font-size:9px;color:#aaa;letter-spacing:1px;font-weight:700;font-family:'Rajdhani',sans-serif;">CANLI</div>
+                        <div id="time-display" style="font-size:13px;color:#ffd700;font-weight:900;font-family:'Orbitron',monospace;">0'</div>
+                    </div>
+                    <span id="s-2" style="font-size:2.8rem;font-family:'Orbitron',monospace;font-weight:900;color:#fff;text-shadow:0 0 18px rgba(255,80,80,0.6);">0</span>
                 </div>
-                <div id="mini-commentator" style="
-                    margin-top:5px; font-size:11px; color:#ccc; font-style:italic;
-                    background:rgba(0,0,0,0.5); border-radius:8px; padding:5px 10px;
-                    min-height:22px; text-align:center; border:1px solid rgba(255,255,255,0.08);
-                ">📣 Maç başlıyor...</div>
             </div>
+
+            <!-- DEPLASMAN -->
+            <div style="display:flex; align-items:center; gap:10px; justify-content:flex-end;">
+                <div style="text-align:right;">
+                    <div id="away-team-name" style="font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;font-family:'Rajdhani',sans-serif;text-transform:uppercase;"></div>
+                    <div id="away-team-gen" style="font-size:10px;color:rgba(255,100,100,0.8);font-weight:700;"></div>
+                </div>
+                <div id="m-logo-away-container" style="width:44px;height:44px;background:rgba(255,255,255,0.06);border:2px solid rgba(255,100,100,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                    <img id="m-logo-away" src="" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- ── YATAY SAHA (fotoğraftaki gibi) ── -->
+        <div id="mini-pitch-wrapper" style="width:100%;margin-bottom:6px;">
+
+            <!-- Spiker -->
+            <div id="mini-commentator" style="
+                font-size:11px;color:#ccc;font-style:italic;
+                background:rgba(0,0,0,0.45);border-radius:8px;padding:5px 12px;
+                min-height:20px;text-align:center;border:1px solid rgba(255,255,255,0.07);
+                margin-bottom:5px;
+            ">📣 Maç başlıyor...</div>
+
+            <!-- SAHA -->
+            <div style="position:relative;">
+                <!-- Takım isimleri üstte -->
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px;padding:0 4px;">
+                    <div id="pitch-home-label" style="font-size:10px;font-weight:700;color:#4db8ff;letter-spacing:0.5px;font-family:'Rajdhani',sans-serif;"></div>
+                    <div id="pitch-away-label" style="font-size:10px;font-weight:700;color:#ff6060;letter-spacing:0.5px;font-family:'Rajdhani',sans-serif;"></div>
+                </div>
+
+                <canvas id="pitch-canvas" width="500" height="110" style="width:100%;height:110px;border-radius:10px;display:block;box-shadow:0 4px 16px rgba(0,0,0,0.5);"></canvas>
+            </div>
+        </div>
+
+        <!-- ── ALT SATIR: İSTATİSTİK + FORMASYON + BUTONLAR ── -->
+        <div style="display:flex;gap:8px;align-items:flex-start;flex:1;min-height:0;">
 
             <!-- İSTATİSTİKLER -->
             <div id="match-stats" style="
-                background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-                border:1px solid rgba(255,255,255,0.1); border-radius:14px;
-                padding:12px 16px; width:100%; box-sizing:border-box; font-size:12px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+                flex:1;
+                background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));
+                border:1px solid rgba(255,255,255,0.08);border-radius:12px;
+                padding:10px 12px;font-size:11px;
             ">
-                <div style="color:#ffd700; font-weight:bold; font-size:11px; letter-spacing:1px; margin-bottom:8px; text-align:center;">📊 MAÇA İSTATİSTİKLERİ</div>
-                <div class="stat-row"><span>⚽ Topa Sahip Olma</span><span id="stat-possession" style="color:#7af">50% - 50%</span></div>
+                <div style="color:#ffd700;font-weight:700;font-size:10px;letter-spacing:1px;margin-bottom:6px;text-align:center;font-family:'Rajdhani',sans-serif;">📊 İSTATİSTİKLER</div>
+                <div class="stat-row"><span>⚽ Sahip Olma</span><span id="stat-possession" style="color:#7af">50% - 50%</span></div>
                 <div class="stat-row"><span>🎯 Şut</span><span id="stat-shots" style="color:#7af">0 - 0</span></div>
-                <div class="stat-row"><span>🥅 İsabetli Şut</span><span id="stat-ontarget" style="color:#7af">0 - 0</span></div>
+                <div class="stat-row"><span>🥅 İsabetli</span><span id="stat-ontarget" style="color:#7af">0 - 0</span></div>
                 <div class="stat-row"><span>🚫 Faul</span><span id="stat-fouls" style="color:#7af">0 - 0</span></div>
                 <div class="stat-row"><span>🚩 Korner</span><span id="stat-corners" style="color:#7af">0 - 0</span></div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px;align-items:center;">
+                    <button id="m-finish" style="display:none;background:linear-gradient(135deg,#00cc88,#007755);border:none;color:#fff;font-size:13px;font-weight:700;padding:10px 28px;border-radius:10px;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 14px rgba(0,200,130,0.4);" onclick="finishCurrentMatch()">✅ DEVAM ET</button>
+                    <button id="m-forfeit" class="forfeit-btn" onclick="forfeitMatch()">MAÇTAN ÇEKİL 🏳️</button>
+                </div>
             </div>
-
-            <!-- BUTONLAR -->
-            <button id="m-finish" style="display:none; background:linear-gradient(135deg,#00cc88,#007755); border:none; color:#fff; font-size:14px; font-weight:bold; padding:12px 40px; border-radius:12px; cursor:pointer; letter-spacing:1px; box-shadow:0 4px 16px rgba(0,200,130,0.4);" onclick="finishCurrentMatch()">✅ DEVAM ET</button>
-            <button id="m-forfeit" class="forfeit-btn" onclick="forfeitMatch()">MAÇTAN ÇEKİL 🏳️</button>
-        </div>
-
-        <!-- SAĞ: FORMASYON SAHASI -->
-        <div id="match-formation-panel" style="
-            width:200px; flex-shrink:0;
-            background: linear-gradient(180deg, rgba(10,20,40,0.95) 0%, rgba(5,15,30,0.98) 100%);
-            border:1px solid rgba(255,200,0,0.25); border-radius:16px;
-            padding:12px 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.6);
-            display:flex; flex-direction:column; align-items:center; gap:8px;
-        ">
-            <div style="color:#ffd700; font-weight:bold; font-size:11px; letter-spacing:1.5px; border-bottom:1px solid rgba(255,200,0,0.2); padding-bottom:6px; width:100%; text-align:center;">⚽ FORMASYON</div>
 
             <!-- FORMASYON SAHASI -->
-            <div id="match-pitch" style="
-                position:relative; width:178px; height:280px;
-                background: repeating-linear-gradient(0deg,#1a5c1a 0px,#1a5c1a 18px,#1e6e1e 18px,#1e6e1e 36px);
-                border:2px solid rgba(255,255,255,0.6); border-radius:8px; overflow:visible;
-                box-shadow: 0 0 20px rgba(0,150,0,0.2);
+            <div id="match-formation-panel" style="
+                width:170px;flex-shrink:0;
+                background:linear-gradient(180deg,rgba(10,20,40,0.95),rgba(5,15,30,0.98));
+                border:1px solid rgba(255,200,0,0.2);border-radius:14px;
+                padding:10px 6px;box-shadow:0 4px 20px rgba(0,0,0,0.6);
+                display:flex;flex-direction:column;align-items:center;gap:6px;
             ">
-                <!-- Çizgiler -->
-                <div style="position:absolute;left:0;top:50%;width:100%;height:1px;background:rgba(255,255,255,0.35);"></div>
-                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border:1px solid rgba(255,255,255,0.3);border-radius:50%;"></div>
-                <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:90px;height:50px;border:1px solid rgba(255,255,255,0.3);border-top:none;box-sizing:border-box;"></div>
-                <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:90px;height:50px;border:1px solid rgba(255,255,255,0.3);border-bottom:none;box-sizing:border-box;"></div>
-                <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:46px;height:18px;border:1px solid rgba(255,255,255,0.25);border-top:none;box-sizing:border-box;"></div>
-                <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:46px;height:18px;border:1px solid rgba(255,255,255,0.25);border-bottom:none;box-sizing:border-box;"></div>
-
-                <!-- FRVT slot -->
-                <div class="match-slot" id="mslot-FRVT" style="position:absolute;left:50%;top:8%;transform:translateX(-50%);"></div>
-                <!-- SLK slot -->
-                <div class="match-slot" id="mslot-SLK" style="position:absolute;left:5%;top:33%;transform:translateY(-50%);"></div>
-                <!-- SĞK slot -->
-                <div class="match-slot" id="mslot-SĞK" style="position:absolute;right:5%;top:33%;transform:translateY(-50%);"></div>
-                <!-- DFNS slot -->
-                <div class="match-slot" id="mslot-DFNS" style="position:absolute;left:50%;top:60%;transform:translateX(-50%);"></div>
-                <!-- KL slot -->
-                <div class="match-slot" id="mslot-KL" style="position:absolute;left:50%;top:83%;transform:translateX(-50%);"></div>
+                <div style="color:#ffd700;font-weight:700;font-size:10px;letter-spacing:1.5px;border-bottom:1px solid rgba(255,200,0,0.15);padding-bottom:5px;width:100%;text-align:center;font-family:'Rajdhani',sans-serif;">⚽ FORMASYON</div>
+                <div id="match-pitch" style="
+                    position:relative;width:156px;height:240px;
+                    background:repeating-linear-gradient(0deg,#1a5c1a 0px,#1a5c1a 16px,#1e6e1e 16px,#1e6e1e 32px);
+                    border:2px solid rgba(255,255,255,0.5);border-radius:8px;overflow:visible;
+                    box-shadow:0 0 16px rgba(0,150,0,0.2);
+                ">
+                    <div style="position:absolute;left:0;top:50%;width:100%;height:1px;background:rgba(255,255,255,0.3);"></div>
+                    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:40px;border:1px solid rgba(255,255,255,0.25);border-radius:50%;"></div>
+                    <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:80px;height:44px;border:1px solid rgba(255,255,255,0.25);border-top:none;box-sizing:border-box;"></div>
+                    <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:44px;border:1px solid rgba(255,255,255,0.25);border-bottom:none;box-sizing:border-box;"></div>
+                    <div class="match-slot" id="mslot-FRVT" style="position:absolute;left:50%;top:7%;transform:translateX(-50%);"></div>
+                    <div class="match-slot" id="mslot-SLK"  style="position:absolute;left:4%;top:32%;transform:translateY(-50%);"></div>
+                    <div class="match-slot" id="mslot-SĞK"  style="position:absolute;right:4%;top:32%;transform:translateY(-50%);"></div>
+                    <div class="match-slot" id="mslot-DFNS" style="position:absolute;left:50%;top:60%;transform:translateX(-50%);"></div>
+                    <div class="match-slot" id="mslot-KL"   style="position:absolute;left:50%;top:83%;transform:translateX(-50%);"></div>
+                </div>
+                <div id="match-squad-gen" style="font-size:10px;color:#aaa;text-align:center;"></div>
             </div>
-
-            <div id="match-squad-gen" style="font-size:10px;color:#aaa;text-align:center;"></div>
         </div>
     </div>
 
@@ -691,8 +925,8 @@
             leagueTier: 2, championships: 0, leagueResetTime: 0, leagueTimerTarget: 0, leagueTimerType: "", leagueStatus: "active",
             currentLeagueMatchIdx: 0, leagueFixtures: [], leagueTeamsData: [],
             euroType: "uel", euroStage: 16, euroLeg: 1, euroScoreHome: 0, euroScoreAway: 0, euroOpponent: "", euroTimer: 0, uclWins: 0,
-            // YENİ EKLEMELER
-            giftTimestamp: 0, giftBoxesOpened: [false, false, false], giftBoxRewards: [], marketTimestamp: 0, fkCoins: 100, pendingFkPack: null, openedFkPacks: {}, fkInbox: []
+            giftTimestamp: 0, giftBoxesOpened: [false, false, false], giftBoxRewards: [], marketTimestamp: 0, fkCoins: 100, pendingFkPack: null, openedFkPacks: {}, fkInbox: [],
+            money: 100000, bets: []
         };
         
         let matchLoopInterval = null; 
@@ -902,6 +1136,8 @@
             if(p.openedFkPacks === undefined) p.openedFkPacks = {};
             if(p.fkInbox === undefined) p.fkInbox = [];
             if(!p.squadPositions) p.squadPositions = {};
+            if(p.money === undefined) p.money = 100000;
+            if(!p.bets) p.bets = [];
             updateUI(); 
             if(p.name) showScreen('main-screen');
             else showScreen('start-screen');
@@ -1017,6 +1253,14 @@
             document.getElementById('tm-btn').style.opacity = p.lv >= 30 ? "1" : "0.4";
             document.getElementById('custom-team-btn').style.opacity = p.lv >= 50 ? "1" : "0.4";
             document.getElementById('ml-btn').style.opacity = p.lv >= 1000 ? "1" : "0.4";
+
+            // Para göstergesi
+            const moneyEl = document.getElementById('ui-money');
+            if(moneyEl) moneyEl.innerText = formatMoney(p.money || 0);
+
+            // Bahis butonu (lv >= 50)
+            const betBtnEl = document.getElementById('bet-btn');
+            if(betBtnEl) betBtnEl.style.display = (p.lv >= 50) ? 'block' : 'none';
         }
 
         function setupMissions() {
@@ -1696,6 +1940,7 @@
             if(s === 'market') renderMarket();
             if(s === 'packmarket') renderPackMarket();
             if(s === 'myplayers') renderMyPlayers();
+            if(s === 'betting') renderBetting();
             if(s === 'milli') renderList('ml-list', milliles, 'ml', false);
             if(s === 'comments') renderComments();
         }
@@ -1936,9 +2181,12 @@
                                 ${placedMevki ? `<span style="color:#00ffcc;font-size:11px;"> · ${placedMevki} 📍</span>` : ''}
                             </p>
                         </div>
-                        <div style="display:flex;align-items:center;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
                             <div class="gen-badge">${player.gen}</div>
-                            ${placedMevki ? `<button onclick="removeFromSlot('${placedMevki}')" style="background:#cc0000;font-size:11px;">ÇIKAR</button>` : ''}
+                            ${placedMevki
+                                ? `<button onclick="removeFromSlot('${placedMevki}')" style="background:linear-gradient(135deg,#cc0000,#880000);font-size:10px;padding:5px 8px;">ÇIKAR</button>`
+                                : `<button onclick="mobileAddToSlot('${player.id}')" style="background:linear-gradient(135deg,#006622,#00aa44);font-size:10px;padding:5px 8px;">+ EKLE</button>`
+                            }
                         </div>
                     </div>
                 `;
@@ -1999,6 +2247,25 @@
             Object.keys(p.squadPositions).forEach(m => {
                 if(p.squadPositions[m] === id) delete p.squadPositions[m];
             });
+            p.squadIds = Object.values(p.squadPositions);
+            save(); renderMyPlayers();
+        }
+
+        // Mobil için: oyuncunun mevkisine göre otomatik slota ekle
+        function mobileAddToSlot(playerId) {
+            const player = p.boughtPool.find(x => x.id === playerId);
+            if(!player || !player.mevki) return alert('Bu oyuncunun mevkisi yok!');
+            if(!p.squadPositions) p.squadPositions = {};
+            // Slotta başkası varsa sor
+            if(p.squadPositions[player.mevki]) {
+                const existing = p.boughtPool.find(x => x.id === p.squadPositions[player.mevki]);
+                if(!confirm(`${player.mevki} pozisyonunda ${existing?.name || 'bir oyuncu'} var. Değiştirmek istiyor musun?`)) return;
+            }
+            // Oyuncu zaten başka slottaysa oradan kaldır
+            Object.keys(p.squadPositions).forEach(m => {
+                if(p.squadPositions[m] === playerId) delete p.squadPositions[m];
+            });
+            p.squadPositions[player.mevki] = playerId;
             p.squadIds = Object.values(p.squadPositions);
             save(); renderMyPlayers();
         }
@@ -2088,12 +2355,15 @@
             document.getElementById('s-2').innerText = 0;
             document.getElementById('m-finish').style.display = 'none';
             document.getElementById('m-forfeit').style.display = 'block';
-            document.getElementById('m-status').innerText = "MAÇ DEVAM EDİYOR";
+            document.getElementById('m-status').innerText = "CANLI";
             
             let homeLogoContainer = document.getElementById('m-logo-home-container');
             let awayLogoContainer = document.getElementById('m-logo-away-container');
             
             let squadGenAverage = 70; 
+
+            // Tarih çubuğunu güncelle
+            updateMatchDateBar();
 
             if(type === 'custom' || type === 'league' || type === 'euro') {
                 if(type === 'league') {
@@ -2129,6 +2399,22 @@
                 else if(type === 'kulup') { currentOpponentName = (p.tm || "Rakip Kulüp").replace('.jpeg',''); currentOpponentLogo = p.tm || "🏆"; }
                 else { currentOpponentName = p.ml || "Milli Rakip"; currentOpponentLogo = "🌍"; }
             }
+
+            // Takım isimlerini skorbord + canvas etikete yaz
+            const homeNameEl  = document.getElementById('home-team-name');
+            const awayNameEl  = document.getElementById('away-team-name');
+            const homeGenEl   = document.getElementById('home-team-gen');
+            const awayGenEl   = document.getElementById('away-team-gen');
+            const pitchHomeEl = document.getElementById('pitch-home-label');
+            const pitchAwayEl = document.getElementById('pitch-away-label');
+            const homeName = (p.teamName || p.name || 'TAKIM').toUpperCase();
+            const awayName = currentOpponentName.toUpperCase();
+            if(homeNameEl)  homeNameEl.innerText  = homeName;
+            if(awayNameEl)  awayNameEl.innerText  = awayName;
+            if(homeGenEl)   homeGenEl.innerText    = `GEN ${Math.round(squadGenAverage)}`;
+            if(awayGenEl)   awayGenEl.innerText    = `GEN ${Math.round(squadGenAverage * (0.85 + Math.random()*0.3))}`;
+            if(pitchHomeEl) pitchHomeEl.innerText  = homeName;
+            if(pitchAwayEl) pitchAwayEl.innerText  = awayName;
             
             // Formasyon sahası slotlarını doldur
             const slotMevkiler = ['FRVT','SLK','SĞK','DFNS','KL'];
@@ -2188,53 +2474,191 @@
 
             function updateMiniPitch(phase) {
                 pitchPhase = phase;
-                const overlay = document.getElementById('mini-pitch-overlay');
-                const ball    = document.getElementById('mini-ball');
-                const label   = document.getElementById('mini-pitch-label');
                 const comment = document.getElementById('mini-commentator');
-                if(!overlay || !ball || !label || !comment) return;
+                if(comment) {
+                    if(phase === 'user_attack')      comment.innerText = spikerUserAtak[Math.floor(Math.random()*spikerUserAtak.length)];
+                    else if(phase === 'user_goal_area') comment.innerText = spikerUserGol[Math.floor(Math.random()*spikerUserGol.length)];
+                    else if(phase === 'opp_attack')  comment.innerText = spikerOppAtak[Math.floor(Math.random()*spikerOppAtak.length)];
+                    else if(phase === 'opp_goal_area') comment.innerText = spikerOppGol[Math.floor(Math.random()*spikerOppGol.length)];
+                    else comment.innerText = spikerMiddle[Math.floor(Math.random()*spikerMiddle.length)];
+                }
+                drawPitchCanvas(phase);
+            }
 
+            // ── CANVAS SAHA ÇİZ ──────────────────────────────────────────
+            // ── CANVAS SAHA (animasyonlu ok, yuvarlak yok) ──────────────
+            let pitchAnimFrame = null;
+            let pitchArrowProgress = 0;
+            let pitchCurrentPhase = 'middle';
+            let pitchBallX = 0.5; // 0-1 normalized
+
+            function drawPitchCanvas(phase) {
+                pitchCurrentPhase = phase;
+                pitchArrowProgress = 0;
+                if(pitchAnimFrame) cancelAnimationFrame(pitchAnimFrame);
+                animatePitch();
+            }
+
+            function animatePitch() {
+                const canvas = document.getElementById('pitch-canvas');
+                if(!canvas) return;
+                const ctx = canvas.getContext('2d');
+                const W = canvas.width, H = canvas.height;
+                const phase = pitchCurrentPhase;
+
+                // Ok animasyon ilerlemesi
+                pitchArrowProgress = Math.min(1, pitchArrowProgress + 0.06);
+
+                ctx.clearRect(0,0,W,H);
+
+                // ── ÇİM ZEMİN (dikey çizgili) ──
+                const stripes = 10;
+                const sw = W / stripes;
+                for(let i=0;i<stripes;i++){
+                    ctx.fillStyle = i%2===0 ? '#1b6020' : '#1f6e24';
+                    ctx.fillRect(i*sw, 0, sw, H);
+                }
+
+                // ── SAHA ÇİZGİLERİ ──
+                ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([]);
+                // Dış çerçeve
+                ctx.strokeRect(3,3,W-6,H-6);
+                // Orta çizgi
+                ctx.beginPath(); ctx.moveTo(W/2,3); ctx.lineTo(W/2,H-3); ctx.stroke();
+                // Orta çember
+                ctx.beginPath(); ctx.arc(W/2,H/2, H*0.3, 0, Math.PI*2); ctx.stroke();
+                // Sol ceza sahası
+                ctx.strokeRect(3, H*0.18, W*0.14, H*0.64);
+                // Sağ ceza sahası
+                ctx.strokeRect(W-W*0.14-3, H*0.18, W*0.14, H*0.64);
+                // Sol küçük alan
+                ctx.strokeRect(3, H*0.32, W*0.055, H*0.36);
+                // Sağ küçük alan
+                ctx.strokeRect(W-W*0.055-3, H*0.32, W*0.055, H*0.36);
+                // Sol kale (gerçek kale çizgisi — dışarı taşan)
+                ctx.strokeRect(-2, H*0.38, 7, H*0.24);
+                // Sağ kale
+                ctx.strokeRect(W-5, H*0.38, 7, H*0.24);
+
+                // ── ATAK ARKAPLAN RENK ──
+                let gradX1, gradX2, gradColor, ballNorm;
                 if(phase === 'user_attack') {
-                    // Sağ yarı (kullanıcı rakip kalesine doğru) turuncu
-                    overlay.style.background = 'rgba(255,140,0,0.35)';
-                    overlay.style.left = '50%'; overlay.style.width = '50%';
-                    overlay.style.inset = 'auto';
-                    overlay.style.cssText = 'position:absolute; left:50%; top:0; width:50%; height:100%; background:rgba(255,140,0,0.35); transition:all 0.4s; border-radius:0 4px 4px 0;';
-                    ball.style.left = '62%';
-                    label.innerText = '⚡ SENİN ATAĞI';
-                    label.style.color = '#ff8c00';
-                    comment.innerText = spikerUserAtak[Math.floor(Math.random()*spikerUserAtak.length)];
+                    gradX1=W*0.4; gradX2=W; gradColor='rgba(40,120,255,0.32)';
+                    ballNorm = 0.55 + pitchArrowProgress * 0.1;
                 } else if(phase === 'user_goal_area') {
-                    // Sağ kale alanı — kırmızı
-                    overlay.style.cssText = 'position:absolute; right:0; top:0; width:50%; height:100%; background:rgba(255,40,40,0.45); transition:all 0.4s; border-radius:0 4px 4px 0;';
-                    ball.style.left = '84%';
-                    label.innerText = '🔥 KALE ÖNÜNDE!';
-                    label.style.color = '#ff3e3e';
-                    comment.innerText = spikerUserGol[Math.floor(Math.random()*spikerUserGol.length)];
+                    gradX1=W*0.65; gradX2=W; gradColor='rgba(40,120,255,0.48)';
+                    ballNorm = 0.82;
                 } else if(phase === 'opp_attack') {
-                    // Sol yarı — turuncu
-                    overlay.style.cssText = 'position:absolute; left:0; top:0; width:50%; height:100%; background:rgba(255,140,0,0.35); transition:all 0.4s; border-radius:4px 0 0 4px;';
-                    ball.style.left = '28%';
-                    label.innerText = '⚠️ RAKİP ATAĞI';
-                    label.style.color = '#ff8c00';
-                    comment.innerText = spikerOppAtak[Math.floor(Math.random()*spikerOppAtak.length)];
+                    gradX1=W*0.6; gradX2=0; gradColor='rgba(220,50,50,0.32)';
+                    ballNorm = 0.45 - pitchArrowProgress * 0.1;
                 } else if(phase === 'opp_goal_area') {
-                    // Sol kale alanı — kırmızı
-                    overlay.style.cssText = 'position:absolute; left:0; top:0; width:50%; height:100%; background:rgba(255,40,40,0.45); transition:all 0.4s; border-radius:4px 0 0 4px;';
-                    ball.style.left = '6%';
-                    label.innerText = '🚨 KALEMİZ TEHLİKEDE!';
-                    label.style.color = '#ff3e3e';
-                    comment.innerText = spikerOppGol[Math.floor(Math.random()*spikerOppGol.length)];
+                    gradX1=W*0.35; gradX2=0; gradColor='rgba(220,50,50,0.48)';
+                    ballNorm = 0.18;
                 } else {
-                    // Orta saha
-                    overlay.style.cssText = 'position:absolute; inset:0; background:transparent; transition:all 0.4s; border-radius:4px;';
-                    ball.style.left = '46%';
-                    label.innerText = '⚽ ORTA SAHA';
-                    label.style.color = '#ccc';
-                    comment.innerText = spikerMiddle[Math.floor(Math.random()*spikerMiddle.length)];
+                    ballNorm = 0.5;
+                }
+
+                if(phase !== 'middle') {
+                    const isUser = phase.startsWith('user');
+                    const grad = ctx.createLinearGradient(gradX1, 0, gradX2, 0);
+                    grad.addColorStop(0, 'rgba(0,0,0,0)');
+                    grad.addColorStop(1, gradColor);
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, W, H);
+                }
+
+                // Smooth ball X
+                const targetBallX = ballNorm * W;
+                pitchBallX += (targetBallX - pitchBallX) * 0.12;
+
+                // ── OK (animasyonlu) ──
+                if(phase !== 'middle') {
+                    const isUser = phase.startsWith('user');
+                    const color  = isUser ? '#4db8ff' : '#ff5555';
+                    const shadow = isUser ? 'rgba(77,184,255,0.7)' : 'rgba(255,85,85,0.7)';
+
+                    // Ok başlangıç / bitiş
+                    const fromX = isUser ? W * 0.08  : W * 0.92;
+                    const toX   = isUser ? W * 0.92  : W * 0.08;
+                    const midX  = fromX + (toX - fromX) * pitchArrowProgress;
+                    const y     = H / 2;
+
+                    // Glow efekti
+                    ctx.shadowColor = shadow;
+                    ctx.shadowBlur = 10;
+
+                    // Ok gövdesi
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([]);
+                    ctx.beginPath();
+                    ctx.moveTo(fromX, y);
+                    ctx.lineTo(midX, y);
+                    ctx.stroke();
+
+                    // Ok başı (sadece ilerleme > 0.15 ise çiz)
+                    if(pitchArrowProgress > 0.15) {
+                        const dir = isUser ? 1 : -1;
+                        const tipX = midX;
+                        ctx.beginPath();
+                        ctx.moveTo(tipX, y);
+                        ctx.lineTo(tipX - dir * 14, y - 7);
+                        ctx.lineTo(tipX - dir * 10, y);
+                        ctx.lineTo(tipX - dir * 14, y + 7);
+                        ctx.closePath();
+                        ctx.fillStyle = color;
+                        ctx.fill();
+                    }
+
+                    // İkinci küçük ok (derinlik hissi)
+                    if(pitchArrowProgress > 0.4) {
+                        const offset = isUser ? -W*0.18 : W*0.18;
+                        const midX2 = midX + offset * (pitchArrowProgress - 0.4) / 0.6;
+                        ctx.globalAlpha = 0.45;
+                        ctx.beginPath();
+                        ctx.moveTo(fromX + offset*0.2, y + H*0.22);
+                        ctx.lineTo(midX2, y + H*0.22);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+
+                    ctx.shadowBlur = 0;
+                    ctx.setLineDash([]);
+                }
+
+                // ── TOP ──
+                ctx.shadowColor = 'rgba(255,255,255,0.6)';
+                ctx.shadowBlur = 8;
+                ctx.font = '15px serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('⚽', pitchBallX, H/2);
+                ctx.shadowBlur = 0;
+
+                // ── Animasyonu devam ettir ──
+                if(pitchArrowProgress < 1) {
+                    pitchAnimFrame = requestAnimationFrame(animatePitch);
                 }
             }
 
+            // ── TARİH ÇUBUĞu ──
+            function updateMatchDateBar() {
+                const el = document.getElementById('match-date-bar');
+                if(!el) return;
+                const now = new Date();
+                const days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+                const months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+                const d = days[now.getDay()];
+                const m = months[now.getMonth()];
+                const hr = String(now.getHours()).padStart(2,'0');
+                const mn = String(now.getMinutes()).padStart(2,'0');
+                el.innerText = `${d}, ${now.getDate()} ${m} ${now.getFullYear()} • ${hr}:${mn}`;
+            }
+            updateMatchDateBar();
+
+            pitchBallX = 250; // canvas ortası (W/2 = 500/2)
             // Başlangıçta orta saha
             updateMiniPitch('middle');
 
@@ -2302,12 +2726,9 @@
                     stopCrowdSound();
                     
                     // Mini sahayı sıfırla
-                    const endOverlay = document.getElementById('mini-pitch-overlay');
-                    if(endOverlay) endOverlay.style.cssText = 'position:absolute; inset:0; background:transparent; border-radius:4px;';
-                    const endBall = document.getElementById('mini-ball');
-                    if(endBall) endBall.style.left = '46%';
-                    const endLabel = document.getElementById('mini-pitch-label');
-                    if(endLabel) { endLabel.innerText = '🏁 MAÇ BİTTİ'; endLabel.style.color = '#fff'; }
+                    if(pitchAnimFrame) { cancelAnimationFrame(pitchAnimFrame); pitchAnimFrame = null; }
+                    drawPitchCanvas('middle');
+                    const endLabel = document.getElementById('pitch-home-label');
                     const endComment = document.getElementById('mini-commentator');
                     if(endComment) endComment.innerText = s1 > s2 ? '📣 Mükemmel bir galibiyet! Tebrikler!' : (s1 === s2 ? '📣 Berabere bitti. İki takım da mücadele etti.' : '📣 Bugün rakip daha iyiydi. Devam edin!');
 
@@ -2551,6 +2972,360 @@
                 `${liveStats.cornersHome} - ${liveStats.cornersAway}`;
         }
 
+        // ══════════════════════════════════════════════════
+        // PARA & BAHİS SİSTEMİ
+        // ══════════════════════════════════════════════════
+
+        function formatMoney(n) {
+            return Math.floor(n).toLocaleString('tr-TR');
+        }
+
+        function updateMoneyDisplay() {
+            const el = document.getElementById('ui-money');
+            if(el) el.innerText = formatMoney(p.money || 0);
+            const bmd = document.getElementById('bet-money-display');
+            if(bmd) bmd.innerText = formatMoney(p.money || 0);
+            const exs = document.getElementById('exchange-money-show');
+            if(exs) exs.innerText = formatMoney(p.money || 0);
+            const bdd = document.getElementById('bet-detail-money');
+            if(bdd) bdd.innerText = formatMoney(p.money || 0);
+        }
+
+        // ── PARA ÇEVİRME ──────────────────────────────────
+        function openMoneyExchange() {
+            updateMoneyDisplay();
+            document.getElementById('exchange-amount-input').value = '';
+            document.getElementById('money-exchange-overlay').style.display = 'flex';
+        }
+        function closeMoneyExchange() {
+            document.getElementById('money-exchange-overlay').style.display = 'none';
+        }
+        function doMoneyExchange() {
+            const amt = parseInt(document.getElementById('exchange-amount-input').value);
+            if(!amt || amt <= 0) return alert('Geçerli bir miktar gir!');
+            if(amt > (p.money || 0)) return alert(`Yetersiz para! Bakiyen: ${formatMoney(p.money)} ₺`);
+            p.money -= amt;
+            p.fkCoins = (p.fkCoins || 0) + amt;
+            save();
+            updateMoneyDisplay();
+            updateFkCoinDisplays();
+            updateUI();
+            closeMoneyExchange();
+            alert(`✅ ${formatMoney(amt)} ₺ → ${formatMoney(amt)} FK Coin'e çevrildi!`);
+        }
+
+        // ── BAHİS MATEMATİĞİ ──────────────────────────────
+        // Gerçek saat ile senkronize maç listesi üret
+        const BET_TEAMS = [
+            'Galatasaray','Fenerbahçe','Beşiktaş','Trabzonspor','Başakşehir',
+            'Konyaspor','Sivasspor','Antalyaspor','Alanyaspor','Giresunspor',
+            'Real Madrid','Barcelona','Man City','Liverpool','Arsenal',
+            'Bayern Münih','PSG','Juventus','Inter','Dortmund'
+        ];
+
+        function generateBetMatches() {
+            // Gerçek saate göre bugün için 8 maç oluştur (seed ile tutarlı)
+            const now = new Date();
+            const seed = now.getFullYear() * 10000 + (now.getMonth()+1) * 100 + now.getDate();
+            const rng = (s) => { let x = Math.sin(s) * 10000; return x - Math.floor(x); };
+
+            const matches = [];
+            const used = new Set();
+            let si = seed;
+
+            for(let i = 0; i < 8; i++) {
+                let hi, ai;
+                do { si++; hi = Math.floor(rng(si) * BET_TEAMS.length); } while(used.has(hi));
+                used.add(hi);
+                do { si++; ai = Math.floor(rng(si) * BET_TEAMS.length); } while(used.has(ai));
+                used.add(ai);
+
+                // Maç saati: bugün 12:00'dan başlayıp 2'şer saat arayla
+                const matchHour = 12 + i * 2;
+                const matchDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), matchHour % 24, 0, 0);
+
+                matches.push({
+                    id: seed + '_' + i,
+                    home: BET_TEAMS[hi],
+                    away: BET_TEAMS[ai],
+                    time: matchDate.getTime(),
+                    status: 'upcoming' // upcoming | live | finished
+                });
+            }
+            return matches;
+        }
+
+        let betMatches = [];
+        let betMatchTimers = [];
+        let currentBetMatchIdx = null;
+        let currentBetPick = null;
+        let watchingBetMatch = null;
+        let betMiniInterval = null;
+
+        function renderBetting() {
+            betMatches = generateBetMatches();
+            const container = document.getElementById('bet-matches-list');
+            const moneyEl = document.getElementById('bet-money-display');
+            if(moneyEl) moneyEl.innerText = formatMoney(p.money || 0);
+            if(!container) return;
+
+            const now = Date.now();
+            container.innerHTML = betMatches.map((m, idx) => {
+                const mTime = new Date(m.time);
+                const timeStr = `${String(mTime.getHours()).padStart(2,'0')}:${String(mTime.getMinutes()).padStart(2,'0')}`;
+                const isLive = now >= m.time && now < m.time + 90 * 667;
+                const isFinished = now >= m.time + 90 * 667;
+                const existingBet = (p.bets || []).find(b => b.matchId === m.id);
+
+                let statusBadge = '';
+                if(isFinished) statusBadge = `<span style="background:#333;color:#aaa;padding:2px 8px;border-radius:6px;font-size:10px;">BİTTİ</span>`;
+                else if(isLive) statusBadge = `<span style="background:rgba(255,50,50,0.2);color:#ff5555;border:1px solid #f33;padding:2px 8px;border-radius:6px;font-size:10px;animation:pulse 1.5s infinite alternate;">● CANLI</span>`;
+                else statusBadge = `<span style="background:rgba(255,215,0,0.1);color:#ffd700;border:1px solid rgba(255,215,0,0.3);padding:2px 8px;border-radius:6px;font-size:10px;">⏰ ${timeStr}</span>`;
+
+                let actionBtn = '';
+                if(existingBet) {
+                    const pickLabel = existingBet.pick === 'home' ? m.home + ' kazanır' : existingBet.pick === 'away' ? m.away + ' kazanır' : 'Berabere';
+                    actionBtn = `
+                        <div style="background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.2);border-radius:8px;padding:6px 10px;font-size:11px;color:#00e676;margin-top:6px;">
+                            🎯 Bahsin: <b>${pickLabel}</b> — <b>${formatMoney(existingBet.amount)} ₺</b>
+                        </div>
+                        ${(isLive || isFinished) ? `<button onclick="watchBetMatch(${idx})" style="margin-top:6px;background:linear-gradient(135deg,#003a6e,#005ab4);border:1px solid #5ab4ff;color:#fff;font-size:11px;padding:6px 14px;border-radius:8px;font-weight:700;">👁 İZLE</button>` : ''}
+                    `;
+                } else if(!isFinished) {
+                    actionBtn = `<button onclick="openBetDetail(${idx})" style="margin-top:6px;background:linear-gradient(135deg,#1a4a00,#2d7a00);border:1px solid rgba(0,200,0,0.4);color:#00e676;font-size:11px;padding:6px 14px;border-radius:8px;font-weight:700;">🎰 BAHİS YAP</button>`;
+                }
+
+                return `
+                    <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:12px 16px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                            <div style="flex:1;">
+                                <div style="font-weight:700;font-family:'Rajdhani',sans-serif;font-size:14px;color:#fff;">
+                                    ${m.home} <span style="color:#555;font-size:12px;">vs</span> ${m.away}
+                                </div>
+                                <div style="margin-top:4px;">${statusBadge}</div>
+                            </div>
+                            <div>${actionBtn}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Başlayan maçlar için bildirim kontrol et
+            checkBetNotifications();
+        }
+
+        function checkBetNotifications() {
+            const now = Date.now();
+            (p.bets || []).forEach(bet => {
+                const m = betMatches.find(x => x.id === bet.matchId);
+                if(!m || bet.notified) return;
+                if(now >= m.time) {
+                    bet.notified = true;
+                    save();
+                    // Bildirim göster
+                    const notif = document.createElement('div');
+                    notif.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);
+                        background:linear-gradient(135deg,#003a00,#006600);border:2px solid #00e676;
+                        border-radius:14px;padding:14px 24px;z-index:999;color:#00e676;font-weight:700;
+                        font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;
+                        box-shadow:0 0 30px rgba(0,230,118,0.4);text-align:center;`;
+                    notif.innerHTML = `⚽ MAÇ BAŞLADI!<br><span style="font-size:12px;color:#fff;">${m.home} vs ${m.away}</span>`;
+                    document.body.appendChild(notif);
+                    setTimeout(() => notif.remove(), 4000);
+                }
+            });
+        }
+
+        // ── BAHİS DETAY ───────────────────────────────────
+        function openBetDetail(idx) {
+            currentBetMatchIdx = idx;
+            currentBetPick = null;
+            const m = betMatches[idx];
+            document.getElementById('bet-detail-title').innerText = '🎰 BAHİS YAP';
+            document.getElementById('bet-detail-match').innerHTML = `
+                <div style="font-size:16px;font-weight:900;font-family:'Rajdhani',sans-serif;">${m.home}</div>
+                <div style="color:#555;font-size:12px;margin:4px 0;">vs</div>
+                <div style="font-size:16px;font-weight:900;font-family:'Rajdhani',sans-serif;">${m.away}</div>
+            `;
+            updateMoneyDisplay();
+            document.getElementById('bet-amount-input').value = '';
+            ['home','draw','away'].forEach(p => {
+                const btn = document.getElementById('bet-pick-' + p);
+                if(btn) { btn.style.borderColor = '#333'; btn.style.background = '#1a2a4a'; }
+            });
+            document.getElementById('bet-detail-overlay').style.display = 'flex';
+        }
+
+        function selectBetPick(pick) {
+            currentBetPick = pick;
+            ['home','draw','away'].forEach(pp => {
+                const btn = document.getElementById('bet-pick-' + pp);
+                if(!btn) return;
+                if(pp === pick) {
+                    btn.style.borderColor = '#00e676';
+                    btn.style.background = 'rgba(0,230,118,0.15)';
+                } else {
+                    btn.style.borderColor = '#333';
+                    btn.style.background = '#1a2a4a';
+                }
+            });
+        }
+
+        function closeBetDetail() {
+            document.getElementById('bet-detail-overlay').style.display = 'none';
+            currentBetMatchIdx = null;
+            currentBetPick = null;
+        }
+
+        function confirmBet() {
+            if(currentBetMatchIdx === null) return;
+            if(!currentBetPick) return alert('Bir tahmin seç!');
+            const amount = parseInt(document.getElementById('bet-amount-input').value);
+            if(!amount || amount <= 0) return alert('Geçerli bir miktar gir!');
+            if(amount > (p.money || 0)) return alert(`Yetersiz para! Bakiyen: ${formatMoney(p.money)} ₺`);
+
+            const m = betMatches[currentBetMatchIdx];
+            // Aynı maça tekrar bahis yapılamaz
+            if((p.bets || []).find(b => b.matchId === m.id)) return alert('Bu maça zaten bahis yaptın!');
+
+            p.money -= amount;
+            if(!p.bets) p.bets = [];
+            p.bets.push({
+                matchId: m.id,
+                home: m.home,
+                away: m.away,
+                time: m.time,
+                pick: currentBetPick,
+                amount: amount,
+                notified: false,
+                settled: false
+            });
+            save();
+            updateMoneyDisplay();
+            updateUI();
+            closeBetDetail();
+            renderBetting();
+            alert(`✅ Bahsin alındı! ${formatMoney(amount)} ₺ koyuldu.`);
+        }
+
+        // ── BAHİS MAÇ İZLE ────────────────────────────────
+        let betSimInterval = null;
+        let betSimClock = 0;
+        let betSimS1 = 0, betSimS2 = 0;
+
+        function watchBetMatch(idx) {
+            const m = betMatches[idx];
+            watchingBetMatch = m;
+            betSimClock = Math.min(89, Math.floor((Date.now() - m.time) / 667));
+            betSimS1 = 0; betSimS2 = 0;
+
+            // Mini scoreboard göster
+            document.getElementById('mini-scoreboard').style.display = 'block';
+            document.getElementById('msb-teams').innerText = `${m.home} vs ${m.away}`;
+            document.getElementById('msb-s1').innerText = betSimS1;
+            document.getElementById('msb-s2').innerText = betSimS2;
+            document.getElementById('msb-min').innerText = `${betSimClock}'`;
+            document.getElementById('msb-title').innerText = '● CANLI';
+
+            if(betSimInterval) clearInterval(betSimInterval);
+            betSimInterval = setInterval(() => {
+                betSimClock++;
+                document.getElementById('msb-min').innerText = `${betSimClock}'`;
+
+                if(Math.random() > 0.94) {
+                    if(Math.random() < 0.5) betSimS1++;
+                    else betSimS2++;
+                    document.getElementById('msb-s1').innerText = betSimS1;
+                    document.getElementById('msb-s2').innerText = betSimS2;
+                }
+
+                if(betSimClock >= 90) {
+                    clearInterval(betSimInterval);
+                    betSimInterval = null;
+                    document.getElementById('msb-title').innerText = 'MAÇ BİTTİ';
+                    document.getElementById('msb-min').innerText = '';
+                    settleBetMatch(m, betSimS1, betSimS2);
+                    setTimeout(() => closeMiniScoreboard(), 5000);
+                }
+            }, 667);
+        }
+
+        function closeMiniScoreboard() {
+            document.getElementById('mini-scoreboard').style.display = 'none';
+            if(betSimInterval) { clearInterval(betSimInterval); betSimInterval = null; }
+        }
+
+        function settleBetMatch(m, s1, s2) {
+            const bet = (p.bets || []).find(b => b.matchId === m.id && !b.settled);
+            if(!bet) return;
+            bet.settled = true;
+
+            // Gerçek sonuç
+            const realResult = s1 > s2 ? 'home' : s2 > s1 ? 'away' : 'draw';
+            // Yakın mı? (fark 1 gol)
+            const diff = Math.abs(s1 - s2);
+
+            let winAmount = 0;
+            let msg = '';
+
+            if(bet.pick === realResult) {
+                // Tam doğru → 3 katı
+                winAmount = bet.amount * 3;
+                msg = `🎉 TAHMİN DOĞRU! ${formatMoney(winAmount)} ₺ kazandın! (3x)`;
+            } else if(
+                (bet.pick === 'home' && realResult === 'draw' && diff <= 1) ||
+                (bet.pick === 'away' && realResult === 'draw' && diff <= 1) ||
+                (bet.pick === 'draw' && (realResult === 'home' || realResult === 'away') && diff <= 1) ||
+                (bet.pick === 'home' && realResult === 'away' && diff <= 1) ||
+                (bet.pick === 'away' && realResult === 'home' && diff <= 1)
+            ) {
+                // Yakın → 2 katı
+                winAmount = bet.amount * 2;
+                msg = `👍 YAKIN TAHMİN! ${formatMoney(winAmount)} ₺ kazandın! (2x)`;
+            } else {
+                msg = `❌ Tahmin yanlış. ${formatMoney(bet.amount)} ₺ kaybettin. (${m.home} ${s1}-${s2} ${m.away})`;
+            }
+
+            if(winAmount > 0) {
+                p.money = (p.money || 0) + winAmount;
+            }
+            save();
+            updateMoneyDisplay();
+            updateUI();
+
+            // Bildirim
+            const notif = document.createElement('div');
+            notif.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);
+                background:${winAmount>0?'linear-gradient(135deg,#003a00,#006600)':'linear-gradient(135deg,#3a0000,#660000)'};
+                border:2px solid ${winAmount>0?'#00e676':'#ff5555'};
+                border-radius:14px;padding:16px 28px;z-index:999;
+                color:${winAmount>0?'#00e676':'#ff6060'};font-weight:700;
+                font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;
+                box-shadow:0 0 30px ${winAmount>0?'rgba(0,230,118,0.4)':'rgba(255,50,50,0.4)'};
+                text-align:center;max-width:360px;`;
+            notif.innerText = msg;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 6000);
+        }
+
+        // Periyodik bildirim + otomatik sonuçlandırma kontrol
+        setInterval(() => {
+            if(document.getElementById('view-betting') && document.getElementById('view-betting').style.display === 'block') {
+                checkBetNotifications();
+            }
+            // Bitmiş maçların bahislerini otomatik sonuçlandır
+            (p.bets || []).filter(b => !b.settled).forEach(b => {
+                const endTime = b.time + 90 * 667;
+                if(Date.now() >= endTime) {
+                    const rng = (s) => { let x = Math.sin(s) * 10000; return x - Math.floor(x); };
+                    const seed = b.time;
+                    const s1 = Math.floor(rng(seed) * 5);
+                    const s2 = Math.floor(rng(seed + 1) * 5);
+                    const fakeM = { id: b.matchId, home: b.home, away: b.away, time: b.time };
+                    settleBetMatch(fakeM, s1, s2);
+                }
+            });
+        }, 5000);
 </script>
 </body>
 </html>
