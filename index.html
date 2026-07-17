@@ -226,6 +226,24 @@
         .forfeit-btn { background:linear-gradient(135deg,#5a0000,#3a0000); border:2px solid rgba(255,50,50,0.6); padding:10px 18px; color:white; border-radius:10px; cursor:pointer; font-weight:700; transition:all 0.2s; font-size:11px; letter-spacing:1px; margin-top:6px; font-family:'Rajdhani',sans-serif; }
         .forfeit-btn:hover { background:linear-gradient(135deg,#900,#600); box-shadow:0 0 22px rgba(255,50,50,0.5); transform:translateY(-1px); }
 
+        /* SOSYAL MEDYA */
+        .social-tab-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#999; padding:7px 16px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s; font-family:'Rajdhani',sans-serif; letter-spacing:0.5px; }
+        .social-tab-btn:hover:not(:disabled) { background:rgba(224,64,251,0.15); border-color:#e040fb; color:#e040fb; transform:none; box-shadow:none; }
+        .active-tab { background:linear-gradient(135deg,rgba(224,64,251,0.2),rgba(224,64,251,0.05)) !important; border-color:#e040fb !important; color:#e040fb !important; }
+
+        .social-card { background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.09); border-radius:16px; padding:14px 16px; transition:all 0.2s; }
+        .social-card:hover { border-color:rgba(224,64,251,0.3); transform:translateY(-1px); }
+        .social-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+        .social-handle { font-size:11px; color:#888; }
+        .social-name { font-size:13px; font-weight:700; color:#fff; font-family:'Rajdhani',sans-serif; }
+        .social-time { font-size:10px; color:#555; }
+        .social-content { font-size:13px; color:#d0d8e8; line-height:1.5; margin:8px 0; }
+        .social-stats { display:flex; gap:14px; font-size:11px; color:#667; margin-top:6px; }
+        .social-stat { display:flex; align-items:center; gap:4px; cursor:pointer; transition:color 0.2s; }
+        .social-stat:hover { color:#e040fb; }
+        .breaking-badge { background:linear-gradient(135deg,#cc0000,#ff3333); color:#fff; font-size:9px; font-weight:900; padding:2px 7px; border-radius:5px; letter-spacing:1px; margin-left:6px; vertical-align:middle; }
+        .news-image { width:100%; height:80px; object-fit:cover; border-radius:10px; background:linear-gradient(135deg,#1a1a2e,#16213e); display:flex; align-items:center; justify-content:center; font-size:28px; margin-bottom:8px; }
+
         /* ── CARDS / MARKET ── */
         .comment-box { background:rgba(0,0,0,0.4); border-radius:12px; padding:14px; height:340px; overflow-y:auto; border:1px solid rgba(255,255,255,0.07); text-align:left; }
         .comment-box::-webkit-scrollbar { width:4px; }
@@ -430,11 +448,12 @@
                 <div id="mh-btn" class="sidebar-item" onclick="showSection('mahalle')" style="color:#00ff00;">MAHALLE (100 XP)</div>
                 <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">🏆 TAKIMLAR (30 XP)</div>
                 <div id="custom-team-btn" class="sidebar-item" onclick="showSection('customteam')" style="color: cyan;">🛡️ TAKIM OLUŞTUR (50 SV)</div>
-                <div id="mkt-btn" class="sidebar-item" onclick="showSection('market')" style="color: #ffcc00; display: none;">🛒 OYUNCU MARKETİ</div>
+                <div id="mkt-btn" class="sidebar-item" onclick="showSection('market')" style="color: #ffcc00;">🛒 OYUNCU MARKETİ</div>
                 <div id="pack-market-btn" class="sidebar-item" onclick="showSection('packmarket')" style="color: var(--accent-gold); font-weight: bold;">PAKET MARKETİ</div>
-                <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc; display: none;">🏃 ALINAN OYUNCULAR</div>
+                <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc;">🏃 ALINAN OYUNCULAR</div>
                 <div id="history-btn" class="sidebar-item" onclick="showSection('history')" style="color: #e0aaff; display: none;">📊 MAÇ GEÇMİŞİ</div>
                 <div id="bet-btn" class="sidebar-item" onclick="showSection('betting')" style="color:#00e676;font-weight:bold;display:none;">🎰 BAHİS</div>
+                <div id="social-btn" class="sidebar-item" onclick="showSection('social')" style="color:#e040fb;font-weight:bold;display:none;">📱 SOSYAL MEDYA</div>
                 <div id="ml-btn" class="sidebar-item" onclick="showSection('milli')">🌍 MİLLİ (1000 XP)</div>
                 <div class="sidebar-item" onclick="showSection('comments')" style="color: var(--accent-gold);">💬 YORUMLAR</div>
             </div>
@@ -701,6 +720,17 @@
                         💰 Bakiye: <span id="bet-money-display" style="color:#00e676;font-weight:900;font-family:'Orbitron',monospace;">0</span> ₺
                     </div>
                     <div id="bet-matches-list" style="display:flex;flex-direction:column;gap:10px;max-height:480px;overflow-y:auto;padding-right:4px;"></div>
+                </div>
+
+                <div id="view-social" style="display:none;">
+                    <!-- PLATFORM SEÇIM TABI -->
+                    <div style="display:flex;gap:6px;margin-bottom:14px;border-bottom:2px solid rgba(255,255,255,0.08);padding-bottom:10px;flex-wrap:wrap;">
+                        <button id="stab-fktweet"  onclick="switchSocialTab('fktweet')"  class="social-tab-btn active-tab">𝕏 FKTweet</button>
+                        <button id="stab-fkstagram" onclick="switchSocialTab('fkstagram')" class="social-tab-btn">📸 FKstagram</button>
+                        <button id="stab-fknews"   onclick="switchSocialTab('fknews')"   class="social-tab-btn">📰 FK Haber</button>
+                    </div>
+                    <!-- FEED -->
+                    <div id="social-feed" style="display:flex;flex-direction:column;gap:10px;overflow-y:auto;max-height:460px;padding-right:4px;"></div>
                 </div>
 
                 <div id="view-comments" style="display:none;">
@@ -1228,8 +1258,8 @@
                 document.getElementById('ui-team-bar-title').innerText = `${p.teamName}:`;
                 document.getElementById('ui-team-level-val').innerText = `${p.teamLv} / 100000 XP`;
                 document.getElementById('team-level-bar').style.width = (p.teamLv / 100) + "%";
-                document.getElementById('mkt-btn').style.display = 'block';
-                document.getElementById('sqd-btn').style.display = 'block';
+                document.getElementById('mkt-btn').style.opacity = '1';
+                document.getElementById('sqd-btn').style.opacity = '1';
                 document.getElementById('history-btn').style.display = 'block';
                 document.getElementById('league-btn').style.display = 'block';
                 document.getElementById('gift-menu-btn').style.display = 'block';
@@ -1241,8 +1271,8 @@
                 }
             } else {
                 document.getElementById('ui-team-bar-container').style.display = 'none';
-                document.getElementById('mkt-btn').style.display = 'none';
-                document.getElementById('sqd-btn').style.display = 'none';
+                document.getElementById('mkt-btn').style.opacity = '0.5';
+                document.getElementById('sqd-btn').style.opacity = '0.5';
                 document.getElementById('history-btn').style.display = 'none';
                 document.getElementById('league-btn').style.display = 'none';
                 document.getElementById('euro-btn').style.display = 'none';
@@ -1261,6 +1291,10 @@
             // Bahis butonu (lv >= 50)
             const betBtnEl = document.getElementById('bet-btn');
             if(betBtnEl) betBtnEl.style.display = (p.lv >= 50) ? 'block' : 'none';
+
+            // Sosyal medya butonu (lv >= 50)
+            const socialBtnEl = document.getElementById('social-btn');
+            if(socialBtnEl) socialBtnEl.style.display = (p.lv >= 50) ? 'block' : 'none';
         }
 
         function setupMissions() {
@@ -1941,6 +1975,13 @@
             if(s === 'packmarket') renderPackMarket();
             if(s === 'myplayers') renderMyPlayers();
             if(s === 'betting') renderBetting();
+            if(s === 'social') {
+                currentSocialTab = 'fktweet';
+                document.querySelectorAll('.social-tab-btn').forEach(b => b.classList.remove('active-tab'));
+                const at = document.getElementById('stab-fktweet');
+                if(at) at.classList.add('active-tab');
+                renderSocialFeed();
+            }
             if(s === 'milli') renderList('ml-list', milliles, 'ml', false);
             if(s === 'comments') renderComments();
         }
@@ -2973,8 +3014,259 @@
         }
 
         // ══════════════════════════════════════════════════
-        // PARA & BAHİS SİSTEMİ
+        // SOSYAL MEDYA SİSTEMİ
         // ══════════════════════════════════════════════════
+
+        let currentSocialTab = 'fktweet';
+        let socialLikes = {}; // postId → liked bool
+
+        // Sabit hesaplar
+        const SOCIAL_ACCOUNTS = [
+            { name:'GoalFlash TR',   handle:'@goalflash_tr',  avatar:'⚡', color:'#ffd700' },
+            { name:'FutbolArena',    handle:'@futbolarena',   avatar:'🏟️', color:'#00e5ff' },
+            { name:'Taraftar Sesi',  handle:'@taraftarsesi',  avatar:'📣', color:'#ff5555' },
+            { name:'FK Insider',     handle:'@fkinsider',     avatar:'🔍', color:'#e040fb' },
+            { name:'MacAnaliz',      handle:'@macanaliz',     avatar:'📊', color:'#00e676' },
+            { name:'SkorBülten',     handle:'@skorbulten',    avatar:'🎯', color:'#ff9f1c' },
+            { name:'TransferGündemi',handle:'@transfergundem', avatar:'💸', color:'#4db8ff' },
+            { name:'YorumcuHoca',    handle:'@yorumcuhoca',   avatar:'🎙️', color:'#c8ff00' },
+        ];
+
+        const NEWS_OUTLETS = [
+            { name:'FK Haber',  logo:'📰', color:'#ff3333' },
+            { name:'Gol TV',    logo:'📺', color:'#ffd700' },
+            { name:'Spor24',    logo:'🗞️', color:'#00e5ff' },
+            { name:'MacHaber',  logo:'⚽', color:'#00e676' },
+        ];
+
+        // Maça özel tweet/haber şablonları
+        function generateMatchPosts(matchData) {
+            if(!matchData) return [];
+            const { playerName, oppName, s1, s2, res, teamName, type } = matchData;
+            const won  = s1 > s2;
+            const draw = s1 === s2;
+            const typeLabel = type === 'mahalle' ? 'mahalleden' : type === 'kulup' ? 'kulüpten' :
+                              type === 'league' ? 'ligden' : type === 'euro' ? "Avrupa'dan" : 'maçtan';
+
+            const tweets = [
+                won  ? `${teamName} bu gece ${oppName}'ı ${s1}-${s2} geride bıraktı! ${playerName} sahada inanılmaz bir performans sergiledi. 🔥` :
+                draw ? `${teamName} ile ${oppName} ${s1}-${s2} berabere kaldı. Her iki taraf da fırsatları değerlendiremedi. 😐` :
+                       `${oppName} bu gecenin kazananı! ${teamName} ${s1}-${s2} yenilgiyle ayrıldı. ${playerName} için zorlu bir gece. 💔`,
+
+                won  ? `"${playerName} bugün formunun zirvesindeydi!" — Sahadan dönen taraftarlar böyle konuşuyor. #${teamName.replace(/\s/,'')}` :
+                draw ? `Beraberlik futbolun adaleti mi yoksa fırsatı tepme mi? ${typeLabel} sonuç ${s1}-${s2}. #Futbol` :
+                       `${s1}-${s2} ile kapandı kapılar. ${teamName} bu mağlubiyetten ders çıkarmalı. #Analiz`,
+
+                `SKOR | ${teamName.toUpperCase()} ${s1} - ${s2} ${oppName.toUpperCase()} | ${res} ✅`,
+
+                won  ? `${teamName}'ın kazanma serisi devam ediyor! ${oppName} karşısında ${s1}-${s2}'lik galip geliş takımı üst sıralara taşıyor.` :
+                draw ? `Heyecanlı karşılaşmada puanlar paylaşıldı: ${teamName} ${s1}-${s2} ${oppName}` :
+                       `Zor bir gece geçirdi ${teamName}. ${oppName} karşısında ${s1}-${s2} yenilgi ciddi soru işaretleri doğurdu.`,
+
+                `${playerName} bu maçta gözlemlenen en iyi formdaydı. ${typeLabel} gelen ${res.toLowerCase()} sonucu görmezden gelinmemeli. 👀`,
+            ];
+
+            const instaPosts = [
+                { emoji: won?'🏆':'(s1===s2?"🤝":"😔")', caption: won ? `Galibiyet gecesi ✨ ${teamName} ${s1}-${s2} ${oppName} 🔥 #Futbol #Galibiyet #${teamName.replace(/\s/,'')}` : draw ? `Berabere bitti 🤝 ${s1}-${s2} #Futbol #${teamName.replace(/\s/,'')}` : `Bugün olmadı 😔 ${s1}-${s2} #Mücadele #${teamName.replace(/\s/,'')}`, img: won?'🏆':draw?'🤝':'😔' },
+                { emoji:'📸', caption:`${playerName} sahada! Bugünkü maç anları 📸⚽ #${teamName.replace(/\s/,'')} #Futbol #Spor`, img:'⚽' },
+                { emoji:'🔥', caption:won?`Üst üste galibiyetler! ${teamName} durdurulamıyor 🔥 #${teamName.replace(/\s/,'')}`:draw?`Sahada her şeyi verdik 💪 ${teamName} #Futbol`:
+                `Bu mağlubiyetten güçlenerek çıkacağız 💪 #${teamName.replace(/\s/,'')}`, img:won?'🔥':'💪' },
+            ];
+
+            const news = [
+                { headline: won ? `${teamName}, ${oppName}'ı ${s1}-${s2} Yenerek Lider Gruba Yaklaştı` : draw ? `${teamName}-${oppName} Maçı ${s1}-${s2} Beraberlikle Tamamlandı` : `${teamName} ${oppName} Karşısında ${s1}-${s2} Mağlup Oldu`, body: won ? `${playerName} önderliğinde oynayan ${teamName}, ${oppName} karşısında üstün bir oyunla ${s1}-${s2} galip geldi. Teknik ekip ve taraftarlar büyük sevinç yaşadı.` : draw ? `İki takım arasındaki zorlu rekabet ${s1}-${s2} beraberlikle noktalandı. Her iki taraf da çeşitli pozisyonlar elde etse de skoru değiştirmeyi başaramadı.` : `${teamName}, sahasında ${oppName} karşısında ${s1}-${s2} yenilerek puanları rakibine bıraktı. ${playerName}'in performansı ve takım oyunu sorgulanmaya başladı.`, outlet:0, breaking: won },
+                { headline: `Maç Analizi: ${teamName} ${s1}-${s2} ${oppName} — Taktiksel Değerlendirme`, body: `${won?'Galip':'Mağlup'} ayrılan ${teamName}'ın oyun anlayışını ve ${oppName}'ın savunma/hücum stratejisini mercek altına aldık. İşte ${s1}-${s2}'lik sonucun perde arkası...`, outlet:1, breaking:false },
+                { headline: `${playerName} Bu Performansla Dikkat Çekiyor`, body: `${typeLabel} ${res} alan ${playerName}, son dönemdeki istikrarlı performansıyla futbol gündemini meşgul ediyor. Uzmanlar ${won?'"Bu tempo sürdürülebilir mi?"':'"Toparlanmak için ne gerekiyor?"'} sorusunu tartışıyor.`, outlet:2, breaking:false },
+            ];
+
+            return { tweets, instaPosts, news };
+        }
+
+        // Genel (maç bağımsız) içerik
+        function generateGenericPosts() {
+            const genericTweets = [
+                `Bu hafta en iyi performans ödülü kime gitmeli? 🏆 #FutbolSoru`,
+                `Transfer döneminde en büyük sürpriz kim olacak? 👀 #Transfer`,
+                `Haftanın golü için oylamaya katıl! ⚽🔥 #HaftaninGolu`,
+                `Defans mı hücum mu? Futbolun tartışmalı sorusu yine gündemde 🤔`,
+                `Genç yetenekler mi deneyimli oyuncular mı? Takımını nasıl kurardın? #Futbol`,
+                `Bu sezon bizi en çok şaşırtan takım hangisi? Yorumla! 👇`,
+                `Sahada gösterilen fair-play bu sezonun en güzel anlarından biri 🤝 #Spor`,
+                `Taraftar olmadan stadyum sadece beton yığınıdır. Sizleri seviyoruz! ❤️`,
+                `Gece maçı mı gündüz maçı mı? Tercihini yaz! 🌙☀️`,
+                `Sezonun en iyi hareketi için aday göster! #BecerileriKonuşuyor`,
+            ];
+            const genericNews = [
+                { headline:'Süper Lig\'de Bu Haftanın Özeti', body:'Haftanın en çarpıcı maçları, golleri ve tartışmalı kararları... Tüm detaylar FK Haber\'de.', outlet:0, breaking:false },
+                { headline:'Transfer Dedikodularında Son Durum', body:'Kulislerden gelen bilgilere göre birçok büyük kulüp önemli transferler için harekete geçti.', outlet:3, breaking:false },
+                { headline:'Genç Yetenek Radar: Yükselen İsimler', body:'Akademi liglerinden süzülen genç yetenekler artık büyük kulüplerin gündeminde. İşte öne çıkanlar...', outlet:1, breaking:false },
+                { headline:'VAR Kararları Yine Tartışma Yarattı', body:'Son haftada verilen VAR kararları sosyal medyada büyük yankı uyandırdı. Uzmanlar ne düşünüyor?', outlet:2, breaking:false },
+            ];
+            return { tweets: genericTweets, news: genericNews };
+        }
+
+        function switchSocialTab(tab) {
+            currentSocialTab = tab;
+            document.querySelectorAll('.social-tab-btn').forEach(b => b.classList.remove('active-tab'));
+            document.getElementById('stab-' + tab).classList.add('active-tab');
+            renderSocialFeed();
+        }
+
+        function renderSocialFeed() {
+            const feed = document.getElementById('social-feed');
+            if(!feed) return;
+
+            // Son maç verisi
+            const lastMatch = p.matchHistory && p.matchHistory.length > 0 ? {
+                playerName: p.name,
+                teamName:   p.teamName || p.name,
+                oppName:    p.matchHistory[0].oppName,
+                s1: parseInt(p.matchHistory[0].skor?.split('-')[0]) || 0,
+                s2: parseInt(p.matchHistory[0].skor?.split('-')[1]) || 0,
+                res: p.matchHistory[0].res,
+                type: p.matchHistory[0].type
+            } : null;
+
+            const matchPosts = lastMatch ? generateMatchPosts(lastMatch) : null;
+            const generic = generateGenericPosts();
+
+            const now = new Date();
+            function timeAgo(min) {
+                if(min < 1)  return 'Şimdi';
+                if(min < 60) return `${min}dk`;
+                return `${Math.floor(min/60)}sa`;
+            }
+            const rng = (s) => { let x=Math.sin(s)*10000; return x-Math.floor(x); };
+            const seed = now.getHours()*100+now.getMinutes();
+
+            if(currentSocialTab === 'fktweet') {
+                let posts = [];
+                // Maç tweetleri (en üstte)
+                if(matchPosts) {
+                    matchPosts.tweets.forEach((txt, i) => {
+                        const acc = SOCIAL_ACCOUNTS[i % SOCIAL_ACCOUNTS.length];
+                        const ago = Math.floor(rng(seed+i)*30)+1;
+                        posts.push({ acc, txt, ago, likes: Math.floor(rng(seed+i+10)*2000)+50, rts: Math.floor(rng(seed+i+20)*500)+5, id:'mp'+i });
+                    });
+                }
+                // Genel tweetler
+                generic.tweets.slice(0,5).forEach((txt,i) => {
+                    const acc = SOCIAL_ACCOUNTS[(i+3) % SOCIAL_ACCOUNTS.length];
+                    const ago = Math.floor(rng(seed+i+50)*120)+30;
+                    posts.push({ acc, txt, ago, likes: Math.floor(rng(seed+i+60)*800)+10, rts: Math.floor(rng(seed+i+70)*200)+2, id:'gt'+i });
+                });
+
+                feed.innerHTML = posts.map(post => `
+                    <div class="social-card">
+                        <div style="display:flex;gap:10px;align-items:flex-start;">
+                            <div class="social-avatar" style="background:${post.acc.color}22;border:2px solid ${post.acc.color}44;">${post.acc.avatar}</div>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                                    <span class="social-name">${post.acc.name}</span>
+                                    <span class="social-handle">${post.acc.handle}</span>
+                                    <span class="social-time">· ${timeAgo(post.ago)}</span>
+                                </div>
+                                <div class="social-content">${post.txt}</div>
+                                <div class="social-stats">
+                                    <span class="social-stat" onclick="toggleLike('${post.id}',this)">
+                                        <span id="like-icon-${post.id}">${socialLikes[post.id]?'❤️':'🤍'}</span>
+                                        <span id="like-count-${post.id}">${post.likes + (socialLikes[post.id]?1:0)}</span>
+                                    </span>
+                                    <span class="social-stat">🔁 ${post.rts}</span>
+                                    <span class="social-stat">💬 ${Math.floor(post.likes/10)}</span>
+                                    <span class="social-stat">📤</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } else if(currentSocialTab === 'fkstagram') {
+                let posts = [];
+                if(matchPosts) {
+                    matchPosts.instaPosts.forEach((ip, i) => {
+                        const acc = SOCIAL_ACCOUNTS[i % 3];
+                        const ago = Math.floor(rng(seed+i)*60)+1;
+                        posts.push({ acc, ...ip, ago, likes: Math.floor(rng(seed+i+100)*5000)+200, id:'ig'+i });
+                    });
+                }
+                // Ek genel insta postlar
+                const extraImgs = ['🌟','🔥','⚡','🏆','💪','🎯','🌍','❤️'];
+                extraImgs.slice(0,4).forEach((img,i) => {
+                    const acc = SOCIAL_ACCOUNTS[(i+4)%SOCIAL_ACCOUNTS.length];
+                    const ago = Math.floor(rng(seed+i+200)*180)+60;
+                    posts.push({ acc, img, caption:`Futbol bu! ${img} #Spor #Futbol #${['Gol','Antrenman','Taraftar','Şampiyonluk'][i]}`, ago, likes: Math.floor(rng(seed+i+210)*3000)+100, id:'ig_g'+i });
+                });
+
+                feed.innerHTML = `
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        ${posts.map(post => `
+                            <div class="social-card" style="padding:10px;">
+                                <div style="width:100%;height:90px;border-radius:10px;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:8px;">${post.img}</div>
+                                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                                    <div class="social-avatar" style="width:26px;height:26px;font-size:13px;background:${post.acc.color}22;border:1px solid ${post.acc.color}44;">${post.acc.avatar}</div>
+                                    <span class="social-name" style="font-size:11px;">${post.acc.name}</span>
+                                </div>
+                                <div class="social-content" style="font-size:11px;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;">${post.caption}</div>
+                                <div class="social-stats" style="margin-top:6px;">
+                                    <span class="social-stat" onclick="toggleLike('${post.id}',this)">
+                                        <span id="like-icon-${post.id}">${socialLikes[post.id]?'❤️':'🤍'}</span>
+                                        <span id="like-count-${post.id}">${post.likes + (socialLikes[post.id]?1:0)}</span>
+                                    </span>
+                                    <span class="social-time">· ${timeAgo(post.ago)}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+            } else if(currentSocialTab === 'fknews') {
+                let articles = [];
+                if(matchPosts) {
+                    matchPosts.news.forEach((n,i) => {
+                        const ago = Math.floor(rng(seed+i)*45)+5;
+                        articles.push({ ...n, ago });
+                    });
+                }
+                generic.news.forEach((n,i) => {
+                    const ago = Math.floor(rng(seed+i+300)*300)+60;
+                    articles.push({ ...n, ago });
+                });
+
+                feed.innerHTML = articles.map((art,i) => {
+                    const outlet = NEWS_OUTLETS[art.outlet] || NEWS_OUTLETS[0];
+                    const breakingBadge = art.breaking ? `<span class="breaking-badge">SON DAKİKA</span>` : '';
+                    return `
+                        <div class="social-card">
+                            <div style="width:100%;height:60px;border-radius:10px;background:linear-gradient(135deg,${outlet.color}22,rgba(0,0,0,0.3));display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:10px;">${outlet.logo}</div>
+                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                                <span style="font-size:11px;font-weight:700;color:${outlet.color};">${outlet.name}</span>
+                                <span class="social-time">· ${timeAgo(art.ago)}</span>
+                                ${breakingBadge}
+                            </div>
+                            <div style="font-size:14px;font-weight:700;color:#fff;font-family:'Rajdhani',sans-serif;margin-bottom:6px;line-height:1.3;">${art.headline}</div>
+                            <div class="social-content" style="font-size:12px;">${art.body}</div>
+                            <div class="social-stats">
+                                <span class="social-stat">👁 ${Math.floor(rng(seed+i+400)*50000)+1000} görüntülenme</span>
+                                <span class="social-stat">💬 Yorumlar</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function toggleLike(id, el) {
+            socialLikes[id] = !socialLikes[id];
+            const iconEl = document.getElementById('like-icon-' + id);
+            const countEl = document.getElementById('like-count-' + id);
+            if(iconEl) iconEl.textContent = socialLikes[id] ? '❤️' : '🤍';
+        }
+
+        // Maç bitince sosyal medyayı güncelle (matchHistory'ye yeni maç eklendiğinde)
+        // finishCurrentMatch override'ı kaldırıldı - zaten çalışıyor
+
+
 
         function formatMoney(n) {
             return Math.floor(n).toLocaleString('tr-TR');
