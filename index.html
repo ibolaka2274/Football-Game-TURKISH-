@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -346,6 +346,82 @@
         .auth-link { color:var(--accent-gold); cursor:pointer; font-weight:700; }
         .auth-note { color:#6a7a8a; font-size:13px; margin-top:10px; }
 
+
+        /* ── FKS 27 YENİ NEON ARAYÜZ ── */
+        .neon-ui {
+            border-color: rgba(0,229,255,0.42) !important;
+            box-shadow: 0 0 14px rgba(0,229,255,0.10), inset 0 0 18px rgba(0,229,255,0.035);
+        }
+        .sidebar-item:hover, .sidebar-item.active {
+            border-color: rgba(0,229,255,0.55) !important;
+            box-shadow: 0 0 14px rgba(0,229,255,0.18), inset 0 0 10px rgba(0,229,255,0.05);
+            color:#7df5ff !important;
+        }
+        #welcome-overlay, #important-position-overlay {
+            position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+            background:rgba(2,6,18,0.78); backdrop-filter:blur(14px); z-index:300;
+        }
+        .welcome-panel {
+            width:min(620px,92vw); padding:34px 30px; text-align:center;
+            background:linear-gradient(145deg,rgba(5,14,30,0.98),rgba(7,9,25,0.98));
+            border:1px solid rgba(0,229,255,0.55); border-radius:24px;
+            box-shadow:0 0 25px rgba(0,229,255,0.22), 0 0 90px rgba(110,0,255,0.14), inset 0 0 35px rgba(0,229,255,0.04);
+        }
+        .welcome-panel h1 {
+            margin:0 0 8px; font-family:'Orbitron',monospace; color:#fff;
+            text-shadow:0 0 18px rgba(0,229,255,0.75);
+        }
+        .welcome-sub { color:#7df5ff; font-size:14px; letter-spacing:2px; margin-bottom:22px; }
+        .welcome-feature-list { display:flex; flex-direction:column; gap:9px; margin:20px 0 24px; }
+        .welcome-feature {
+            padding:12px 15px; text-align:left; border:1px solid rgba(0,229,255,0.22);
+            border-radius:12px; background:rgba(0,229,255,0.045); color:#e8faff;
+            box-shadow:inset 0 0 15px rgba(0,229,255,0.025);
+        }
+        .neon-primary {
+            background:linear-gradient(135deg,#003f57,#006d82) !important; color:#fff !important;
+            border-color:rgba(0,229,255,0.7) !important; box-shadow:0 0 18px rgba(0,229,255,0.28) !important;
+            padding:12px 30px !important; font-size:13px !important;
+        }
+        /* ── TAKIM / VIDEO BENZERİ DÜZEN ── */
+        .ct-video-ui { text-align:left; }
+        .ct-tabs { display:flex; justify-content:center; gap:2px; margin:-2px auto 14px; max-width:460px; }
+        .ct-tab { flex:1; padding:11px 20px; background:rgba(4,13,28,0.92); color:#9aa9c0; border:1px solid rgba(0,229,255,0.14); border-radius:0; }
+        .ct-tab.active { color:#00e5ff; border-color:rgba(0,229,255,0.55); box-shadow:0 0 16px rgba(0,229,255,0.15); }
+        .ct-layout { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }
+        .ct-panel { background:linear-gradient(145deg,rgba(3,10,22,0.92),rgba(8,15,30,0.88)); border:1px solid rgba(0,229,255,0.20); border-radius:12px; overflow:hidden; box-shadow:0 0 18px rgba(0,0,0,0.35); }
+        .ct-panel-title { padding:10px 14px; background:rgba(255,255,255,0.06); color:#fff; font-weight:900; letter-spacing:1px; border-bottom:1px solid rgba(0,229,255,0.18); }
+        .ct-days { display:grid; grid-template-columns:repeat(7,1fr); background:rgba(0,0,0,0.3); }
+        .ct-day { padding:7px 3px; text-align:center; font-size:9px; color:#aab5c8; border-right:1px solid rgba(255,255,255,0.06); }
+        .ct-day.today { color:#00e5ff; background:rgba(0,229,255,0.08); box-shadow:inset 0 -2px #00e5ff; }
+        .ct-match { display:grid; grid-template-columns:54px 1fr 54px; align-items:center; gap:8px; padding:13px 12px; border-bottom:1px solid rgba(255,255,255,0.06); text-align:center; }
+        .ct-match:last-child { border-bottom:0; }
+        .ct-match-logo { width:42px; height:42px; margin:auto; display:flex; align-items:center; justify-content:center; border:1px solid rgba(0,229,255,0.22); border-radius:8px; background:rgba(0,0,0,0.35); }
+        .ct-match-score { font-family:'Orbitron',monospace; font-size:18px; font-weight:900; color:#7df5ff; }
+        .ct-match-time { color:#ffd700; font-size:11px; margin-bottom:3px; }
+        .ct-team-card { padding:18px; text-align:center; }
+        .ct-team-logo-large { width:120px; height:120px; object-fit:contain; border:1px solid rgba(0,229,255,0.4); border-radius:16px; background:rgba(0,0,0,0.45); padding:10px; box-shadow:0 0 25px rgba(0,229,255,0.12); }
+        .ct-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+        .ct-stat { padding:9px; border:1px solid rgba(255,255,255,0.07); border-radius:8px; background:rgba(255,255,255,0.035); text-align:center; }
+        .ct-stat b { display:block; color:#00e5ff; font-size:16px; }
+        .ct-roster { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:10px; max-height:190px; overflow:auto; }
+        .ct-player { padding:8px; border:1px solid rgba(255,255,255,0.08); border-radius:8px; background:rgba(255,255,255,0.035); }
+        .ct-player strong { display:block; color:#fff; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ct-player span { color:#ffd700; font-size:10px; }
+        /* ── ÖNEMLİ POZİSYON ── */
+        .important-panel { width:min(620px,92vw); padding:24px; text-align:center; background:rgba(4,10,24,0.98); border:2px solid #00e5ff; border-radius:20px; box-shadow:0 0 35px rgba(0,229,255,0.30); }
+        .important-panel h2 { color:#00e5ff; margin:0 0 8px; text-shadow:0 0 16px rgba(0,229,255,0.65); }
+        .event-ball { font-size:88px; margin:8px auto 12px; filter:drop-shadow(0 0 16px rgba(255,255,255,0.55)); }
+        .touch-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:320px; margin:14px auto; }
+        .touch-point { height:64px; border-radius:12px; border:1px solid rgba(0,229,255,0.42); background:rgba(0,229,255,0.06); color:#fff; font-size:22px; box-shadow:0 0 12px rgba(0,229,255,0.10); }
+        .touch-point.next { border-color:#ffd700; box-shadow:0 0 18px rgba(255,215,0,0.35); }
+        .touch-point.done { opacity:.35; }
+        .goal-frame { position:relative; width:min(430px,82vw); height:250px; margin:16px auto; border:8px solid #ddd; border-bottom-width:12px; background:repeating-linear-gradient(0deg,transparent 0 28px,rgba(255,255,255,.18) 29px 30px),repeating-linear-gradient(90deg,transparent 0 28px,rgba(255,255,255,.18) 29px 30px),rgba(255,255,255,.025); box-shadow:inset 0 0 25px rgba(255,255,255,.12),0 0 24px rgba(0,229,255,.12); }
+        .keeper-ball { position:absolute; width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; cursor:pointer; animation:ballPulse .65s infinite alternate; filter:drop-shadow(0 0 12px rgba(255,215,0,.75)); }
+        @keyframes ballPulse { from{transform:scale(.9)} to{transform:scale(1.08)} }
+        .event-timer { font-family:'Orbitron',monospace; font-size:24px; color:#ff5555; text-shadow:0 0 14px rgba(255,70,70,.6); }
+        @media(max-width:700px){ .ct-layout{grid-template-columns:1fr;} .ct-days{grid-template-columns:repeat(7,1fr);} .ct-match{grid-template-columns:42px 1fr 42px;} }
+
         /* ── MOBILE ── */
         @media (max-width:600px) {
             .screen { padding:12px 10px; height:98vh; border-radius:16px; width:99%; }
@@ -357,7 +433,18 @@
             #main-layout { gap:6px; }
             .header-ui { padding:8px 10px; }
         }
-    </style>
+    
+        .ct-squad-editor{margin-top:14px;display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:16px;align-items:start}
+        .ct-mini-pitch{position:relative;min-height:430px;border:2px solid rgba(255,255,255,.65);border-radius:16px;overflow:hidden;background:repeating-linear-gradient(0deg,#155f1c 0,#155f1c 35px,#1b7122 35px,#1b7122 70px);box-shadow:0 0 28px rgba(0,229,255,.12)}
+        .ct-mini-pitch:before{content:'';position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(255,255,255,.55)}
+        .ct-pitch-circle{position:absolute;left:50%;top:50%;width:80px;height:80px;border:2px solid rgba(255,255,255,.5);border-radius:50%;transform:translate(-50%,-50%)}
+        .ct-pitch-slot{position:absolute;transform:translate(-50%,-50%);width:105px;min-height:58px;padding:7px 6px;border:1px solid rgba(0,229,255,.45);border-radius:12px;background:rgba(2,10,20,.88);text-align:center;cursor:pointer;box-shadow:0 0 12px rgba(0,229,255,.12)}
+        .ct-pitch-slot.empty{color:#8796aa}.ct-pitch-slot strong{display:block;color:#fff;font-size:12px}.ct-pitch-slot small{display:block;color:#00e5ff;font-size:9px;margin-top:3px}.ct-pitch-slot button{margin-top:5px!important;padding:3px 7px!important;font-size:9px!important}
+        .ct-available{min-width:0}.ct-available-title{font-weight:900;color:#fff;margin-bottom:9px}.ct-player-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px;max-height:430px;overflow:auto;padding-right:3px}
+        .ct-player-card{border:1px solid rgba(0,229,255,.25);border-radius:12px;background:rgba(5,14,27,.82);padding:10px;display:flex;justify-content:space-between;gap:8px;align-items:center}.ct-player-card.pack-player{border-color:rgba(255,215,0,.5);box-shadow:inset 0 0 14px rgba(255,215,0,.05)}
+        .ct-player-card .pc-name{font-weight:900;color:#fff;font-size:12px}.ct-player-card .pc-meta{color:#94a4b9;font-size:10px;margin-top:3px}.ct-player-card .pc-pack{color:#ffd84a;font-size:9px;font-weight:900;margin-top:4px}.ct-player-card button{white-space:nowrap!important;padding:6px 9px!important;font-size:9px!important}
+        @media(max-width:800px){.ct-squad-editor{grid-template-columns:1fr}.ct-mini-pitch{min-height:390px}.ct-player-list{max-height:none}}
+</style>
 </head>
 <body>
 
@@ -447,10 +534,9 @@
                 <div id="euro-btn" class="sidebar-item" onclick="showSection('euro')" style="color: #ff9f1c; display: none; font-weight: bold;">🇪🇺 EURO KUPALARI</div>
                 <div id="mh-btn" class="sidebar-item" onclick="showSection('mahalle')" style="color:#00ff00;">MAHALLE (100 XP)</div>
                 <div id="tm-btn" class="sidebar-item" onclick="showSection('teams')">🏆 TAKIMLAR (30 XP)</div>
-                <div id="custom-team-btn" class="sidebar-item" onclick="showSection('customteam')" style="color: cyan;">🛡️ TAKIM OLUŞTUR (50 SV)</div>
+                <div id="custom-team-btn" class="sidebar-item" onclick="showSection('customteam')" style="color: #00e5ff;">🛡️ TAKIM</div>
                 <div id="mkt-btn" class="sidebar-item" onclick="showSection('market')" style="color: #ffcc00;">🛒 OYUNCU MARKETİ</div>
                 <div id="pack-market-btn" class="sidebar-item" onclick="showSection('packmarket')" style="color: var(--accent-gold); font-weight: bold;">PAKET MARKETİ</div>
-                <div id="sqd-btn" class="sidebar-item" onclick="showSection('myplayers')" style="color: #00ffcc;">🏃 ALINAN OYUNCULAR</div>
                 <div id="history-btn" class="sidebar-item" onclick="showSection('history')" style="color: #e0aaff; display: none;">📊 MAÇ GEÇMİŞİ</div>
                 <div id="bet-btn" class="sidebar-item" onclick="showSection('betting')" style="color:#00e676;font-weight:bold;display:none;">🎰 BAHİS</div>
                 <div id="social-btn" class="sidebar-item" onclick="showSection('social')" style="color:#e040fb;font-weight:bold;display:none;">📱 SOSYAL MEDYA</div>
@@ -576,7 +662,7 @@
 
                 <div id="view-customteam" style="display:none;">
                     <div id="ct-setup" style="display: none;">
-                        <h2>KENDİ TAKIMINI KUR</h2>
+                        <h2>TAKIMINI OLUŞTUR</h2>
                         <input type="text" id="ct-name-input" placeholder="Takım İsmi..." style="width: 280px;"><br>
                         <label class="custom-file-upload">
                             <input type="file" id="ct-logo-input" accept="image/*" style="display: none;" onchange="previewLogo(this)">
@@ -586,26 +672,62 @@
                             <img id="ct-logo-preview" src="" style="max-width: 100px; max-height: 100px; border-radius: 10px; border: 2px solid var(--accent-gold);">
                         </div>
                         <br>
-                        <button onclick="createCustomTeam()" style="background: cyan; color: black; font-size: 14px; padding: 12px 30px;">TAKIMI KUR 🚀</button>
+                        <button onclick="createCustomTeam()" class="neon-primary">TAKIMI KUR 🚀</button>
                     </div>
-                    <div id="ct-dashboard" style="display: none;">
-                        <h2 id="ct-dash-title" style="color: cyan; letter-spacing: 2px;"></h2>
-                        <div style="margin: 20px auto; width: 120px; height: 120px; background: rgba(0,0,0,0.5); border: 2px solid cyan; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                            <img id="ct-dash-logo" src="" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px;">
+                    <div id="ct-dashboard" class="ct-video-ui" style="display: none;">
+                        <div class="ct-tabs">
+                            <button class="ct-tab active" onclick="switchTeamTab('team')">TAKIM⌄</button>
+                            <button class="ct-tab" onclick="switchTeamTab('players')">OYUNCULAR</button>
                         </div>
-                        
-                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; max-width: 400px; margin: 0 auto 15px auto; border: 1px solid #333;">
-                            <h4>⚙️ TAKIMI DÜZENLE</h4>
-                            <input type="text" id="ct-edit-name" placeholder="Yeni Takım İsmi..." style="width: 80%; font-size: 14px; padding: 8px;"><br>
-                            <label class="custom-file-upload" style="padding: 6px 12px; font-size: 11px;">
-                                <input type="file" id="ct-edit-logo" accept="image/*" style="display: none;" onchange="updateCustomLogo(this)">
-                                🖼️ YENİ LOGO SEÇ
-                            </label>
-                            <br>
-                            <button onclick="saveTeamEdits()" style="background: #00aa00; font-size: 11px; padding: 6px 12px;">DEĞİŞİKLİKLERİ KAYDET</button>
+                        <div id="ct-team-tab">
+                            <div class="ct-layout">
+                                <div class="ct-panel">
+                                    <div class="ct-panel-title">ZAMAN ÇİZELGESİ</div>
+                                    <div class="ct-days" id="ct-days"></div>
+                                    <div id="ct-live-fixtures"></div>
+                                </div>
+                                <div class="ct-panel">
+                                    <div class="ct-panel-title" style="display:flex;justify-content:space-between;align-items:center;">
+                                        <span id="ct-dash-title">TAKIM</span>
+                                        <span style="font-size:10px;color:#ff4d75;">● CANLI</span>
+                                    </div>
+                                    <div class="ct-team-card">
+                                        <img id="ct-dash-logo" class="ct-team-logo-large" src="">
+                                        <h2 style="margin:10px 0 3px;color:#fff;" id="ct-team-name-display"></h2>
+                                        <div style="color:#8c9ab0;font-size:11px;">Kulüp merkezi • gerçek zamanlı takvim</div>
+                                        <div class="ct-stat-grid">
+                                            <div class="ct-stat"><b id="ct-team-level">0</b>Takım XP</div>
+                                            <div class="ct-stat"><b id="ct-team-matches">0</b>Maç</div>
+                                            <div class="ct-stat"><b id="ct-team-wins">0</b>Galibiyet</div>
+                                            <div class="ct-stat"><b id="ct-team-league">2. Lig</b>Lig</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ct-panel" style="margin-top:16px;">
+                                <div class="ct-panel-title">BAŞLANGIÇ DİZİLİŞİ • KADRO <span style="color:#00e5ff;font-size:10px;">(<span id="ct-squad-count">0</span>/5)</span></div>
+                                <div class="ct-squad-editor">
+                                    <div class="ct-mini-pitch">
+                                        <div class="ct-pitch-circle"></div>
+                                        <div id="ct-pitch-slots"></div>
+                                    </div>
+                                    <div class="ct-available">
+                                        <div class="ct-available-title">OYUNCULAR — TAKIMA EKLE / ÇIKAR</div>
+                                        <div style="color:#8190a5;font-size:10px;margin-bottom:10px;">Paketlerden ve marketten gelen oyuncular burada görünür. Oyuncuyu mevkisine uygun boş slota ekleyebilirsin.</div>
+                                        <div id="ct-available-players" class="ct-player-list"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <button id="ct-match-start-btn" style="background: cyan; color: black; font-size: 14px; padding: 15px 35px;" onclick="tryCustomMatch()">KENDİ TAKIMINLA MAÇ YAP</button>
+                        <div id="ct-players-tab" style="display:none;">
+                            <div class="ct-panel">
+                                <div class="ct-panel-title">OYUNCULAR</div>
+                                <div id="ct-full-roster" class="ct-roster"></div>
+                            </div>
+                        </div>
+                        <div style="text-align:center;margin-top:14px;">
+                            <button id="ct-match-start-btn" class="neon-primary" onclick="tryCustomMatch()">KENDİ TAKIMINLA MAÇ YAP</button>
+                        </div>
                     </div>
                 </div>
 
@@ -627,7 +749,7 @@
                 </div>
 
                 <div id="view-myplayers" style="display:none;">
-                    <h2>🏃 ALINAN OYUNCULAR</h2>
+                    <h2>OYUNCULAR</h2>
                     <p style="color: #00ffcc; font-weight: bold;">Kadro: <span id="squad-count-val">0</span>/5 — Oyuncuları sürükleyerek sahaya yerleştir!</p>
 
                     <!-- FUTBOL SAHASI -->
@@ -742,6 +864,49 @@
     </div>
 
 
+
+
+    <!-- FKS 27 KARŞILAMA -->
+    <div id="welcome-overlay">
+        <div class="welcome-panel">
+            <div style="font-size:54px; margin-bottom:6px;">⚽</div>
+            <h1 id="welcome-title">FKS 27'YE HOŞ GELDİN</h1>
+            <div class="welcome-sub">YENİ SEZON • YENİ DENEYİM</div>
+            <div id="welcome-step-one">
+                <p style="color:#b9c9dc;line-height:1.5;">Kariyerine devam etmeye hazır mısın?</p>
+                <button class="neon-primary" onclick="showWelcomeFeatures()">DEVAM ET</button>
+            </div>
+            <div id="welcome-step-two" style="display:none;">
+                <div class="welcome-feature-list">
+                    <div class="welcome-feature">⚡ <b>Yeni neler geldi?</b></div>
+                    <div class="welcome-feature">🕒 <b>Gerçek zamanlı maçlar</b></div>
+                    <div class="welcome-feature">✨ <b>UI'lar iyileşti</b></div>
+                    <div class="welcome-feature">🎬 <b>Önemli pozisyonları oynatma</b></div>
+                </div>
+                <button class="neon-primary" onclick="closeWelcomeOverlay()">DEVAM ET</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÖNEMLİ AN -->
+    <div id="important-position-overlay">
+        <div class="important-panel">
+            <h2>⚡ ÖNEMLİ POZİSYON</h2>
+            <div id="important-event-description" style="color:#b9c9dc;font-size:13px;"></div>
+            <div id="important-field-player">
+                <div class="event-ball">⚽</div>
+                <div style="color:#7df5ff;font-size:12px;">Topa sırayla dokun!</div>
+                <div id="touch-progress" style="color:#ffd700;font-size:11px;margin-top:5px;"></div>
+                <div id="touch-grid" class="touch-grid"></div>
+            </div>
+            <div id="important-goalkeeper" style="display:none;">
+                <div style="color:#7df5ff;font-size:12px;">Topun yerini 3 saniye içinde yakala!</div>
+                <div id="keeper-timer" class="event-timer">3.0</div>
+                <div id="goal-frame" class="goal-frame"></div>
+            </div>
+            <div id="important-result" style="display:none;margin-top:12px;font-size:15px;font-weight:900;"></div>
+        </div>
+    </div>
 
     <div id="inbox-overlay">
         <div id="inbox-panel">
@@ -953,6 +1118,7 @@
             missions: [], missionTimestamp: 0, 
             stats: { matchesPlayed: 0, wins: 0, trainingsDone: 0 },
             leagueTier: 2, championships: 0, leagueResetTime: 0, leagueTimerTarget: 0, leagueTimerType: "", leagueStatus: "active",
+            leagueMatchStartTime: 0,
             currentLeagueMatchIdx: 0, leagueFixtures: [], leagueTeamsData: [],
             euroType: "uel", euroStage: 16, euroLeg: 1, euroScoreHome: 0, euroScoreAway: 0, euroOpponent: "", euroTimer: 0, uclWins: 0,
             giftTimestamp: 0, giftBoxesOpened: [false, false, false], giftBoxRewards: [], marketTimestamp: 0, fkCoins: 100, pendingFkPack: null, openedFkPacks: {}, fkInbox: [],
@@ -1158,7 +1324,8 @@
             if(!p.matchHistory) p.matchHistory = [];
             if(!p.missions) p.missions = [];
             if(!p.stats) p.stats = { matchesPlayed: 0, wins: 0, trainingsDone: 0 };
-            if(p.leagueTier === undefined) { p.leagueTier = 2; p.championships = 0; p.leagueResetTime = 0; p.leagueTimerTarget = 0; p.leagueTimerType = ""; p.leagueStatus = "active"; p.currentLeagueMatchIdx = 0; p.leagueFixtures = []; p.leagueTeamsData = []; }
+            if(p.leagueTier === undefined) { p.leagueTier = 2; p.championships = 0; p.leagueResetTime = 0; p.leagueTimerTarget = 0; p.leagueTimerType = ""; p.leagueStatus = "active"; p.leagueMatchStartTime = 0; p.currentLeagueMatchIdx = 0; p.leagueFixtures = []; p.leagueTeamsData = []; }
+            if(p.leagueMatchStartTime === undefined) p.leagueMatchStartTime = 0;
             if(p.euroType === undefined) { p.euroType = "uel"; p.euroStage = 16; p.euroLeg = 1; p.euroScoreHome = 0; p.euroScoreAway = 0; p.euroOpponent = ""; p.euroTimer = 0; p.uclWins = 0; }
             if(p.giftTimestamp === undefined) { p.giftTimestamp = 0; p.giftBoxesOpened = [false, false, false]; p.giftBoxRewards = []; p.marketTimestamp = 0; }
             if(p.fkCoins === undefined) p.fkCoins = 100;
@@ -1169,7 +1336,7 @@
             if(p.money === undefined) p.money = 100000;
             if(!p.bets) p.bets = [];
             updateUI(); 
-            if(p.name) showScreen('main-screen');
+            if(p.name) { showScreen('main-screen'); setTimeout(showWelcomeOverlay,250); }
             else showScreen('start-screen');
             setupMissions();
             checkLeagueResetAndTimers();
@@ -1180,6 +1347,7 @@
                 setInterval(() => {
                     updateMissionTimer();
                     checkLeagueResetAndTimers();
+                    if(document.getElementById('view-league') && document.getElementById('view-league').style.display === 'block') renderLeague();
                     checkEuroTimers();
                     checkTimedSystems();
                 }, 1000);
@@ -1189,12 +1357,195 @@
 
         function showScreen(id) { document.querySelectorAll('.screen').forEach(x => x.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
+
+        let welcomeFeaturesShown = false;
+        function showWelcomeOverlay() {
+            const ov=document.getElementById('welcome-overlay');
+            if(!ov) return;
+            document.getElementById('welcome-step-one').style.display='block';
+            document.getElementById('welcome-step-two').style.display='none';
+            ov.style.display='flex';
+        }
+        function showWelcomeFeatures() {
+            welcomeFeaturesShown=true;
+            document.getElementById('welcome-step-one').style.display='none';
+            document.getElementById('welcome-step-two').style.display='block';
+        }
+        function closeWelcomeOverlay() {
+            document.getElementById('welcome-overlay').style.display='none';
+        }
+
+        let importantEventActive=false, importantEventType='field', importantEventPhase='user';
+        let touchSequence=[], touchIndex=0, keeperTimer=null, keeperDeadline=0;
+
+        function showImportantPosition(phase) {
+            if(importantEventActive) return;
+            importantEventActive=true;
+            importantEventPhase=phase || 'user';
+            clearInterval(keeperTimer);
+            const ov=document.getElementById('important-position-overlay');
+            const desc=document.getElementById('important-event-description');
+            const field=document.getElementById('important-field-player');
+            const gk=document.getElementById('important-goalkeeper');
+            const result=document.getElementById('important-result');
+            result.style.display='none';
+            const isGK=(p.role==='Kaleci');
+            document.getElementById('touch-grid').innerHTML='';
+            field.style.display=isGK?'none':'block';
+            gk.style.display=isGK?'block':'none';
+            if(importantEventPhase==='user') desc.innerText='Takımın hücumda! Pozisyonu sen yönlendir.';
+            else desc.innerText='Rakip tehlikeli geliyor! Pozisyonu sen savun.';
+            ov.style.display='flex';
+
+            if(isGK) {
+                const frame=document.getElementById('goal-frame');
+                frame.innerHTML='';
+                const ball=document.createElement('button');
+                ball.className='keeper-ball'; ball.innerText='⚽';
+                const spots=[
+                    [8,10],[43,8],[80,10],[7,42],[43,42],[80,42],[10,72],[43,70],[78,70]
+                ];
+                const spot=spots[Math.floor(Math.random()*spots.length)];
+                ball.style.left=spot[0]+'%'; ball.style.top=spot[1]+'%';
+                ball.onclick=()=>resolveImportantPosition(true);
+                frame.appendChild(ball);
+                keeperDeadline=Date.now()+3000;
+                const tick=()=>{
+                    const left=Math.max(0,keeperDeadline-Date.now());
+                    document.getElementById('keeper-timer').innerText=(left/1000).toFixed(1);
+                    if(left<=0){
+                        clearInterval(keeperTimer); keeperTimer=null;
+                        resolveImportantPosition(false);
+                    }
+                };
+                keeperTimer=setInterval(tick,50); tick();
+            } else {
+                touchSequence=[0,1,2,3,4].sort(()=>Math.random()-0.5);
+                touchIndex=0;
+                renderTouchSequence();
+            }
+        }
+        function renderTouchSequence() {
+            const grid=document.getElementById('touch-grid');
+            const progress=document.getElementById('touch-progress');
+            grid.innerHTML='';
+            progress.innerText=`Sıradaki dokunuş: ${touchIndex+1}/5`;
+            for(let i=0;i<5;i++){
+                const b=document.createElement('button');
+                b.className='touch-point'+(i<touchIndex?' done':'')+(i===touchIndex?' next':'');
+                b.innerText=(i<touchIndex?'✓':'⚽');
+                b.disabled=i!==touchIndex;
+                b.onclick=()=>{ touchIndex++; if(touchIndex>=5) resolveImportantPosition(true); else renderTouchSequence(); };
+                grid.appendChild(b);
+            }
+        }
+        function resolveImportantPosition(success) {
+            if(!importantEventActive) return;
+            clearInterval(keeperTimer); keeperTimer=null;
+            const result=document.getElementById('important-result');
+            result.style.display='block';
+            if(success) {
+                if(importantEventPhase==='user') {
+                    if(Math.random()<0.78){
+                        window.importantUserGoal=true;
+                        result.style.color='#00e676'; result.innerText='⚽ GOOOOL! Harika bitiriş!';
+                    } else {
+                        result.style.color='#ffd700'; result.innerText='🔥 Şut! Kaleci çıkardı.';
+                    }
+                } else {
+                    window.importantOpponentGoal=false;
+                    result.style.color='#00e676'; result.innerText=p.role==='Kaleci'?'🧤 MÜTHİŞ KURTARIŞ!':'🛡️ Pozisyonu savundun!';
+                }
+            } else {
+                if(importantEventPhase==='user') {
+                    result.style.color='#ff5555'; result.innerText='❌ Pozisyon kaçtı!';
+                } else {
+                    window.importantOpponentGoal=true;
+                    result.style.color='#ff5555'; result.innerText='⚽ RAKİP GOLÜ! Pozisyonu durduramadın.';
+                }
+            }
+            setTimeout(()=>{
+                document.getElementById('important-position-overlay').style.display='none';
+                importantEventActive=false;
+                if(typeof resumeImportantMatch==='function') resumeImportantMatch();
+            },1200);
+        }
+        function notifyImportantPosition(phase) {
+            const n=document.createElement('button');
+            n.innerText='⚡ ÖNEMLİ ALAN GELDİ';
+            n.style.cssText='position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:290;padding:14px 24px;border:2px solid #00e5ff;border-radius:14px;background:rgba(2,14,30,.96);color:#7df5ff;font-weight:900;font-family:Rajdhani,sans-serif;font-size:14px;box-shadow:0 0 28px rgba(0,229,255,.45);cursor:pointer;';
+            n.onclick=()=>{n.remove();showImportantPosition(phase);};
+            document.body.appendChild(n);
+            setTimeout(()=>{if(n.parentNode)n.remove();},10000);
+        }
+        function switchTeamTab(tab) {
+            document.getElementById('ct-team-tab').style.display=tab==='team'?'block':'none';
+            document.getElementById('ct-players-tab').style.display=tab==='players'?'block':'none';
+            document.querySelectorAll('.ct-tab').forEach((b,i)=>b.classList.toggle('active',(tab==='team'?i===0:i===1)));
+            if(tab==='players') renderTeamVideoUI();
+        }
+        function renderTeamVideoUI() {
+            if(!p.hasTeam) return;
+            if(!p.squadPositions) p.squadPositions = {};
+            if(!p.squadIds) p.squadIds = Object.values(p.squadPositions);
+            const days=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+            const now=new Date();
+            const daysEl=document.getElementById('ct-days');
+            if(daysEl) daysEl.innerHTML=days.map((d,i)=>{
+                const dt=new Date(now); dt.setDate(now.getDate()-(now.getDay()===0?6:now.getDay()-1)+i);
+                return `<div class="ct-day ${dt.toDateString()===now.toDateString()?'today':''}">${d}<br><b>${dt.getDate()}</b></div>`;
+            }).join('');
+            const opponents=['FC Viking','Dragon de Fuego','Glodni Sukcesu'];
+            const fixtures=[0,1,2].map((i)=>{
+                const t=new Date(now.getTime()+(i+1)*3600000);
+                return {time:t,opp:opponents[i],score:i===0?'— : —':(i===1?'0 : 0':'— : —')};
+            });
+            const fx=document.getElementById('ct-live-fixtures');
+            if(fx) fx.innerHTML=fixtures.map(f=>`
+                <div class="ct-match"><div class="ct-match-logo">🛡️</div>
+                    <div><div class="ct-match-time">${f.time.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}</div>
+                    <div style="font-weight:800;color:#fff;">${p.teamName}</div><div style="color:#8b9ab0;font-size:10px;">${f.opp}</div></div>
+                    <div class="ct-match-score">${f.score}</div>
+                </div>`).join('');
+            const set=(id,val)=>{const el=document.getElementById(id);if(el)el.innerText=val;};
+            set('ct-team-name-display',p.teamName||'TAKIM');
+            set('ct-team-level',p.teamLv||0);
+            set('ct-team-matches',p.stats?.matchesPlayed||0);
+            set('ct-team-wins',p.stats?.wins||0);
+            set('ct-team-league',p.leagueTier===0?'Süper Lig':p.leagueTier===1?'1. Lig':'2. Lig');
+            const logo=document.getElementById('ct-dash-logo'); if(logo) logo.src=p.teamLogo||'';
+
+            const positions=['FRVT','SLK','SĞK','DFNS','KL'];
+            const pitch=document.getElementById('ct-pitch-slots');
+            const coords={FRVT:[50,18],SLK:[22,40],SĞK:[78,40],DFNS:[50,64],KL:[50,88]};
+            if(pitch) pitch.innerHTML=positions.map(pos=>{
+                const id=p.squadPositions[pos];
+                const pl=id ? p.boughtPool.find(x=>x.id===id) : null;
+                const [x,y]=coords[pos];
+                if(pl) return `<div class="ct-pitch-slot" style="left:${x}%;top:${y}%;"><strong>${pl.name}</strong><small>${pos} • ${pl.gen} GEN</small><button onclick="removeFromSlot('${pos}')">ÇIKAR</button></div>`;
+                return `<div class="ct-pitch-slot empty" style="left:${x}%;top:${y}%;"><strong>BOŞ</strong><small>${pos}</small></div>`;
+            }).join('');
+            set('ct-squad-count',p.squadIds.length);
+
+            const list=document.getElementById('ct-available-players');
+            const players=p.boughtPool||[];
+            if(list) list.innerHTML=players.length ? players.map(pl=>{
+                const placed=Object.entries(p.squadPositions).find(([m,id])=>id===pl.id)?.[0];
+                const isPack=String(pl.id||'').startsWith('pack_');
+                const canAdd=!placed;
+                return `<div class="ct-player-card ${isPack?'pack-player':''}">
+                    <div><div class="pc-name">${pl.name}</div><div class="pc-meta">${pl.mevki||'?'} • ${pl.gen} GEN ${placed?'• KADRODA':''}</div>${isPack?'<div class="pc-pack">📦 PAKETTEN GELDİ</div>':''}</div>
+                    ${placed ? `<button onclick="removeFromSlot('${placed}')">ÇIKAR</button>` : `<button onclick="mobileAddToSlot('${pl.id}')">+ EKLE</button>`}
+                </div>`;
+            }).join('') : '<div style="color:#8c9ab0;padding:15px;">Henüz oyuncu yok. Paket aç veya marketten oyuncu al.</div>';
+        }
+
         function startGame() {
             let n = document.getElementById('player-name-input').value;
             if(!n) return; p.name = n; showScreen('role-screen');
         }
 
-        function setRole(r) { p.role = r; save(); updateUI(); showScreen('main-screen'); }
+        function setRole(r) { p.role = r; save(); updateUI(); showScreen('main-screen'); setTimeout(showWelcomeOverlay,250); }
 
         function getRoleImage(role) {
             if(role === 'Forvet') return 'Atak.png';
@@ -1259,7 +1610,7 @@
                 document.getElementById('ui-team-level-val').innerText = `${p.teamLv} / 100000 XP`;
                 document.getElementById('team-level-bar').style.width = (p.teamLv / 100) + "%";
                 document.getElementById('mkt-btn').style.opacity = '1';
-                document.getElementById('sqd-btn').style.opacity = '1';
+                const sqdBtn = document.getElementById('sqd-btn'); if(sqdBtn) sqdBtn.style.opacity = '1';
                 document.getElementById('history-btn').style.display = 'block';
                 document.getElementById('league-btn').style.display = 'block';
                 document.getElementById('gift-menu-btn').style.display = 'block';
@@ -1272,7 +1623,7 @@
             } else {
                 document.getElementById('ui-team-bar-container').style.display = 'none';
                 document.getElementById('mkt-btn').style.opacity = '0.5';
-                document.getElementById('sqd-btn').style.opacity = '0.5';
+                const sqdBtn = document.getElementById('sqd-btn'); if(sqdBtn) sqdBtn.style.opacity = '0.5';
                 document.getElementById('history-btn').style.display = 'none';
                 document.getElementById('league-btn').style.display = 'none';
                 document.getElementById('euro-btn').style.display = 'none';
@@ -1607,6 +1958,7 @@
             p.leagueStatus = "active";
             p.leagueTimerTarget = 0;
             p.leagueTimerType = "";
+            p.leagueMatchStartTime = Date.now() + 30000;
 
             let opponents = p.leagueTeamsData.filter(x => !x.isUser);
             opponents.forEach(opp => {
@@ -1746,8 +2098,22 @@
                         <h3 style="margin:10px 0;">${p.teamName} vs ${currentFixture.oppName}</h3>
                         <span style="background:#222; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold;">📍 KONUM: ${loc.toUpperCase()}</span>
                     </div>
-                    <button style="background:var(--accent-gold); color:black; width:100%; padding:12px; font-size:13px;" onclick="tryLeagueMatch()">MAÇA ÇIK ⚔️</button>
+                    <div id="league-kickoff-box" style="margin-top:12px;padding:10px;border:1px solid rgba(0,229,255,.22);border-radius:9px;background:rgba(0,229,255,.04);color:#7df5ff;font-size:12px;"></div>
+                    <button id="league-play-now-btn" style="background:var(--accent-gold); color:black; width:100%; padding:12px; font-size:13px;" onclick="tryLeagueMatch()">MAÇA ÇIK ⚔️</button>
                 `;
+                const kickoffBox=document.getElementById('league-kickoff-box');
+                const playBtn=document.getElementById('league-play-now-btn');
+                if(kickoffBox && playBtn) {
+                    const diff=(p.leagueMatchStartTime||0)-Date.now();
+                    if(diff>0) {
+                        const sec=Math.ceil(diff/1000);
+                        kickoffBox.innerText=`🕒 GERÇEK ZAMANLI BAŞLANGIÇ: ${new Date(p.leagueMatchStartTime).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} • ${sec} sn`;
+                        playBtn.disabled=true; playBtn.innerText='MAÇ SAATİ BEKLENİYOR';
+                    } else {
+                        kickoffBox.innerText='🔴 MAÇ ŞİMDİ CANLI';
+                        playBtn.disabled=false; playBtn.innerText='MAÇA ÇIK ⚔️';
+                    }
+                }
             }
         }
 
@@ -1817,6 +2183,7 @@
         }
 
         function tryLeagueMatch() {
+            if(p.leagueMatchStartTime && Date.now() < p.leagueMatchStartTime) return alert('Lig maçı henüz başlamadı. Gerçek maç saatini bekle!');
             if(p.squadIds.length < 5) {
                 return alert("Lig maçına çıkabilmek için önce marketten oyuncu alıp kadronu tam 5 kişiye tamamlamalısın!");
             }
@@ -1911,6 +2278,7 @@
             
             document.querySelectorAll('#content-area > div').forEach(v => v.style.display = 'none');
             document.getElementById('view-' + s).style.display = 'block';
+            document.getElementById('main-screen').classList.add('neon-ui');
 
             if(s === 'euro') {
                 if(p.euroType === "uel" || p.euroType === "wait_uecl") {
@@ -1967,7 +2335,7 @@
                     document.getElementById('ct-dashboard').style.display = 'block';
                     document.getElementById('ct-dash-title').innerText = p.teamName.toUpperCase();
                     document.getElementById('ct-dash-logo').src = p.teamLogo;
-                    document.getElementById('ct-edit-name').value = p.teamName;
+                    renderTeamVideoUI();
                 }
             }
             
@@ -2097,6 +2465,7 @@
 
             p.pendingFkPack = null;
             save(); updateUI();
+            if(document.getElementById('view-customteam')?.style.display === 'block') renderTeamVideoUI();
             document.getElementById('pack-opening-box').style.display = 'none';
             document.getElementById('pack-result').style.display = 'block';
             renderCurrentFkPackReward();
@@ -2125,7 +2494,7 @@
                 <div class="pack-reward-card ${getPackRarityClass(card.rarity)}">
                     <div class="reward-gen">${card.gen} GEN</div>
                     <h3>${card.rarity} ${card.name}</h3>
-                    <div>Oyuncu alınan oyunculara eklendi.</div>
+                    <div>Oyuncu takım kadrosuna eklendi.</div>
                 </div>
             `;
         }
@@ -2175,7 +2544,8 @@
             if(!target.mevki) target.mevki = ['FRVT','SLK','SĞK','DFNS','KL'][Math.floor(Math.random()*5)];
             p.boughtPool.push(target);
             save(); updateUI(); renderMarket();
-            alert(`${target.name} transfer edildi! 'Alınan Oyuncular' sekmesinden kadroya ekleyebilirsiniz.`);
+            if(document.getElementById('view-customteam')?.style.display === 'block') renderTeamVideoUI();
+            alert(`${target.name} transfer edildi! Takım bölümünden kadroya ekleyebilirsin.`);
         }
 
         function renderMyPlayers() {
@@ -2269,6 +2639,7 @@
             p.squadIds = Object.values(p.squadPositions);
             save();
             renderMyPlayers();
+            if(document.getElementById('view-customteam')?.style.display === 'block') renderTeamVideoUI();
         }
 
         function removeFromSlot(mevki) {
@@ -2277,6 +2648,7 @@
             p.squadIds = Object.values(p.squadPositions);
             save();
             renderMyPlayers();
+            if(document.getElementById('view-customteam')?.style.display === 'block') renderTeamVideoUI();
         }
 
         function addToSquad(id) {
@@ -2290,6 +2662,7 @@
             });
             p.squadIds = Object.values(p.squadPositions);
             save(); renderMyPlayers();
+            if(document.getElementById('view-customteam')?.style.display === 'block') renderTeamVideoUI();
         }
 
         // Mobil için: oyuncunun mevkisine göre otomatik slota ekle
@@ -2309,6 +2682,7 @@
             p.squadPositions[player.mevki] = playerId;
             p.squadIds = Object.values(p.squadPositions);
             save(); renderMyPlayers();
+            if(document.getElementById('view-customteam')?.style.display === 'block') renderTeamVideoUI();
         }
 
         function tryCustomMatch() {
@@ -2477,7 +2851,7 @@
             const genAvgEl = document.getElementById('match-squad-gen');
             if(genAvgEl) genAvgEl.innerText = genCount > 0 ? `Ortalama GEN: ${Math.round(totalGen/genCount)}` : '';
 
-            const speed = type === 'mahalle' ? 80 : 667; // 90 tık × 667ms ≈ 60 saniye (1 dakika)
+            const speed = type === 'mahalle' ? 80 : 1333; // Lig/maç süresi artırıldı: 90 dk ≈ 120 gerçek saniye
 
             startCrowdSound();
             let pitchPhase = 'middle'; // 'user_attack','user_goal_area','opp_attack','opp_goal_area','middle'
@@ -2702,8 +3076,13 @@
             pitchBallX = 250; // canvas ortası (W/2 = 500/2)
             // Başlangıçta orta saha
             updateMiniPitch('middle');
+            let importantEventTimer = 0;
+            let nextImportantEvent = 10 + Math.floor(Math.random()*7);
+            window.importantUserGoal=false; window.importantOpponentGoal=false;
+            window.resumeImportantMatch=null;
 
             matchLoopInterval = setInterval(() => {
+                if(importantEventActive) return;
                 clock++;
                 
                 // Her tick'te saha fazını güncelle (gol olmayan anlarda)
@@ -2722,7 +3101,24 @@
                     document.getElementById('time-display').innerText = `🕒 Dakika: ${clock}'`;
                 }
                 
-                if(Math.random() > 0.94) { 
+                // Bir maçta birden fazla gerçek zamanlı önemli pozisyon
+                importantEventTimer++;
+                if(type === 'league' && !importantEventActive && importantEventTimer >= nextImportantEvent) {
+                    const phase = Math.random() < 0.52 ? 'user' : 'opponent';
+                    notifyImportantPosition(phase);
+                    nextImportantEvent = importantEventTimer + 10 + Math.floor(Math.random()*10);
+                }
+
+                if(window.importantUserGoal) {
+                    s1++; document.getElementById('s-1').innerText=s1; window.importantUserGoal=false;
+                    goalCrowdRoar(); document.getElementById('goal-info').innerText='⚽ ÖNEMLİ POZİSYON: GOL!';
+                }
+                if(window.importantOpponentGoal) {
+                    s2++; document.getElementById('s-2').innerText=s2; window.importantOpponentGoal=false;
+                    goalCrowdRoar(); document.getElementById('goal-info').innerText='⚽ ÖNEMLİ POZİSYON: RAKİP GOLÜ!';
+                }
+
+                if(Math.random() > 0.94 && !importantEventActive) { 
                     let userAttackChance = 0.50; 
                     
                     if(type === 'league') {
@@ -2874,6 +3270,7 @@
             });
 
             p.currentLeagueMatchIdx++;
+            p.leagueMatchStartTime = p.currentLeagueMatchIdx < p.leagueFixtures.length ? Date.now() + 30000 : 0;
             save();
         }
 
